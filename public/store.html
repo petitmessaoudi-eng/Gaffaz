@@ -1,0 +1,2061 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ComparateurTN — Meilleurs Prix Tunisie</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --emerald: #059669;
+  --emerald-light: #34d399;
+  --gold: #d4a574;
+  --gold-light: #e8c9a0;
+  --amber: #b45309;
+  --coral: #e07a5f;
+  --slate: #475569;
+  --glass-bg: rgba(255,255,255,0.05);
+  --glass-border: rgba(255,255,255,0.1);
+  --glass-shadow: rgba(0,0,0,0.3);
+  --glass-hover: rgba(255,255,255,0.08);
+  --bg-dark: #0a0f0d;
+  --bg-gradient-1: #0d1a14;
+  --bg-gradient-2: #132419;
+  --bg-gradient-3: #1a2e23;
+  --text-primary: #f5f5f4;
+  --text-secondary: rgba(245,245,244,0.7);
+  --text-muted: rgba(245,245,244,0.4);
+  --success: #22c55e;
+  --warning: #eab308;
+  --danger: #dc2626;
+  --info: #0ea5e9;
+  --sidebar-width: 280px;
+  --navbar-height: 70px;
+  --border-radius: 20px;
+  --card-padding: 24px;
+  --transition-fast: 0.2s ease;
+  --transition-normal: 0.3s ease;
+  --transition-slow: 0.5s ease;
+  --store-tunisianet: #e2001a;
+  --store-spacenet: #0066cc;
+  --store-skymil: #ff6600;
+  --store-mytek: #00933b;
+  /* accent vars used by theme-aware elements */
+  --accent: #34d399;
+  --accent-2: #d4a574;
+  --accent-glow: rgba(52,211,153,0.3);
+}
+[data-theme="light"] {
+  --glass-bg: rgba(255,255,255,0.6);
+  --glass-border: rgba(0,0,0,0.1);
+  --glass-shadow: rgba(0,0,0,0.1);
+  --glass-hover: rgba(255,255,255,0.8);
+  --bg-dark: #f5f5f0;
+  --bg-gradient-1: #e8f5e9;
+  --bg-gradient-2: #f1f8e9;
+  --bg-gradient-3: #fefefe;
+  --text-primary: #1a1a1a;
+  --text-secondary: rgba(26,26,26,0.7);
+  --text-muted: rgba(26,26,26,0.5);
+  --accent: #059669;
+  --accent-2: #b45309;
+  --accent-glow: rgba(5,150,105,0.2);
+}
+[data-theme="light"] .orb { opacity: 0.15; }
+[data-theme="light"] .glass-card::before { background: linear-gradient(90deg,transparent,rgba(0,0,0,0.05),transparent); }
+
+/* ══════════════════════════════════════════
+   GAMING THEME — Obsidian + Wine Red
+══════════════════════════════════════════ */
+[data-theme="gaming"] {
+  --emerald: #8b0000;
+  --emerald-light: #c0392b;
+  --gold: #ff4444;
+  --gold-light: #ff6b6b;
+  --amber: #6b0000;
+  --coral: #ff2244;
+  --glass-bg: rgba(180,0,0,0.07);
+  --glass-border: rgba(192,57,43,0.2);
+  --glass-shadow: rgba(0,0,0,0.6);
+  --glass-hover: rgba(180,0,0,0.13);
+  --bg-dark: #060608;
+  --bg-gradient-1: #08000a;
+  --bg-gradient-2: #0d0005;
+  --bg-gradient-3: #100008;
+  --text-primary: #f0e6e6;
+  --text-secondary: rgba(240,230,230,0.7);
+  --text-muted: rgba(240,230,230,0.38);
+  --success: #c0392b;
+  --warning: #e74c3c;
+  --danger: #ff1a1a;
+  --info: #c0392b;
+  --accent: #c0392b;
+  --accent-2: #8b0000;
+  --accent-glow: rgba(192,57,43,0.4);
+}
+[data-theme="gaming"] .orb { opacity: 0.55; filter: blur(90px); }
+[data-theme="gaming"] .orb-1 { background: #6b0010; }
+[data-theme="gaming"] .orb-2 { background: #3d0000; }
+[data-theme="gaming"] .orb-3 { background: #8b0020; }
+[data-theme="gaming"] .background::before {
+  background:
+    radial-gradient(ellipse 70% 50% at 15% 35%, rgba(139,0,0,0.25) 0%, transparent 55%),
+    radial-gradient(ellipse 55% 40% at 85% 65%, rgba(80,0,0,0.2) 0%, transparent 55%),
+    radial-gradient(ellipse 40% 30% at 50% 90%, rgba(192,57,43,0.15) 0%, transparent 50%);
+}
+[data-theme="gaming"] .glass-card::before { background: linear-gradient(90deg,transparent,rgba(192,57,43,0.15),transparent); }
+[data-theme="gaming"] .logo { background: linear-gradient(135deg,#8b0000,#c0392b); box-shadow: 0 8px 32px rgba(139,0,0,0.5); }
+[data-theme="gaming"] .logo-text { background: linear-gradient(135deg,#c0392b,#ff6b6b); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+[data-theme="gaming"] .nav-link.active::before { background: linear-gradient(180deg,#c0392b,#8b0000); }
+[data-theme="gaming"] .nav-link:hover, [data-theme="gaming"] .nav-link.active { background: rgba(139,0,0,0.15); }
+[data-theme="gaming"] .cat-parent:hover, [data-theme="gaming"] .cat-parent.open { background: rgba(139,0,0,0.18); border-color: rgba(192,57,43,0.3); }
+[data-theme="gaming"] .cat-parent.active-parent { background: linear-gradient(135deg,rgba(139,0,0,0.22),rgba(192,57,43,0.1)); border-color: rgba(192,57,43,0.4); color: #ff6b6b; }
+[data-theme="gaming"] .cat-parent.active-parent .cat-icon { background: linear-gradient(135deg,#8b0000,#c0392b); box-shadow: 0 3px 10px rgba(139,0,0,0.5); }
+[data-theme="gaming"] .cat-sub:hover { background: rgba(139,0,0,0.15); border-left-color: rgba(192,57,43,0.4); }
+[data-theme="gaming"] .cat-sub.active { background: linear-gradient(135deg,rgba(139,0,0,0.2),transparent); color: #ff6b6b; border-left-color: #c0392b; }
+[data-theme="gaming"] .search-input:focus { border-color: #c0392b; box-shadow: 0 0 20px rgba(192,57,43,0.25); }
+[data-theme="gaming"] .sort-btn.active { background: linear-gradient(135deg,rgba(139,0,0,0.25),rgba(192,57,43,0.1)); border-color: #c0392b; color: #ff6b6b; }
+[data-theme="gaming"] .compare-btn { background: linear-gradient(135deg,rgba(139,0,0,0.2),rgba(192,57,43,0.1)); border-color: rgba(192,57,43,0.35); color: #ff6b6b; }
+[data-theme="gaming"] .compare-btn:hover { background: linear-gradient(135deg,rgba(139,0,0,0.35),rgba(192,57,43,0.2)); border-color: #c0392b; box-shadow: 0 0 20px rgba(192,57,43,0.25); }
+[data-theme="gaming"] .product-best-price { background: linear-gradient(135deg,#c0392b,#ff6b6b); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+[data-theme="gaming"] .product-brand { color: #ff6b6b; }
+[data-theme="gaming"] .product-card:hover { box-shadow: 0 25px 50px -12px rgba(0,0,0,0.7), 0 0 40px rgba(139,0,0,0.2); }
+[data-theme="gaming"] .best-deal-badge { background: linear-gradient(135deg,#8b0000,#c0392b); box-shadow: 0 4px 15px rgba(139,0,0,0.5); }
+[data-theme="gaming"] .category-chip:hover, [data-theme="gaming"] .category-chip.active { background: linear-gradient(135deg,rgba(139,0,0,0.25),rgba(192,57,43,0.1)); border-color: #c0392b; color: #ff6b6b; }
+[data-theme="gaming"] .page-btn.active { background: linear-gradient(135deg,#8b0000,#c0392b); box-shadow: 0 4px 15px rgba(139,0,0,0.45); }
+[data-theme="gaming"] .page-btn:hover { border-color: #c0392b; }
+[data-theme="gaming"] .filter-reset-btn:hover { border-color: #c0392b; }
+[data-theme="gaming"] .filter-option input:checked + .custom-checkbox { background: linear-gradient(135deg,#8b0000,#c0392b); border-color: #c0392b; }
+[data-theme="gaming"] .nav-btn:hover { border-color: #c0392b; }
+[data-theme="gaming"] .sidebar::-webkit-scrollbar-thumb:hover { background: #c0392b; }
+[data-theme="gaming"] .table-wrap::-webkit-scrollbar-thumb { background: linear-gradient(90deg,#8b0000,#c0392b); }
+[data-theme="gaming"] .autocomplete-item:hover { background: rgba(139,0,0,0.15); }
+[data-theme="gaming"] .autocomplete-item-price { color: #ff6b6b; }
+[data-theme="gaming"] .user-avatar { background: linear-gradient(135deg,#8b0000,#c0392b); }
+[data-theme="gaming"] .related-scroll::-webkit-scrollbar-thumb { background: linear-gradient(90deg,#8b0000,#c0392b); }
+/* gaming scanline overlay */
+[data-theme="gaming"] .background::after {
+  content: '';
+  position: fixed; inset: 0; z-index: -1; pointer-events: none;
+  background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px);
+}
+[data-theme="gaming"] .store-nav-item:hover { background: rgba(139,0,0,0.15); border-color: rgba(192,57,43,0.3); }
+[data-theme="gaming"] .store-nav-item.active { background: rgba(139,0,0,0.2); }
+[data-theme="gaming"] .admin-link:hover { background: rgba(139,0,0,0.15); border-color: rgba(192,57,43,0.3); }
+[data-theme="gaming"] .view-btn:hover, [data-theme="gaming"] .view-btn.active { border-color: #c0392b; color: #ff6b6b; }
+[data-theme="gaming"] input[type="range"]::-webkit-slider-thumb { background: linear-gradient(135deg,#8b0000,#c0392b); box-shadow: 0 0 10px rgba(192,57,43,0.5); }
+[data-theme="gaming"] .price-range-input:focus { border-color: #c0392b; }
+[data-theme="gaming"] .spec-filter-search:focus { border-color: #c0392b; }
+[data-theme="gaming"] .spec-active-chip { background: linear-gradient(135deg,rgba(139,0,0,0.25),rgba(192,57,43,0.1)); border-color: rgba(192,57,43,0.4); color: #ff6b6b; }
+
+/* ══════════════════════════════════════════
+   MIDNIGHT THEME — Deep Dark Blue-Violet
+══════════════════════════════════════════ */
+[data-theme="midnight"] {
+  --emerald: #6c3dd4;
+  --emerald-light: #a78bfa;
+  --gold: #818cf8;
+  --gold-light: #c4b5fd;
+  --amber: #4c1d95;
+  --coral: #7c3aed;
+  --glass-bg: rgba(100,60,220,0.06);
+  --glass-border: rgba(167,139,250,0.15);
+  --glass-shadow: rgba(0,0,0,0.5);
+  --glass-hover: rgba(100,60,220,0.11);
+  --bg-dark: #04040f;
+  --bg-gradient-1: #060614;
+  --bg-gradient-2: #080820;
+  --bg-gradient-3: #0c0c1e;
+  --text-primary: #ede9fe;
+  --text-secondary: rgba(237,233,254,0.7);
+  --text-muted: rgba(237,233,254,0.38);
+  --success: #7c3aed;
+  --warning: #6d28d9;
+  --danger: #8b5cf6;
+  --info: #a78bfa;
+  --accent: #a78bfa;
+  --accent-2: #818cf8;
+  --accent-glow: rgba(167,139,250,0.35);
+}
+[data-theme="midnight"] .orb { opacity: 0.45; filter: blur(85px); }
+[data-theme="midnight"] .orb-1 { background: #4c1d95; }
+[data-theme="midnight"] .orb-2 { background: #1e1b4b; }
+[data-theme="midnight"] .orb-3 { background: #5b21b6; }
+[data-theme="midnight"] .background::before {
+  background:
+    radial-gradient(ellipse 75% 50% at 20% 40%, rgba(109,40,217,0.22) 0%, transparent 55%),
+    radial-gradient(ellipse 60% 40% at 80% 60%, rgba(67,56,202,0.18) 0%, transparent 55%),
+    radial-gradient(ellipse 45% 35% at 50% 85%, rgba(124,58,237,0.15) 0%, transparent 50%);
+}
+[data-theme="midnight"] .glass-card::before { background: linear-gradient(90deg,transparent,rgba(167,139,250,0.12),transparent); }
+[data-theme="midnight"] .logo { background: linear-gradient(135deg,#4c1d95,#7c3aed); box-shadow: 0 8px 32px rgba(76,29,149,0.5); }
+[data-theme="midnight"] .logo-text { background: linear-gradient(135deg,#a78bfa,#818cf8); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+[data-theme="midnight"] .nav-link.active::before { background: linear-gradient(180deg,#a78bfa,#6c3dd4); }
+[data-theme="midnight"] .nav-link:hover, [data-theme="midnight"] .nav-link.active { background: rgba(109,40,217,0.12); }
+[data-theme="midnight"] .cat-parent:hover, [data-theme="midnight"] .cat-parent.open { background: rgba(109,40,217,0.15); border-color: rgba(167,139,250,0.25); }
+[data-theme="midnight"] .cat-parent.active-parent { background: linear-gradient(135deg,rgba(109,40,217,0.2),rgba(167,139,250,0.08)); border-color: rgba(167,139,250,0.35); color: #a78bfa; }
+[data-theme="midnight"] .cat-parent.active-parent .cat-icon { background: linear-gradient(135deg,#4c1d95,#7c3aed); box-shadow: 0 3px 10px rgba(109,40,217,0.5); }
+[data-theme="midnight"] .cat-sub:hover { background: rgba(109,40,217,0.12); border-left-color: rgba(167,139,250,0.35); }
+[data-theme="midnight"] .cat-sub.active { background: linear-gradient(135deg,rgba(109,40,217,0.18),transparent); color: #a78bfa; border-left-color: #7c3aed; }
+[data-theme="midnight"] .search-input:focus { border-color: #7c3aed; box-shadow: 0 0 20px rgba(124,58,237,0.2); }
+[data-theme="midnight"] .sort-btn.active { background: linear-gradient(135deg,rgba(109,40,217,0.22),rgba(167,139,250,0.08)); border-color: #7c3aed; color: #a78bfa; }
+[data-theme="midnight"] .compare-btn { background: linear-gradient(135deg,rgba(109,40,217,0.18),rgba(124,58,237,0.08)); border-color: rgba(167,139,250,0.3); color: #a78bfa; }
+[data-theme="midnight"] .compare-btn:hover { background: linear-gradient(135deg,rgba(109,40,217,0.3),rgba(124,58,237,0.18)); border-color: #7c3aed; box-shadow: 0 0 20px rgba(124,58,237,0.22); }
+[data-theme="midnight"] .product-best-price { background: linear-gradient(135deg,#a78bfa,#818cf8); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+[data-theme="midnight"] .product-brand { color: #a78bfa; }
+[data-theme="midnight"] .product-card:hover { box-shadow: 0 25px 50px -12px rgba(0,0,0,0.65), 0 0 40px rgba(109,40,217,0.18); }
+[data-theme="midnight"] .best-deal-badge { background: linear-gradient(135deg,#4c1d95,#7c3aed); box-shadow: 0 4px 15px rgba(109,40,217,0.45); }
+[data-theme="midnight"] .category-chip:hover, [data-theme="midnight"] .category-chip.active { background: linear-gradient(135deg,rgba(109,40,217,0.22),rgba(124,58,237,0.08)); border-color: #7c3aed; color: #a78bfa; }
+[data-theme="midnight"] .page-btn.active { background: linear-gradient(135deg,#4c1d95,#7c3aed); box-shadow: 0 4px 15px rgba(109,40,217,0.4); }
+[data-theme="midnight"] .page-btn:hover { border-color: #7c3aed; }
+[data-theme="midnight"] .filter-reset-btn:hover { border-color: #7c3aed; }
+[data-theme="midnight"] .filter-option input:checked + .custom-checkbox { background: linear-gradient(135deg,#4c1d95,#7c3aed); border-color: #7c3aed; }
+[data-theme="midnight"] .nav-btn:hover { border-color: #7c3aed; }
+[data-theme="midnight"] .sidebar::-webkit-scrollbar-thumb:hover { background: #7c3aed; }
+[data-theme="midnight"] .autocomplete-item:hover { background: rgba(109,40,217,0.12); }
+[data-theme="midnight"] .autocomplete-item-price { color: #a78bfa; }
+[data-theme="midnight"] .user-avatar { background: linear-gradient(135deg,#4c1d95,#7c3aed); }
+[data-theme="midnight"] .store-nav-item:hover { background: rgba(109,40,217,0.12); border-color: rgba(167,139,250,0.25); }
+[data-theme="midnight"] .store-nav-item.active { background: rgba(109,40,217,0.18); }
+[data-theme="midnight"] .admin-link:hover { background: rgba(109,40,217,0.12); border-color: rgba(167,139,250,0.25); }
+[data-theme="midnight"] .view-btn:hover, [data-theme="midnight"] .view-btn.active { border-color: #7c3aed; color: #a78bfa; }
+[data-theme="midnight"] input[type="range"]::-webkit-slider-thumb { background: linear-gradient(135deg,#4c1d95,#7c3aed); box-shadow: 0 0 10px rgba(124,58,237,0.45); }
+[data-theme="midnight"] .price-range-input:focus { border-color: #7c3aed; }
+[data-theme="midnight"] .spec-filter-search:focus { border-color: #7c3aed; }
+[data-theme="midnight"] .spec-active-chip { background: linear-gradient(135deg,rgba(109,40,217,0.22),rgba(124,58,237,0.08)); border-color: rgba(167,139,250,0.35); color: #a78bfa; }
+[data-theme="midnight"] .nav-divider { background: rgba(167,139,250,0.1); }
+*,*::before,*::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body {
+  font-family:'Outfit',sans-serif;
+  background:var(--bg-dark);
+  color:var(--text-primary);
+  min-height:100vh;
+  overflow-x:hidden;
+  line-height:1.6;
+  opacity:0;
+  transition:opacity 0.3s ease;
+}
+a { text-decoration:none; color:inherit; }
+.background {
+  position:fixed; top:0; left:0; width:100%; height:100%; z-index:-2;
+  background:linear-gradient(135deg,var(--bg-gradient-1) 0%,var(--bg-gradient-2) 50%,var(--bg-gradient-3) 100%);
+}
+.background::before {
+  content:''; position:absolute; top:0; left:0; width:100%; height:100%;
+  background:
+    radial-gradient(ellipse 80% 50% at 20% 40%,rgba(120,0,255,0.15) 0%,transparent 50%),
+    radial-gradient(ellipse 60% 40% at 80% 60%,rgba(0,200,255,0.12) 0%,transparent 50%),
+    radial-gradient(ellipse 50% 30% at 50% 80%,rgba(255,0,200,0.1) 0%,transparent 50%);
+}
+.orb {
+  position:fixed; border-radius:50%; filter:blur(80px); opacity:0.4; z-index:-1;
+  animation:float 20s ease-in-out infinite;
+}
+.orb-1 { width:400px; height:400px; background:var(--emerald); top:10%; left:10%; animation-delay:0s; }
+.orb-2 { width:350px; height:350px; background:var(--gold); top:60%; right:10%; animation-delay:-5s; }
+.orb-3 { width:300px; height:300px; background:var(--coral); bottom:10%; left:30%; animation-delay:-10s; }
+@keyframes float {
+  0%,100% { transform:translate(0,0) scale(1); }
+  25% { transform:translate(30px,-30px) scale(1.05); }
+  50% { transform:translate(-20px,20px) scale(0.95); }
+  75% { transform:translate(20px,10px) scale(1.02); }
+}
+.dashboard { display:flex; min-height:100vh; }
+.sidebar {
+  position:fixed; left:0; top:0; width:var(--sidebar-width); height:100vh;
+  background:var(--glass-bg); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px);
+  border-right:1px solid var(--glass-border); padding:24px; z-index:100;
+  transition:all var(--transition-normal); overflow-y:auto;
+  display:flex; flex-direction:column;
+}
+.sidebar::-webkit-scrollbar { width:6px; }
+.sidebar::-webkit-scrollbar-track { background:transparent; }
+.sidebar::-webkit-scrollbar-thumb { background:var(--glass-border); border-radius:3px; }
+.sidebar::-webkit-scrollbar-thumb:hover { background:var(--emerald-light); }
+.sidebar-header {
+  display:flex; align-items:center; gap:12px;
+  padding-bottom:30px; border-bottom:1px solid var(--glass-border); margin-bottom:30px;
+}
+.logo {
+  width:45px; height:45px;
+  background:linear-gradient(135deg,var(--emerald),var(--gold));
+  border-radius:12px; display:flex; align-items:center; justify-content:center;
+  font-weight:700; font-size:20px; box-shadow:0 8px 32px rgba(5,150,105,0.3);
+  flex-shrink:0;
+}
+.logo-text {
+  font-size:20px; font-weight:600;
+  background:linear-gradient(135deg,var(--emerald-light),var(--gold));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+}
+.nav-menu { list-style:none; flex:1; }
+.nav-menu ul { list-style:none; padding:0; margin:0; }
+.nav-section { margin-bottom:25px; list-style:none; }
+.nav-section-title {
+  font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:1.5px;
+  color:var(--text-muted); margin-bottom:12px; padding-left:15px; display:block;
+}
+.nav-item { margin-bottom:5px; list-style:none; }
+.nav-link {
+  display:flex; align-items:center; gap:14px; padding:14px 18px;
+  color:var(--text-secondary); border-radius:12px; transition:all var(--transition-fast);
+  position:relative; overflow:hidden; font-size:14px; font-weight:500;
+}
+.nav-link:hover { background:var(--glass-hover); color:var(--text-primary); }
+.nav-link.active { background:var(--glass-hover); color:var(--text-primary); }
+.nav-link.active::before {
+  content:''; position:absolute; left:0; top:50%; transform:translateY(-50%);
+  width:3px; height:60%; background:linear-gradient(180deg,var(--emerald-light),var(--gold));
+  border-radius:0 2px 2px 0;
+}
+.nav-icon { width:22px; height:22px; opacity:0.8; flex-shrink:0; }
+.nav-link.active .nav-icon,.nav-link:hover .nav-icon { opacity:1; }
+
+/* ── Mega Category Tree ── */
+.nav-section-label {
+  font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:1.5px;
+  color:var(--text-muted); padding:0 6px; margin:14px 0 8px; display:block;
+}
+.cat-group { margin-bottom:3px; }
+.cat-parent {
+  display:flex; align-items:center; gap:9px; padding:9px 12px;
+  border-radius:11px; cursor:pointer; transition:all var(--transition-fast);
+  color:var(--text-secondary); font-size:13px; font-weight:600;
+  border:1px solid transparent; user-select:none;
+}
+.cat-parent:hover { background:var(--glass-hover); color:var(--text-primary); border-color:var(--glass-border); }
+.cat-parent.open { background:var(--glass-hover); color:var(--text-primary); border-color:var(--glass-border); }
+.cat-parent.active-parent {
+  background:linear-gradient(135deg,rgba(52,211,153,0.12),rgba(5,150,105,0.06));
+  border-color:rgba(52,211,153,0.25); color:var(--emerald-light);
+}
+.cat-icon {
+  width:30px; height:30px; border-radius:8px; display:flex; align-items:center;
+  justify-content:center; flex-shrink:0; font-size:15px;
+  background:var(--glass-bg); border:1px solid var(--glass-border);
+  transition:all var(--transition-fast);
+}
+.cat-parent:hover .cat-icon,.cat-parent.open .cat-icon {
+  background:linear-gradient(135deg,rgba(52,211,153,0.18),rgba(5,150,105,0.08));
+  border-color:rgba(52,211,153,0.3);
+}
+.cat-parent.active-parent .cat-icon {
+  background:linear-gradient(135deg,var(--emerald),var(--emerald-light));
+  border-color:transparent; box-shadow:0 3px 10px rgba(5,150,105,0.4);
+}
+.cat-label { flex:1; line-height:1.2; }
+.cat-label small { display:block; font-size:10px; font-weight:400; color:var(--text-muted); margin-top:1px; line-height:1.3; }
+.cat-parent.active-parent .cat-label small { color:rgba(52,211,153,0.6); }
+.cat-arrow {
+  width:14px; height:14px; flex-shrink:0; opacity:0.4;
+  transition:transform var(--transition-fast), opacity var(--transition-fast);
+}
+.cat-parent.open .cat-arrow { transform:rotate(90deg); opacity:0.9; }
+.cat-children {
+  overflow:hidden; max-height:0;
+  transition:max-height 0.38s cubic-bezier(0.4,0,0.2,1);
+  padding-left:10px; margin-top:2px;
+}
+.cat-children.open { max-height:700px; }
+.cat-sub {
+  display:flex; align-items:center; gap:8px; padding:6px 10px;
+  border-radius:8px; cursor:pointer; transition:all var(--transition-fast);
+  color:var(--text-muted); font-size:12px; font-weight:500;
+  border-left:2px solid transparent; margin-bottom:1px;
+}
+.cat-sub:hover { background:var(--glass-hover); color:var(--text-primary); border-left-color:var(--glass-border); }
+.cat-sub.active {
+  background:linear-gradient(135deg,rgba(52,211,153,0.1),transparent);
+  color:var(--emerald-light); border-left-color:var(--emerald-light); font-weight:600;
+}
+.cat-sub-icon { font-size:12px; width:16px; text-align:center; flex-shrink:0; opacity:0.8; }
+.cat-sub.active .cat-sub-icon { opacity:1; }
+.nav-divider { height:1px; background:var(--glass-border); margin:12px 0; }
+.store-nav-item {
+  display:flex; align-items:center; gap:10px; padding:8px 12px;
+  border-radius:10px; cursor:pointer; transition:all var(--transition-fast);
+  font-size:13px; color:var(--text-secondary); margin-bottom:3px;
+  border:1px solid transparent;
+}
+.store-nav-item:hover { background:var(--glass-hover); color:var(--text-primary); border-color:var(--glass-border); }
+.store-nav-item.active { background:var(--glass-hover); color:var(--text-primary); }
+.store-pip {
+  width:10px; height:10px; border-radius:50%; flex-shrink:0;
+}
+.store-nav-label { flex:1; font-weight:500; }
+.admin-link {
+  display:flex; align-items:center; gap:10px; padding:9px 12px;
+  border-radius:11px; cursor:pointer; transition:all var(--transition-fast);
+  color:var(--text-muted); font-size:13px; font-weight:500;
+  text-decoration:none; border:1px solid transparent;
+}
+.admin-link:hover { background:var(--glass-hover); color:var(--text-primary); border-color:var(--glass-border); }
+.admin-link svg { width:18px; height:18px; flex-shrink:0; }
+.sidebar-footer { padding-top:14px; border-top:1px solid var(--glass-border); margin-top:auto; }
+.user-profile {
+  display:flex; align-items:center; gap:12px; padding:12px;
+  border-radius:12px; cursor:pointer; transition:background var(--transition-fast);
+}
+.user-profile:hover { background:var(--glass-hover); }
+.user-avatar {
+  width:42px; height:42px; border-radius:12px;
+  background:linear-gradient(135deg,var(--emerald),var(--gold));
+  display:flex; align-items:center; justify-content:center;
+  font-weight:600; font-size:16px; flex-shrink:0;
+}
+.user-info { flex:1; }
+.user-name { font-weight:500; font-size:14px; }
+.user-role { font-size:12px; color:var(--text-muted); }
+.main-content { flex:1; margin-left:var(--sidebar-width); padding:30px; min-height:100vh; }
+.navbar {
+  display:flex; align-items:center; justify-content:space-between;
+  margin-bottom:30px; gap:20px; flex-wrap:wrap;
+}
+.page-title { font-size:28px; font-weight:600; }
+.navbar-right { display:flex; align-items:center; gap:15px; }
+.search-box { position:relative; flex:1; max-width:420px; }
+.search-input {
+  width:100%; padding:12px 20px 12px 48px;
+  background:var(--glass-bg); backdrop-filter:blur(10px);
+  border:1px solid var(--glass-border); border-radius:12px;
+  color:var(--text-primary); font-family:inherit; font-size:14px;
+  transition:all var(--transition-fast);
+}
+.search-input::placeholder { color:var(--text-muted); }
+.search-input:focus {
+  outline:none; border-color:var(--emerald-light);
+  box-shadow:0 0 20px rgba(52,211,153,0.2);
+}
+.search-icon {
+  position:absolute; left:16px; top:50%; transform:translateY(-50%);
+  width:20px; height:20px; color:var(--text-muted); pointer-events:none;
+}
+.autocomplete-dropdown {
+  position:absolute; top:calc(100% + 8px); left:0; right:0;
+  background:rgba(13,26,20,0.97); backdrop-filter:blur(20px);
+  border:1px solid var(--glass-border); border-radius:12px;
+  z-index:200; overflow:hidden; display:none;
+  box-shadow:0 20px 60px rgba(0,0,0,0.5);
+}
+[data-theme="light"] .autocomplete-dropdown { background:rgba(245,245,240,0.97); }
+.autocomplete-dropdown.visible { display:block; animation:fadeInDown 0.2s ease; }
+@keyframes fadeInDown { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
+.autocomplete-item {
+  padding:12px 18px; cursor:pointer; transition:background var(--transition-fast);
+  font-size:14px; display:flex; align-items:center; gap:12px;
+}
+.autocomplete-item:hover { background:var(--glass-hover); }
+.autocomplete-item-img {
+  width:36px; height:36px; border-radius:8px; object-fit:contain;
+  background:var(--glass-bg); padding:2px;
+}
+.autocomplete-item-name { flex:1; }
+.autocomplete-item-price {
+  font-family:'Space Mono',monospace; font-size:13px;
+  color:var(--emerald-light); font-weight:700;
+}
+.nav-btn {
+  width:45px; height:45px; background:var(--glass-bg); backdrop-filter:blur(10px);
+  border:1px solid var(--glass-border); border-radius:12px;
+  display:flex; align-items:center; justify-content:center;
+  cursor:pointer; position:relative; transition:all var(--transition-fast);
+  color:var(--text-secondary); flex-shrink:0;
+}
+.nav-btn:hover { background:var(--glass-hover); border-color:var(--emerald-light); }
+.nav-btn svg { width:20px; height:20px; }
+.store-layout { display:grid; grid-template-columns:260px 1fr; gap:24px; align-items:start; }
+.glass-card {
+  background:var(--glass-bg); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px);
+  border:1px solid var(--glass-border); border-radius:var(--border-radius);
+  padding:var(--card-padding); position:relative; overflow:hidden;
+  transition:all var(--transition-normal); transform-style:preserve-3d;
+}
+.glass-card::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:1px;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,0.2),transparent);
+}
+.filter-panel { position:sticky; top:24px; }
+.filter-panel .glass-card { padding:20px; }
+.filter-title {
+  font-size:15px; font-weight:600; margin-bottom:18px;
+  display:flex; align-items:center; gap:10px;
+}
+.filter-title svg { width:18px; height:18px; color:var(--emerald-light); }
+.filter-section { margin-bottom:20px; }
+.filter-section-header {
+  display:flex; align-items:center; justify-content:space-between;
+  cursor:pointer; padding:8px 0; border-bottom:1px solid var(--glass-border);
+  margin-bottom:12px; font-weight:600; font-size:13px; text-transform:uppercase;
+  letter-spacing:0.5px; color:var(--text-secondary); transition:color var(--transition-fast);
+}
+.filter-section-header:hover { color:var(--text-primary); }
+.filter-section-header svg { width:16px; height:16px; transition:transform var(--transition-fast); }
+.filter-section-header.collapsed svg { transform:rotate(-90deg); }
+.filter-section-body { overflow:hidden; max-height:500px; transition:max-height 0.3s ease; }
+.filter-section-body.collapsed { max-height:0; }
+.filter-option {
+  display:flex; align-items:center; gap:10px; padding:6px 0; cursor:pointer;
+  font-size:13px; color:var(--text-secondary); transition:color var(--transition-fast);
+}
+.filter-option:hover { color:var(--text-primary); }
+.filter-option input[type="checkbox"] { display:none; }
+.custom-checkbox {
+  width:18px; height:18px; border-radius:5px; border:1.5px solid var(--glass-border);
+  display:flex; align-items:center; justify-content:center; flex-shrink:0;
+  transition:all var(--transition-fast); background:var(--glass-bg);
+}
+.filter-option input:checked + .custom-checkbox {
+  background:linear-gradient(135deg,var(--emerald),var(--emerald-light));
+  border-color:var(--emerald-light);
+}
+.filter-option input:checked + .custom-checkbox::after {
+  content:''; width:5px; height:9px; border:2px solid white;
+  border-top:none; border-left:none; transform:rotate(45deg) translateY(-1px);
+}
+.filter-option-count {
+  margin-left:auto; font-size:11px; color:var(--text-muted);
+  background:var(--glass-bg); padding:2px 7px; border-radius:10px;
+}
+.price-range-wrap { padding:8px 0; }
+.price-range-inputs { display:flex; gap:10px; margin-bottom:12px; }
+.price-range-input {
+  flex:1; padding:8px 12px; background:var(--glass-bg);
+  border:1px solid var(--glass-border); border-radius:8px;
+  color:var(--text-primary); font-family:inherit; font-size:13px;
+}
+.price-range-input:focus { outline:none; border-color:var(--emerald-light); }
+input[type="range"] { width:100%; appearance:none; height:4px; border-radius:2px; background:var(--glass-border); outline:none; }
+input[type="range"]::-webkit-slider-thumb {
+  appearance:none; width:18px; height:18px; border-radius:50%;
+  background:linear-gradient(135deg,var(--emerald),var(--emerald-light));
+  cursor:pointer; box-shadow:0 0 10px rgba(52,211,153,0.4);
+}
+.store-dot {
+  display:inline-block; width:10px; height:10px; border-radius:50%; flex-shrink:0;
+}
+.store-dot.tunisianet { background:var(--store-tunisianet); }
+.store-dot.spacenet { background:var(--store-spacenet); }
+.store-dot.skymil { background:var(--store-skymil); }
+.store-dot.mytek { background:var(--store-mytek); }
+.filter-reset-btn {
+  width:100%; padding:10px; background:transparent;
+  border:1px solid var(--glass-border); border-radius:10px;
+  color:var(--text-secondary); font-family:inherit; font-size:13px;
+  cursor:pointer; transition:all var(--transition-fast); margin-top:4px;
+}
+.filter-reset-btn:hover { background:var(--glass-hover); color:var(--text-primary); border-color:var(--emerald-light); }
+/* ── Spec Filters ── */
+.spec-filters-wrap { animation:fadeInUp 0.3s ease; }
+.spec-filter-search {
+  width:100%; padding:7px 10px; background:var(--glass-bg);
+  border:1px solid var(--glass-border); border-radius:8px;
+  color:var(--text-primary); font-family:inherit; font-size:12px;
+  margin-bottom:8px;
+}
+.spec-filter-search:focus { outline:none; border-color:var(--emerald-light); }
+.spec-active-chip {
+  display:inline-flex; align-items:center; gap:5px;
+  padding:3px 9px; border-radius:20px; font-size:11px; font-weight:600;
+  background:linear-gradient(135deg,rgba(52,211,153,0.2),rgba(5,150,105,0.1));
+  border:1px solid rgba(52,211,153,0.3); color:var(--emerald-light);
+  cursor:pointer; margin:2px; transition:all var(--transition-fast);
+}
+.spec-active-chip:hover { background:rgba(220,38,38,0.15); border-color:rgba(220,38,38,0.3); color:var(--danger); }
+.spec-active-chips { display:flex; flex-wrap:wrap; gap:2px; margin-bottom:8px; }
+.products-area {}
+.products-toolbar {
+  display:flex; align-items:center; justify-content:space-between;
+  margin-bottom:24px; gap:16px; flex-wrap:wrap;
+}
+.results-count { font-size:14px; color:var(--text-secondary); }
+.results-count span { color:var(--text-primary); font-weight:600; }
+.sort-group { display:flex; gap:8px; }
+.sort-btn {
+  padding:9px 16px; background:var(--glass-bg); border:1px solid var(--glass-border);
+  border-radius:10px; color:var(--text-secondary); font-family:inherit; font-size:13px;
+  cursor:pointer; transition:all var(--transition-fast);
+}
+.sort-btn:hover { background:var(--glass-hover); color:var(--text-primary); }
+.sort-btn.active {
+  background:linear-gradient(135deg,rgba(52,211,153,0.2),rgba(52,211,153,0.05));
+  border-color:var(--emerald-light); color:var(--emerald-light);
+}
+.view-toggle { display:flex; gap:6px; }
+.view-btn {
+  width:36px; height:36px; background:var(--glass-bg); border:1px solid var(--glass-border);
+  border-radius:8px; display:flex; align-items:center; justify-content:center;
+  cursor:pointer; transition:all var(--transition-fast); color:var(--text-secondary);
+}
+.view-btn svg { width:16px; height:16px; }
+.view-btn:hover,.view-btn.active { background:var(--glass-hover); border-color:var(--emerald-light); color:var(--emerald-light); }
+.products-grid {
+  display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:20px;
+}
+.products-grid.list-view { grid-template-columns:1fr; }
+.product-card {
+  background:var(--glass-bg); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px);
+  border:1px solid var(--glass-border); border-radius:var(--border-radius);
+  overflow:hidden; position:relative; cursor:pointer;
+  transition:all var(--transition-normal); transform-style:preserve-3d;
+  animation:fadeInUp 0.6s ease-out backwards;
+}
+.product-card::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:1px;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,0.2),transparent);
+}
+.product-card:hover {
+  background:var(--glass-hover); border-color:rgba(255,255,255,0.15);
+  box-shadow:0 25px 50px -12px var(--glass-shadow),0 0 40px rgba(52,211,153,0.1);
+  transform:translateY(-4px);
+}
+@keyframes fadeInUp {
+  from{opacity:0;transform:translateY(30px)}
+  to{opacity:1;transform:translateY(0)}
+}
+.product-img-wrap {
+  position:relative; height:180px; overflow:hidden;
+  background:linear-gradient(135deg,rgba(255,255,255,0.03),rgba(255,255,255,0.01));
+}
+.product-img {
+  width:100%; height:100%; object-fit:contain; padding:16px;
+  transition:transform 0.4s ease;
+}
+.product-card:hover .product-img { transform:scale(1.05); }
+.product-img-skeleton {
+  position:absolute; inset:0;
+  background:linear-gradient(90deg,var(--glass-bg) 25%,var(--glass-hover) 50%,var(--glass-bg) 75%);
+  background-size:200% 100%; animation:shimmer 1.5s infinite;
+}
+@keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+.product-badge {
+  position:absolute; top:12px; left:12px;
+  background:var(--glass-bg); backdrop-filter:blur(10px);
+  border:1px solid var(--glass-border); border-radius:8px;
+  padding:4px 10px; font-size:11px; font-weight:600; color:var(--text-secondary);
+}
+.best-deal-badge {
+  position:absolute; top:12px; right:12px;
+  background:linear-gradient(135deg,var(--emerald),var(--emerald-light));
+  border-radius:8px; padding:4px 10px; font-size:11px; font-weight:700; color:white;
+  box-shadow:0 4px 15px rgba(5,150,105,0.4);
+  animation:pulseBadge 2s ease-in-out infinite;
+}
+@keyframes pulseBadge { 0%,100%{box-shadow:0 4px 15px rgba(5,150,105,0.4)} 50%{box-shadow:0 4px 25px rgba(52,211,153,0.6)} }
+.product-body { padding:16px; }
+.product-brand {
+  font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:1px;
+  color:var(--emerald-light); margin-bottom:6px;
+}
+.product-name {
+  font-size:14px; font-weight:500; line-height:1.4; margin-bottom:12px;
+  color:var(--text-primary); display:-webkit-box; -webkit-line-clamp:2;
+  -webkit-box-orient:vertical; overflow:hidden;
+}
+.product-price-wrap { margin-bottom:12px; }
+.product-best-price {
+  font-family:'Space Mono',monospace; font-size:22px; font-weight:700;
+  background:linear-gradient(135deg,var(--emerald-light),var(--gold));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+}
+.product-price-label { font-size:11px; color:var(--text-muted); margin-top:2px; }
+.store-price-bar {
+  display:flex; gap:6px; align-items:center; margin-bottom:14px;
+  flex-wrap:wrap;
+}
+.store-price-pill {
+  display:flex; align-items:center; gap:5px; padding:4px 8px;
+  background:var(--glass-bg); border:1px solid var(--glass-border); border-radius:20px;
+  font-size:11px; color:var(--text-secondary);
+  transition:all var(--transition-fast);
+}
+.store-price-pill:hover { background:var(--glass-hover); }
+.store-price-pill .price-val { font-family:'Space Mono',monospace; font-size:11px; font-weight:700; }
+.compare-btn {
+  width:100%; padding:10px; border-radius:12px;
+  background:linear-gradient(135deg,rgba(52,211,153,0.15),rgba(5,150,105,0.1));
+  border:1px solid rgba(52,211,153,0.3);
+  color:var(--emerald-light); font-family:inherit; font-size:13px; font-weight:600;
+  cursor:pointer; transition:all var(--transition-fast);
+  display:flex; align-items:center; justify-content:center; gap:8px;
+}
+.compare-btn:hover {
+  background:linear-gradient(135deg,rgba(52,211,153,0.25),rgba(5,150,105,0.2));
+  border-color:var(--emerald-light); box-shadow:0 0 20px rgba(52,211,153,0.2);
+  transform:translateY(-1px);
+}
+.compare-btn svg { width:15px; height:15px; }
+.list-view .product-card {
+  display:grid; grid-template-columns:160px 1fr auto; align-items:center; overflow:visible;
+}
+.list-view .product-img-wrap { height:120px; border-radius:var(--border-radius) 0 0 var(--border-radius); }
+.list-view .product-body { display:flex; align-items:center; gap:24px; flex:1; }
+.list-view .product-name { margin-bottom:0; -webkit-line-clamp:1; }
+.list-view .product-price-wrap { margin-bottom:0; }
+.list-view .store-price-bar { margin-bottom:0; }
+.list-view .compare-btn { width:auto; padding:10px 20px; white-space:nowrap; margin-right:16px; }
+.skeleton-card {
+  background:var(--glass-bg); border:1px solid var(--glass-border);
+  border-radius:var(--border-radius); overflow:hidden;
+}
+.skeleton-img { height:180px; background:linear-gradient(90deg,var(--glass-bg) 25%,var(--glass-hover) 50%,var(--glass-bg) 75%); background-size:200% 100%; animation:shimmer 1.5s infinite; }
+.skeleton-line { height:12px; border-radius:6px; background:linear-gradient(90deg,var(--glass-bg) 25%,var(--glass-hover) 50%,var(--glass-bg) 75%); background-size:200% 100%; animation:shimmer 1.5s infinite; margin:10px 16px; }
+.skeleton-line.w60 { width:60%; }
+.skeleton-line.w80 { width:80%; }
+.skeleton-line.w40 { width:40%; }
+.pagination-wrap {
+  display:flex; align-items:center; justify-content:center; gap:8px;
+  margin-top:36px; padding-top:24px; border-top:1px solid var(--glass-border);
+}
+.page-btn {
+  width:40px; height:40px; background:var(--glass-bg); border:1px solid var(--glass-border);
+  border-radius:10px; display:flex; align-items:center; justify-content:center;
+  cursor:pointer; transition:all var(--transition-fast); font-family:inherit;
+  font-size:14px; color:var(--text-secondary);
+}
+.page-btn:hover { background:var(--glass-hover); border-color:var(--emerald-light); color:var(--text-primary); }
+.page-btn.active {
+  background:linear-gradient(135deg,var(--emerald),var(--emerald-light));
+  border-color:transparent; color:white; font-weight:700;
+  box-shadow:0 4px 15px rgba(5,150,105,0.4);
+}
+.page-btn svg { width:16px; height:16px; }
+.mobile-menu-toggle {
+  display:none; position:fixed; bottom:24px; right:24px; z-index:300;
+  width:54px; height:54px; background:linear-gradient(135deg,var(--emerald),var(--gold));
+  border-radius:16px; border:none; cursor:pointer; box-shadow:0 8px 32px rgba(5,150,105,0.4);
+  align-items:center; justify-content:center;
+}
+.mobile-menu-toggle svg { width:24px; height:24px; color:white; }
+.site-footer {
+  text-align:center; padding:24px; margin-left:var(--sidebar-width);
+  font-size:13px; color:var(--text-muted); border-top:1px solid var(--glass-border);
+}
+.site-footer a { color:var(--emerald-light); }
+.empty-state {
+  text-align:center; padding:80px 20px; color:var(--text-muted);
+}
+.empty-state svg { width:64px; height:64px; margin-bottom:20px; opacity:0.4; }
+.empty-state h3 { font-size:20px; font-weight:600; margin-bottom:8px; color:var(--text-secondary); }
+.toast-container {
+  position:fixed; top:24px; right:24px; z-index:1000; display:flex; flex-direction:column; gap:10px;
+}
+.toast {
+  background:rgba(13,26,20,0.95); backdrop-filter:blur(20px);
+  border:1px solid var(--glass-border); border-radius:12px; padding:14px 20px;
+  display:flex; align-items:center; gap:12px; min-width:280px;
+  animation:toastIn 0.3s ease; box-shadow:0 20px 60px rgba(0,0,0,0.4);
+}
+[data-theme="light"] .toast { background:rgba(245,245,240,0.97); }
+.toast.success { border-color:rgba(52,211,153,0.4); }
+.toast.error { border-color:rgba(220,38,38,0.4); }
+@keyframes toastIn { from{opacity:0;transform:translateX(40px)} to{opacity:1;transform:translateX(0)} }
+@keyframes toastOut { from{opacity:1;transform:translateX(0)} to{opacity:0;transform:translateX(40px)} }
+.category-chip {
+  padding:5px 12px; border-radius:20px; font-size:12px; font-weight:500;
+  background:var(--glass-bg); border:1px solid var(--glass-border);
+  color:var(--text-secondary); cursor:pointer; transition:all var(--transition-fast);
+  white-space:nowrap;
+}
+.category-chip:hover,.category-chip.active {
+  background:linear-gradient(135deg,rgba(52,211,153,0.2),rgba(5,150,105,0.1));
+  border-color:var(--emerald-light); color:var(--emerald-light);
+}
+.category-chips-row {
+  display:flex; gap:8px; flex-wrap:wrap; margin-bottom:20px;
+}
+@media(max-width:1200px){
+  .store-layout{grid-template-columns:220px 1fr;}
+}
+@media(max-width:992px){
+  :root{--sidebar-width:0px;}
+  .sidebar{transform:translateX(-100%);width:280px;}
+  .sidebar.open{transform:translateX(0);}
+  .main-content{margin-left:0;}
+  .mobile-menu-toggle{display:flex;}
+  .site-footer{margin-left:0;}
+  .store-layout{grid-template-columns:1fr;}
+  .filter-panel{position:static;}
+}
+@media(max-width:768px){
+  .navbar{flex-wrap:wrap;}
+  .search-box{order:3;flex:1 1 100%;}
+  .page-title{font-size:22px;}
+  .products-grid{grid-template-columns:repeat(auto-fill,minmax(200px,1fr));}
+  .sort-group{flex-wrap:wrap;}
+}
+@media(max-width:480px){
+  .main-content{padding:20px 15px;}
+  .products-grid{grid-template-columns:1fr 1fr;}
+}
+</style>
+</head>
+<body>
+<div class="background"></div>
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<div class="orb orb-3"></div>
+<div class="toast-container" id="toastContainer"></div>
+
+<div class="dashboard">
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="logo">C</div>
+      <span class="logo-text">ComparateurTN</span>
+    </div>
+    <nav class="nav-menu" id="sidebarNav">
+
+      <!-- All products -->
+      <div class="cat-group">
+        <div class="cat-parent" id="navAll" onclick="navSelectAll()">
+          <div class="cat-label">Tous les produits<small>Toutes catégories</small></div>
+        </div>
+      </div>
+
+      <div class="nav-divider"></div>
+      <span class="nav-section-label">Catégories</span>
+
+      <!-- Informatique -->
+      <div class="cat-group">
+        <div class="cat-parent" onclick="toggleCat('info')" id="cat-info">
+          <div class="cat-label">Informatique<small>PC, Composants, Périphériques</small></div>
+          <svg class="cat-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+        </div>
+        <div class="cat-children" id="children-info">
+          <div class="cat-sub" onclick="navSub('Informatique','Ordinateurs Portables')">Ordinateurs Portables</div>
+          <div class="cat-sub" onclick="navSub('Informatique','PC Bureau')">PC Bureau</div>
+          <div class="cat-sub" onclick="navSub('Informatique','Processeurs')">Processeurs (CPU)</div>
+          <div class="cat-sub" onclick="navSub('Informatique','Cartes Mère')">Cartes Mère</div>
+          <div class="cat-sub" onclick="navSub('Informatique','RAM')">Mémoire RAM</div>
+          <div class="cat-sub" onclick="navSub('Informatique','Cartes Graphiques')">Cartes Graphiques (GPU)</div>
+          <div class="cat-sub" onclick="navSub('Informatique','Stockage')">SSD / Disques Durs</div>
+          <div class="cat-sub" onclick="navSub('Informatique','Alimentation')">Alimentations (PSU)</div>
+          <div class="cat-sub" onclick="navSub('Informatique','Boîtiers')">Boîtiers PC</div>
+          <div class="cat-sub" onclick="navSub('Informatique','Refroidissement')">Refroidissement</div>
+          <div class="cat-sub" onclick="navSub('Informatique','Moniteurs')">Moniteurs</div>
+          <div class="cat-sub" onclick="navSub('Informatique','Claviers')">Claviers & Souris</div>
+          <div class="cat-sub" onclick="navSub('Informatique','Imprimantes')">Imprimantes</div>
+          <div class="cat-sub" onclick="navSub('Informatique','Réseau')">Réseau & Wi-Fi</div>
+        </div>
+      </div>
+
+      <!-- Téléphonie -->
+      <div class="cat-group">
+        <div class="cat-parent" onclick="toggleCat('phone')" id="cat-phone">
+          <div class="cat-label">Téléphonie & Tablettes<small>Smartphones, Tablettes, Accessoires</small></div>
+          <svg class="cat-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+        </div>
+        <div class="cat-children" id="children-phone">
+          <div class="cat-sub" onclick="navSub('Téléphonie & Tablettes','Smartphones')">Smartphones</div>
+          <div class="cat-sub" onclick="navSub('Téléphonie & Tablettes','Tablettes')">Tablettes</div>
+          <div class="cat-sub" onclick="navSub('Téléphonie & Tablettes','Smartwatch')">Smartwatch & Bracelet</div>
+          <div class="cat-sub" onclick="navSub('Téléphonie & Tablettes','Écouteurs')">Écouteurs & Casques</div>
+          <div class="cat-sub" onclick="navSub('Téléphonie & Tablettes','Coques')">Coques & Protection</div>
+          <div class="cat-sub" onclick="navSub('Téléphonie & Tablettes','Chargeurs')">Chargeurs & Câbles</div>
+          <div class="cat-sub" onclick="navSub('Téléphonie & Tablettes','Power Bank')">Power Banks</div>
+        </div>
+      </div>
+
+      <!-- TV & Son -->
+      <div class="cat-group">
+        <div class="cat-parent" onclick="toggleCat('tv')" id="cat-tv">
+          <div class="cat-label">TV & Son<small>Télévisions, Audio, Home cinéma</small></div>
+          <svg class="cat-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+        </div>
+        <div class="cat-children" id="children-tv">
+          <div class="cat-sub" onclick="navSub('TV & Son','Télévisions')">Télévisions</div>
+          <div class="cat-sub" onclick="navSub('TV & Son','Barres de Son')">Barres de Son</div>
+          <div class="cat-sub" onclick="navSub('TV & Son','Enceintes')">Enceintes Bluetooth</div>
+          <div class="cat-sub" onclick="navSub('TV & Son','Home Cinéma')">Home Cinéma</div>
+          <div class="cat-sub" onclick="navSub('TV & Son','Vidéoprojecteurs')">Vidéoprojecteurs</div>
+          <div class="cat-sub" onclick="navSub('TV & Son','Streaming')">Boxes & Streaming</div>
+        </div>
+      </div>
+
+      <!-- Gaming -->
+      <div class="cat-group">
+        <div class="cat-parent" onclick="toggleCat('gaming')" id="cat-gaming">
+          <div class="cat-label">Gaming<small>Consoles, Jeux, Accessoires</small></div>
+          <svg class="cat-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+        </div>
+        <div class="cat-children" id="children-gaming">
+          <div class="cat-sub" onclick="navSub('Gaming','Consoles')">Consoles de Jeux</div>
+          <div class="cat-sub" onclick="navSub('Gaming','PC Gamer')">PC Gamer</div>
+          <div class="cat-sub" onclick="navSub('Gaming','Manettes')">Manettes</div>
+          <div class="cat-sub" onclick="navSub('Gaming','Claviers Gaming')">Claviers Gaming</div>
+          <div class="cat-sub" onclick="navSub('Gaming','Casques Gaming')">Casques Gaming</div>
+          <div class="cat-sub" onclick="navSub('Gaming','Chaises Gaming')">Chaises Gaming</div>
+        </div>
+      </div>
+
+      <!-- Photo & Vidéo -->
+      <div class="cat-group">
+        <div class="cat-parent" onclick="toggleCat('photo')" id="cat-photo">
+          <div class="cat-label">Photo & Vidéo<small>Appareils, Drones, Optique</small></div>
+          <svg class="cat-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+        </div>
+        <div class="cat-children" id="children-photo">
+          <div class="cat-sub" onclick="navSub('Photo & Vidéo','Appareils Photo')">Appareils Photo</div>
+          <div class="cat-sub" onclick="navSub('Photo & Vidéo','Caméscopes')">Caméscopes</div>
+          <div class="cat-sub" onclick="navSub('Photo & Vidéo','Drones')">Drones</div>
+          <div class="cat-sub" onclick="navSub('Photo & Vidéo','Objectifs')">Objectifs & Optique</div>
+          <div class="cat-sub" onclick="navSub('Photo & Vidéo','Stabilisateurs')">Stabilisateurs & Trépieds</div>
+        </div>
+      </div>
+
+      <!-- Électroménager -->
+      <div class="cat-group">
+        <div class="cat-parent" onclick="toggleCat('electro')" id="cat-electro">
+          <div class="cat-label">Électroménager<small>Cuisine, Lavage, Climatisation</small></div>
+          <svg class="cat-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+        </div>
+        <div class="cat-children" id="children-electro">
+          <div class="cat-sub" onclick="navSub('Électroménager','Réfrigérateurs')">Réfrigérateurs</div>
+          <div class="cat-sub" onclick="navSub('Électroménager','Lave-linge')">Lave-linge</div>
+          <div class="cat-sub" onclick="navSub('Électroménager','Climatisation')">Climatiseurs</div>
+          <div class="cat-sub" onclick="navSub('Électroménager','Fours')">Fours & Micro-ondes</div>
+          <div class="cat-sub" onclick="navSub('Électroménager','Aspirateurs')">Aspirateurs</div>
+          <div class="cat-sub" onclick="navSub('Électroménager','Cafetières')">Cafetières</div>
+          <div class="cat-sub" onclick="navSub('Électroménager','Mixeurs')">Mixeurs & Robots</div>
+        </div>
+      </div>
+
+      <!-- Bureautique -->
+      <div class="cat-group">
+        <div class="cat-parent" onclick="toggleCat('bureau')" id="cat-bureau">
+          <div class="cat-label">Bureautique<small>Imprimantes, Scanners, Papeterie</small></div>
+          <svg class="cat-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+        </div>
+        <div class="cat-children" id="children-bureau">
+          <div class="cat-sub" onclick="navSub('Bureautique','Imprimantes')">Imprimantes</div>
+          <div class="cat-sub" onclick="navSub('Bureautique','Scanners')">Scanners</div>
+          <div class="cat-sub" onclick="navSub('Bureautique','Onduleurs')">Onduleurs (UPS)</div>
+          <div class="cat-sub" onclick="navSub('Bureautique','Fournitures')">Fournitures Bureau</div>
+        </div>
+      </div>
+
+      <div class="nav-divider"></div>
+      <span class="nav-section-label">Magasins</span>
+
+      <div class="store-nav-item" onclick="navStore('Tunisianet')" id="store-Tunisianet">
+        <span class="store-pip" style="background:#e2001a;box-shadow:0 0 6px rgba(226,0,26,0.5)"></span>
+        <span class="store-nav-label">Tunisianet</span>
+      </div>
+      <div class="store-nav-item" onclick="navStore('SpaceNet')" id="store-SpaceNet">
+        <span class="store-pip" style="background:#0066cc;box-shadow:0 0 6px rgba(0,102,204,0.5)"></span>
+        <span class="store-nav-label">SpaceNet</span>
+      </div>
+      <div class="store-nav-item" onclick="navStore('Skymil')" id="store-Skymil">
+        <span class="store-pip" style="background:#ff6600;box-shadow:0 0 6px rgba(255,102,0,0.5)"></span>
+        <span class="store-nav-label">Skymil</span>
+      </div>
+      <div class="store-nav-item" onclick="navStore('Mytek')" id="store-Mytek">
+        <span class="store-pip" style="background:#00933b;box-shadow:0 0 6px rgba(0,147,59,0.5)"></span>
+        <span class="store-nav-label">Mytek</span>
+      </div>
+
+      <div class="nav-divider"></div>
+
+      <a href="/admin" class="admin-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        Administration
+      </a>
+
+    </nav>
+    <div class="sidebar-footer">
+      <div class="user-profile">
+        <div class="user-avatar">CT</div>
+        <div class="user-info">
+          <div class="user-name">ComparateurTN</div>
+          <div class="user-role">4 stores surveillés</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <main class="main-content">
+    <nav class="navbar">
+      <h1 class="page-title">Comparer les Prix</h1>
+      <div class="navbar-right" style="flex:1;justify-content:flex-end;gap:15px;">
+        <div class="search-box" style="flex:1;max-width:420px;">
+          <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <input type="text" class="search-input" id="searchInput" placeholder="Rechercher un produit, marque...">
+          <div class="autocomplete-dropdown" id="autocompleteDropdown"></div>
+        </div>
+        <!-- Theme Picker -->
+        <div class="theme-picker-wrap" id="themePickerWrap" style="position:relative;">
+          <button class="nav-btn" id="theme-toggle" title="Changer le thème" onclick="toggleThemePicker()" style="gap:6px;width:auto;padding:0 14px;font-size:13px;font-weight:600;font-family:inherit;">
+            <span id="themeIcon" style="font-size:16px;">🌿</span>
+            <span id="themeName" style="display:none;">Dark</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px;opacity:.6;"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div id="themeDropdown" style="
+            display:none;position:absolute;top:calc(100% + 8px);right:0;
+            background:rgba(10,15,13,0.97);backdrop-filter:blur(20px);
+            border:1px solid var(--glass-border);border-radius:14px;
+            padding:8px;min-width:180px;z-index:300;
+            box-shadow:0 20px 60px rgba(0,0,0,0.5);
+            animation:fadeInDown .18s ease;
+          ">
+            <div class="theme-opt" data-theme="dark" onclick="applyTheme('dark')" style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;cursor:pointer;font-size:13px;font-weight:500;transition:background .15s;">
+              <span style="font-size:18px;">🌿</span>
+              <div>
+                <div style="font-weight:600;">Dark</div>
+                <div style="font-size:11px;opacity:.55;">Vert Émeraude</div>
+              </div>
+              <span class="theme-check" data-for="dark" style="margin-left:auto;color:#34d399;display:none;">✓</span>
+            </div>
+            <div class="theme-opt" data-theme="light" onclick="applyTheme('light')" style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;cursor:pointer;font-size:13px;font-weight:500;transition:background .15s;">
+              <span style="font-size:18px;">☀️</span>
+              <div>
+                <div style="font-weight:600;">Light</div>
+                <div style="font-size:11px;opacity:.55;">Clair & Épuré</div>
+              </div>
+              <span class="theme-check" data-for="light" style="margin-left:auto;color:#059669;display:none;">✓</span>
+            </div>
+            <div style="height:1px;background:var(--glass-border);margin:4px 0;"></div>
+            <div class="theme-opt" data-theme="gaming" onclick="applyTheme('gaming')" style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;cursor:pointer;font-size:13px;font-weight:500;transition:background .15s;">
+              <span style="font-size:18px;">🎮</span>
+              <div>
+                <div style="font-weight:600;">Gaming</div>
+                <div style="font-size:11px;opacity:.55;">Obsidian · Rouge Vin</div>
+              </div>
+              <span class="theme-check" data-for="gaming" style="margin-left:auto;color:#c0392b;display:none;">✓</span>
+            </div>
+            <div class="theme-opt" data-theme="midnight" onclick="applyTheme('midnight')" style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;cursor:pointer;font-size:13px;font-weight:500;transition:background .15s;">
+              <span style="font-size:18px;">🌌</span>
+              <div>
+                <div style="font-weight:600;">Midnight</div>
+                <div style="font-size:11px;opacity:.55;">Bleu Nuit · Violet</div>
+              </div>
+              <span class="theme-check" data-for="midnight" style="margin-left:auto;color:#a78bfa;display:none;">✓</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <div class="category-chips-row" id="categoryChips">
+      <span class="category-chip active" data-cat="">Tous</span>
+      <span class="category-chip" data-cat="Informatique">💻 Informatique</span>
+      <span class="category-chip" data-cat="Téléphonie & Tablettes">📱 Téléphonie</span>
+      <span class="category-chip" data-cat="TV & Son">📺 TV & Son</span>
+      <span class="category-chip" data-cat="Gaming">🎮 Gaming</span>
+      <span class="category-chip" data-cat="Photo & Vidéo">📷 Photo</span>
+      <span class="category-chip" data-cat="Électroménager">🏠 Électroménager</span>
+      <span class="category-chip" data-cat="Bureautique">📋 Bureautique</span>
+    </div>
+
+    <div class="store-layout">
+      <aside class="filter-panel">
+        <div class="glass-card">
+          <div class="filter-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+            Filtres
+          </div>
+          <div id="filterContainer">
+            <!-- ── Spec filters (dynamic, shown only when a subcategory is active) ── -->
+            <div id="specFiltersSection" style="display:none;">
+              <div id="specFiltersContent"></div>
+              <div style="height:1px;background:var(--glass-border);margin:16px 0;"></div>
+            </div>
+            <div class="filter-section">
+              <div class="filter-section-header" data-section="stores">
+                Stores
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </div>
+              <div class="filter-section-body" id="storesBody">
+                <label class="filter-option"><input type="checkbox" value="Tunisianet" class="store-filter"><span class="custom-checkbox"></span><span class="store-dot tunisianet"></span>Tunisianet<span class="filter-option-count" id="cnt-tunisianet">—</span></label>
+                <label class="filter-option"><input type="checkbox" value="SpaceNet" class="store-filter"><span class="custom-checkbox"></span><span class="store-dot spacenet"></span>SpaceNet<span class="filter-option-count" id="cnt-spacenet">—</span></label>
+                <label class="filter-option"><input type="checkbox" value="Skymil" class="store-filter"><span class="custom-checkbox"></span><span class="store-dot skymil"></span>Skymil<span class="filter-option-count" id="cnt-skymil">—</span></label>
+                <label class="filter-option"><input type="checkbox" value="Mytek" class="store-filter"><span class="custom-checkbox"></span><span class="store-dot mytek"></span>Mytek<span class="filter-option-count" id="cnt-mytek">—</span></label>
+              </div>
+            </div>
+            <div class="filter-section">
+              <div class="filter-section-header" data-section="price">
+                Prix (TND)
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </div>
+              <div class="filter-section-body" id="priceBody">
+                <div class="price-range-wrap">
+                  <div class="price-range-inputs">
+                    <input type="number" class="price-range-input" id="priceMin" placeholder="Min" min="0">
+                    <input type="number" class="price-range-input" id="priceMax" placeholder="Max">
+                  </div>
+                  <input type="range" id="priceRange" min="0" max="10000" value="10000">
+                </div>
+              </div>
+            </div>
+            <div class="filter-section">
+              <div class="filter-section-header" data-section="brands">
+                Marques
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </div>
+              <div class="filter-section-body" id="brandsBody">
+                <div id="brandsList" style="max-height:200px;overflow-y:auto;"></div>
+              </div>
+            </div>
+            <div class="filter-section">
+              <div class="filter-section-header" data-section="stock">
+                Disponibilité
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </div>
+              <div class="filter-section-body" id="stockBody">
+                <label class="filter-option"><input type="checkbox" id="inStockOnly"><span class="custom-checkbox"></span>En stock uniquement</label>
+              </div>
+            </div>
+          </div>
+          <button class="filter-reset-btn" id="resetFilters">Réinitialiser les filtres</button>
+        </div>
+      </aside>
+
+      <div class="products-area">
+        <div class="products-toolbar">
+          <div class="results-count"><span id="resultsCount">0</span> produits trouvés</div>
+          <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
+            <div class="sort-group">
+              <button class="sort-btn" data-sort="bestPrice_asc">Prix ↑</button>
+              <button class="sort-btn" data-sort="bestPrice_desc">Prix ↓</button>
+              <button class="sort-btn" data-sort="name_asc">A–Z</button>
+              <button class="sort-btn active" data-sort="createdAt_desc">Récents</button>
+            </div>
+            <div class="view-toggle">
+              <button class="view-btn active" id="gridView" title="Grille">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+              </button>
+              <button class="view-btn" id="listView" title="Liste">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="products-grid" id="productsGrid"></div>
+
+        <div class="pagination-wrap" id="paginationWrap"></div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<button class="mobile-menu-toggle">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+</button>
+
+<footer class="site-footer">
+  <p>© 2026 ComparateurTN — Comparez les prix Tunisianet, SpaceNet, Skymil & Mytek</p>
+</footer>
+
+<script>
+(function(){
+'use strict';
+
+const STORES = {
+  Tunisianet:{color:'#e2001a',cls:'tunisianet'},
+  SpaceNet:{color:'#0066cc',cls:'spacenet'},
+  Skymil:{color:'#ff6600',cls:'skymil'},
+  Mytek:{color:'#00933b',cls:'mytek'}
+};
+
+/* ── Filtres specs par sous-catégorie (clé stockée dans subcategory) ── */
+const SPEC_FILTERS = {
+  'Ordinateurs Portables':[
+    {key:'ram',label:'RAM (Go)',type:'checkbox',options:['4','8','16','32','64']},
+    {key:'storage',label:'Stockage',type:'checkbox',options:['128Go','256Go','512Go','1To','2To']},
+    {key:'screenSize',label:'Taille écran',type:'checkbox',options:['13"','14"','15"','15.6"','16"','17"','17.3"']},
+    {key:'gpu',label:'GPU',type:'text_search'},
+    {key:'processor',label:'Processeur',type:'text_search'},
+    {key:'os',label:'Système',type:'checkbox',options:['Windows 11','Windows 10','macOS','Linux','Sans OS']},
+    {key:'refreshRate',label:'Fréq. rafraîch.',type:'checkbox',options:['60','90','120','144','165','240']},
+    {key:'screenType',label:'Type dalle',type:'checkbox',options:['IPS','OLED','TN','VA']},
+    {key:'color',label:'Couleur',type:'text_search'},
+    {key:'touchscreen',label:'Écran tactile',type:'boolean'},
+  ],
+  'PC Bureau':[
+    {key:'processor',label:'Processeur',type:'text_search'},
+    {key:'ram',label:'RAM (Go)',type:'checkbox',options:['8','16','32','64']},
+    {key:'storage',label:'Stockage',type:'checkbox',options:['256Go','512Go','1To','2To']},
+    {key:'gpu',label:'GPU',type:'text_search'},
+    {key:'os',label:'Système',type:'checkbox',options:['Windows 11','Windows 10','Linux','Sans OS']},
+    {key:'formFactor',label:'Format',type:'checkbox',options:['Tour','Mini-Tour','All-in-One','Mini PC']},
+  ],
+  'Processeurs':[
+    {key:'socket',label:'Socket',type:'checkbox',options:['AM5','AM4','LGA1700','LGA1200','LGA1851']},
+    {key:'cores',label:'Cœurs',type:'checkbox',options:['4','6','8','12','16','24','32']},
+    {key:'baseFreq',label:'Fréq. base (GHz)',type:'range'},
+    {key:'tdp',label:'TDP (W)',type:'checkbox',options:['35','45','65','95','105','125','170']},
+    {key:'iGPU',label:'GPU intégré',type:'boolean'},
+    {key:'coolerIncluded',label:'Ventirad inclus',type:'boolean'},
+  ],
+  'Cartes Mère':[
+    {key:'socket',label:'Socket',type:'checkbox',options:['AM5','AM4','LGA1700','LGA1200','LGA1851']},
+    {key:'chipset',label:'Chipset',type:'text_search'},
+    {key:'formFactor',label:'Format',type:'checkbox',options:['ATX','Micro-ATX','Mini-ITX','E-ATX']},
+    {key:'ramType',label:'Type RAM',type:'checkbox',options:['DDR4','DDR5']},
+    {key:'m2Slots',label:'Slots M.2',type:'checkbox',options:['1','2','3','4']},
+    {key:'wifi',label:'Wi-Fi intégré',type:'boolean'},
+  ],
+  'RAM':[
+    {key:'capacity',label:'Capacité (Go)',type:'checkbox',options:['8','16','32','48','64','96','128']},
+    {key:'type',label:'Type',type:'checkbox',options:['DDR4','DDR5','DDR3']},
+    {key:'speed',label:'Vitesse (MHz)',type:'checkbox',options:['3200','3600','4800','5200','5600','6000','6400','6800']},
+    {key:'kit',label:'Kit',type:'checkbox',options:['1x8Go','1x16Go','2x8Go','2x16Go','2x32Go','4x16Go']},
+    {key:'rgb',label:'RGB',type:'boolean'},
+  ],
+  'Cartes Graphiques':[
+    {key:'vram',label:'VRAM (Go)',type:'checkbox',options:['4','6','8','10','12','16','20','24']},
+    {key:'vramType',label:'Type VRAM',type:'checkbox',options:['GDDR6','GDDR6X','GDDR7','HBM']},
+    {key:'tdp',label:'TDP (W)',type:'checkbox',options:['75','100','120','150','175','200','250','300','350','400','450']},
+    {key:'pcie',label:'PCIe',type:'checkbox',options:['PCIe 3.0','PCIe 4.0','PCIe 5.0']},
+    {key:'slots',label:'Slots occupés',type:'checkbox',options:['1','2','2.5','3']},
+    {key:'rgb',label:'RGB',type:'boolean'},
+  ],
+  'Stockage':[
+    {key:'capacity',label:'Capacité',type:'checkbox',options:['128Go','256Go','512Go','1To','2To','4To','6To','8To']},
+    {key:'formFactor',label:'Format',type:'checkbox',options:['M.2 2280','2.5"','3.5"','M.2 2242']},
+    {key:'interface',label:'Interface',type:'checkbox',options:['NVMe PCIe 4.0','NVMe PCIe 3.0','SATA III','PCIe 5.0']},
+    {key:'readSpeed',label:'Lecture (MB/s)',type:'range'},
+    {key:'nand',label:'Type NAND',type:'checkbox',options:['TLC','QLC','MLC','SLC']},
+  ],
+  'Moniteurs':[
+    {key:'screenSize',label:'Taille (pouces)',type:'checkbox',options:['24','25','27','28','32','34','38','43']},
+    {key:'resolution',label:'Résolution',type:'checkbox',options:['1920x1080','2560x1440','3840x2160','2560x1080','3440x1440']},
+    {key:'panelType',label:'Type dalle',type:'checkbox',options:['IPS','VA','TN','OLED','Mini-LED']},
+    {key:'refreshRate',label:'Fréquence (Hz)',type:'checkbox',options:['60','75','100','144','165','180','240','360']},
+    {key:'responseTime',label:'Temps réponse',type:'checkbox',options:['0.5ms','1ms','2ms','4ms','5ms']},
+    {key:'hdr',label:'HDR',type:'boolean'},
+    {key:'curved',label:'Incurvé',type:'boolean'},
+    {key:'gsync',label:'G-Sync / FreeSync',type:'boolean'},
+  ],
+  'Claviers':[
+    {key:'type',label:'Type',type:'checkbox',options:['Mécanique','Membrane','Optique','Hall Effect']},
+    {key:'layout',label:'Disposition',type:'checkbox',options:['AZERTY','QWERTY','Compact (TKL)','60%','75%','Full Size']},
+    {key:'wireless',label:'Sans fil',type:'boolean'},
+    {key:'backlight',label:'Rétroéclairage',type:'boolean'},
+    {key:'numpad',label:'Pavé numérique',type:'boolean'},
+  ],
+  'Smartphones':[
+    {key:'ram',label:'RAM (Go)',type:'checkbox',options:['3','4','6','8','12','16']},
+    {key:'storage',label:'Stockage (Go)',type:'checkbox',options:['32','64','128','256','512','1024']},
+    {key:'screenSize',label:'Taille écran',type:'checkbox',options:['5"','5.5"','6"','6.1"','6.4"','6.5"','6.7"','6.9"']},
+    {key:'battery',label:'Batterie (mAh)',type:'checkbox',options:['3000','4000','4500','5000','5000+']},
+    {key:'chargingSpeed',label:'Charge rapide (W)',type:'checkbox',options:['18','25','33','45','65','67','100','120']},
+    {key:'os',label:'Système',type:'checkbox',options:['Android','iOS']},
+    {key:'refreshRate',label:'Fréq. rafraîch.',type:'checkbox',options:['60','90','120','144','165']},
+    {key:'camera',label:'Caméra principale',type:'checkbox',options:['12MP','48MP','50MP','64MP','108MP','200MP']},
+    {key:'wirelessCharging',label:'Charge sans fil',type:'boolean'},
+    {key:'nfc',label:'NFC',type:'boolean'},
+    {key:'waterproof',label:'Étanche',type:'boolean'},
+    {key:'simSlots',label:'Slots SIM',type:'checkbox',options:['1','2']},
+  ],
+  'Tablettes':[
+    {key:'ram',label:'RAM (Go)',type:'checkbox',options:['4','6','8','12','16']},
+    {key:'storage',label:'Stockage (Go)',type:'checkbox',options:['64','128','256','512']},
+    {key:'screenSize',label:'Taille écran',type:'checkbox',options:['7"','8"','10"','10.5"','11"','12"','12.4"','13"']},
+    {key:'battery',label:'Batterie (mAh)',type:'checkbox',options:['5000','7000','8000','10000','11000+']},
+    {key:'os',label:'Système',type:'checkbox',options:['Android','iPadOS','Windows']},
+    {key:'stylus',label:'Stylet compatible',type:'boolean'},
+    {key:'connectivity',label:'Connectivité',type:'checkbox',options:['Wi-Fi Only','Wi-Fi + 4G','Wi-Fi + 5G']},
+  ],
+  'Smartwatch':[
+    {key:'os',label:'Système',type:'checkbox',options:['Wear OS','watchOS','RTOS','Tizen','HarmonyOS']},
+    {key:'screenSize',label:'Taille écran',type:'checkbox',options:['1.2"','1.4"','1.5"','1.8"','2"']},
+    {key:'batteryDays',label:'Autonomie (jours)',type:'checkbox',options:['1','2','3','5','7','14','21']},
+    {key:'gps',label:'GPS intégré',type:'boolean'},
+    {key:'heartRate',label:'Cardiofréquencemètre',type:'boolean'},
+    {key:'spo2',label:'SpO2',type:'boolean'},
+    {key:'ecg',label:'ECG',type:'boolean'},
+    {key:'cellular',label:'Cellulaire (4G)',type:'boolean'},
+    {key:'waterproof',label:'Étanche',type:'boolean'},
+  ],
+  'Écouteurs':[
+    {key:'type',label:'Type',type:'checkbox',options:['Intra-auriculaires','Semi-intra','Tour de cou','True Wireless (TWS)']},
+    {key:'wireless',label:'Sans fil',type:'boolean'},
+    {key:'anc',label:'ANC (Réduction bruit)',type:'boolean'},
+    {key:'battery',label:'Autonomie (h)',type:'checkbox',options:['4','5','6','8','10','12']},
+    {key:'ipRating',label:'Indice IP',type:'checkbox',options:['IPX4','IPX5','IPX7','IP54','IP67']},
+    {key:'codec',label:'Codec audio',type:'checkbox',options:['SBC','AAC','aptX','LDAC','LC3']},
+  ],
+  'Télévisions':[
+    {key:'screenSize',label:'Taille (pouces)',type:'checkbox',options:['32','40','43','50','55','65','75','85','98']},
+    {key:'resolution',label:'Résolution',type:'checkbox',options:['HD','Full HD','4K UHD','8K']},
+    {key:'panelType',label:'Type dalle',type:'checkbox',options:['LED LCD','QLED','OLED','Mini-LED','MicroLED']},
+    {key:'refreshRate',label:'Fréquence (Hz)',type:'checkbox',options:['50','60','100','120','144']},
+    {key:'hdr',label:'HDR',type:'boolean'},
+    {key:'dolbyVision',label:'Dolby Vision',type:'boolean'},
+    {key:'dolbyAtmos',label:'Dolby Atmos',type:'boolean'},
+    {key:'smartTV',label:'Smart TV',type:'boolean'},
+    {key:'gamingMode',label:'Mode Gaming',type:'boolean'},
+  ],
+  'Consoles':[
+    {key:'resolution',label:'Résolution max',type:'checkbox',options:['1080p','1440p','4K','8K']},
+    {key:'storage',label:'Stockage (Go)',type:'checkbox',options:['500','825','1000','2000']},
+    {key:'optical',label:'Lecteur optique',type:'boolean'},
+    {key:'online',label:'Online requis',type:'boolean'},
+  ],
+  'Réfrigérateurs':[
+    {key:'type',label:'Type',type:'checkbox',options:['Combiné','Américain','Congélateur haut','Congélateur bas','Sous-comptoir','Side-by-Side']},
+    {key:'totalCapacity',label:'Capacité totale (L)',type:'checkbox',options:['< 200L','200-300L','300-400L','400-500L','> 500L']},
+    {key:'energyClass',label:'Classe énergie',type:'checkbox',options:['A','A+','A++','A+++','D','E','F']},
+    {key:'noFrost',label:'No Frost',type:'boolean'},
+    {key:'inverter',label:'Compresseur Inverter',type:'boolean'},
+    {key:'dispenser',label:'Distributeur eau',type:'boolean'},
+  ],
+  'Lave-linge':[
+    {key:'type',label:'Type',type:'checkbox',options:['Lave-linge','Lave-linge séchant']},
+    {key:'capacity',label:'Capacité (kg)',type:'checkbox',options:['5','6','7','8','9','10','11','12']},
+    {key:'spinSpeed',label:'Essorage (tr/min)',type:'checkbox',options:['800','1000','1200','1400','1600']},
+    {key:'energyClass',label:'Classe énergie',type:'checkbox',options:['A','B','C','D','E']},
+    {key:'loadType',label:'Chargement',type:'checkbox',options:['Frontal','Dessus']},
+    {key:'steamFunction',label:'Fonction vapeur',type:'boolean'},
+    {key:'inverter',label:'Moteur Inverter',type:'boolean'},
+  ],
+  'Climatisation':[
+    {key:'capacity',label:'Puissance (BTU)',type:'checkbox',options:['9000','12000','18000','24000','36000']},
+    {key:'type',label:'Type',type:'checkbox',options:['Split','Mono-split','Multi-split','Portable','Cassette']},
+    {key:'inverter',label:'Inverter',type:'boolean'},
+    {key:'hotCold',label:'Chaud/Froid',type:'boolean'},
+    {key:'wifi',label:'Wi-Fi',type:'boolean'},
+    {key:'energyClass',label:'Classe énergie',type:'checkbox',options:['A','A+','A++','A+++']},
+  ],
+  'Imprimantes':[
+    {key:'type',label:'Type',type:'checkbox',options:['Jet d\'encre','Laser','Multifonction','Sublimation']},
+    {key:'color',label:'Couleur',type:'boolean'},
+    {key:'wireless',label:'Sans fil',type:'boolean'},
+    {key:'duplex',label:'Recto-verso auto',type:'boolean'},
+    {key:'scanner',label:'Scanner intégré',type:'boolean'},
+    {key:'adf',label:'Chargeur documents',type:'boolean'},
+  ],
+  'Onduleurs':[
+    {key:'power',label:'Puissance (W)',type:'checkbox',options:['300','500','600','800','1000','1500','2000']},
+    {key:'va',label:'Puissance (VA)',type:'checkbox',options:['500','600','800','1000','1200','1500','2000']},
+    {key:'type',label:'Type',type:'checkbox',options:['Offline','Line-Interactive','Online/Double conversion']},
+    {key:'avr',label:'Régulation tension',type:'boolean'},
+    {key:'display',label:'Affichage LCD',type:'boolean'},
+  ]
+};
+
+/* Mapping subcategory → clé SPEC_FILTERS */
+const SUB_TO_SPECFILTER = {
+  'Ordinateurs Portables':'Ordinateurs Portables',
+  'PC Bureau':'PC Bureau',
+  'Processeurs':'Processeurs',
+  'Cartes Mère':'Cartes Mère',
+  'RAM':'RAM',
+  'Cartes Graphiques':'Cartes Graphiques',
+  'Stockage':'Stockage',
+  'Moniteurs':'Moniteurs',
+  'Claviers':'Claviers',
+  'Smartphones':'Smartphones',
+  'Tablettes':'Tablettes',
+  'Smartwatch':'Smartwatch',
+  'Écouteurs':'Écouteurs',
+  'Télévisions':'Télévisions',
+  'Consoles':'Consoles',
+  'Réfrigérateurs':'Réfrigérateurs',
+  'Lave-linge':'Lave-linge',
+  'Climatisation':'Climatisation',
+  'Imprimantes':'Imprimantes',
+  'Onduleurs':'Onduleurs',
+};
+
+let state = {
+  page:1,limit:24,totalPages:1,total:0,
+  sort:'createdAt_desc',
+  search:'',
+  category:'',
+  subcategory:'',
+  stores:[],
+  brands:[],
+  priceMin:'',
+  priceMax:'',
+  inStock:false,
+  isGridView:true,
+  searchDebounceTimer:null,
+  loadedBrands:[],
+  specFilters:{}   /* { fieldKey: [val1, val2, ...] } */,
+  specFilterTypes:{} /* { fieldKey: 'checkbox'|'boolean'|'range'|'text_search' } */
+};
+
+function getParams(){
+  const p = new URLSearchParams(window.location.search);
+  if(p.get('category')) state.category = p.get('category');
+  if(p.get('subcategory')) state.subcategory = p.get('subcategory');
+  if(p.get('store')) state.stores = [p.get('store')];
+  if(p.get('search')) state.search = p.get('search');
+}
+
+function buildApiUrl(){
+  const p = new URLSearchParams();
+  p.set('page',state.page);
+  p.set('limit',state.limit);
+  p.set('sort',state.sort);
+  if(state.search) p.set('search',state.search);
+  if(state.category) p.set('category',state.category);
+  if(state.subcategory) p.set('subcategory',state.subcategory);
+  if(state.stores.length) p.set('stores',state.stores.join(','));
+  if(state.brands.length) p.set('brands',state.brands.join(','));
+  if(state.priceMin) p.set('priceMin',state.priceMin);
+  if(state.priceMax) p.set('priceMax',state.priceMax);
+  if(state.inStock) p.set('inStock','true');
+  /* spec filters: specs[key]=val  /  specs[key]=v1,v2  /  specs[key]=__range:min:max  /  specs[key]=true */
+  Object.entries(state.specFilters||{}).forEach(([k,vals])=>{
+    if(!vals||!vals.length) return;
+    // Range filter stored as [min, max]
+    if(vals.length===2 && state.specFilterTypes && state.specFilterTypes[k]==='range'){
+      p.set('specs['+k+']','__range:'+vals[0]+':'+vals[1]);
+    } else {
+      p.set('specs['+k+']',vals.join(','));
+    }
+  });
+  return '/api/products?'+p.toString();
+}
+
+function showSkeletons(){
+  const grid = document.getElementById('productsGrid');
+  grid.innerHTML = Array.from({length:8}).map(()=>`
+    <div class="skeleton-card">
+      <div class="skeleton-img"></div>
+      <div class="skeleton-line w60"></div>
+      <div class="skeleton-line w80"></div>
+      <div class="skeleton-line w40"></div>
+    </div>
+  `).join('');
+}
+
+function formatPrice(n){
+  if(n==null||n===undefined) return '—';
+  return Number(n).toLocaleString('fr-TN',{minimumFractionDigits:0,maximumFractionDigits:0})+' TND';
+}
+
+function storeBarHTML(prices){
+  if(!prices||!prices.length) return '';
+  return prices.filter(p=>p.price).map(p=>`
+    <span class="store-price-pill" title="${p.store}: ${formatPrice(p.price)}">
+      <span class="store-dot ${STORES[p.store]?.cls||''}" style="background:${STORES[p.store]?.color||'#888'};width:8px;height:8px;border-radius:50%;display:inline-block;"></span>
+      <span class="price-val" style="color:${STORES[p.store]?.color||'inherit'}">${formatPrice(p.price)}</span>
+    </span>
+  `).join('');
+}
+
+function renderCard(product,idx){
+  const delay = (idx%12)*0.05;
+  const hasBestDeal = product.prices && product.prices.length > 1;
+  const imgSrc = product.images&&product.images[0] ? product.images[0] : '';
+  return `
+  <div class="product-card glass-card-3d" style="animation-delay:${delay}s;cursor:pointer" data-slug="${product.slug||''}" onclick="window.goToProduct('${product.slug||''}' )">
+    <div class="product-img-wrap">
+      ${imgSrc ? `<img class="product-img" src="${imgSrc}" alt="${escHtml(product.name)}" loading="lazy" onerror="this.style.display='none'">` : ''}
+      <div class="product-img-skeleton" id="skel-${idx}" style="${imgSrc?'':'display:none'}"></div>
+      <span class="product-badge">${escHtml(product.category||'')}</span>
+      ${hasBestDeal?'<span class="best-deal-badge">Meilleur Prix</span>':''}
+    </div>
+    <div class="product-body">
+      <div class="product-brand">${escHtml(product.brand||'')}</div>
+      <div class="product-name">${escHtml(product.name||'')}</div>
+      <div class="product-price-wrap">
+        <div class="product-best-price">${formatPrice(product.bestPrice)}</div>
+        <div class="product-price-label">${product.bestPriceStore ? 'Chez '+escHtml(product.bestPriceStore) : 'Prix le plus bas'}</div>
+      </div>
+      <div class="store-price-bar">${storeBarHTML(product.prices)}</div>
+      <button class="compare-btn" onclick="event.stopPropagation();window.goToProduct('${product.slug||''}')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
+        Comparer les prix
+      </button>
+    </div>
+  </div>`;
+}
+
+function escHtml(str){
+  return String(str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+window.goToProduct=function(slug){
+  if(!slug) return;
+  window.navigateTo('/product/'+slug);
+};
+
+window.navigateTo=function(href){
+  document.body.style.opacity='0';
+  document.body.style.transition='opacity 0.3s ease';
+  setTimeout(()=>{ window.location.href=href; },300);
+};
+
+async function loadProducts(){
+  showSkeletons();
+  try{
+    const res = await fetch(buildApiUrl());
+    if(!res.ok) throw new Error('API error');
+    const data = await res.json();
+    state.total = data.total||0;
+    state.totalPages = data.totalPages||1;
+    document.getElementById('resultsCount').textContent = state.total;
+    const grid = document.getElementById('productsGrid');
+    if(!data.products||!data.products.length){
+      grid.innerHTML=`<div class="empty-state" style="grid-column:1/-1">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <h3>Aucun produit trouvé</h3>
+        <p>Essayez de modifier vos filtres ou votre recherche.</p>
+      </div>`;
+    } else {
+      grid.innerHTML = data.products.map((p,i)=>renderCard(p,i)).join('');
+      initTilt();
+      setupImgLoaded();
+    }
+    renderPagination();
+    if(data.filters) updateFilterCounts(data.filters);
+  }catch(e){
+    document.getElementById('productsGrid').innerHTML=`<div class="empty-state" style="grid-column:1/-1"><h3>Erreur de chargement</h3><p>Impossible de charger les produits.</p></div>`;
+    showToast('Erreur lors du chargement des produits','error');
+  }
+}
+
+function setupImgLoaded(){
+  document.querySelectorAll('.product-img').forEach((img,i)=>{
+    const skel = document.getElementById('skel-'+i);
+    if(img.complete){ if(skel) skel.remove(); return; }
+    img.addEventListener('load',()=>{ if(skel) skel.remove(); },{once:true});
+    img.addEventListener('error',()=>{ if(skel) skel.remove(); },{once:true});
+  });
+}
+
+function renderPagination(){
+  const wrap = document.getElementById('paginationWrap');
+  if(state.totalPages<=1){ wrap.innerHTML=''; return; }
+  let html='';
+  const prev = state.page>1;
+  const next = state.page<state.totalPages;
+  html+=`<button class="page-btn" ${!prev?'disabled':''} onclick="goPage(${state.page-1})"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg></button>`;
+  let start=Math.max(1,state.page-2), end=Math.min(state.totalPages,state.page+2);
+  if(start>1) html+=`<button class="page-btn" onclick="goPage(1)">1</button>${start>2?'<span style="padding:0 4px;color:var(--text-muted)">…</span>':''}`;
+  for(let i=start;i<=end;i++) html+=`<button class="page-btn${i===state.page?' active':''}" onclick="goPage(${i})">${i}</button>`;
+  if(end<state.totalPages) html+=`${end<state.totalPages-1?'<span style="padding:0 4px;color:var(--text-muted)">…</span>':''}<button class="page-btn" onclick="goPage(${state.totalPages})">${state.totalPages}</button>`;
+  html+=`<button class="page-btn" ${!next?'disabled':''} onclick="goPage(${state.page+1})"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></button>`;
+  wrap.innerHTML=html;
+}
+
+window.goPage=function(p){
+  state.page=p;
+  loadProducts();
+  window.scrollTo({top:0,behavior:'smooth'});
+};
+
+function updateFilterCounts(filters){
+  if(filters.storeCounts){
+    ['tunisianet','spacenet','skymil','mytek'].forEach(s=>{
+      const el=document.getElementById('cnt-'+s);
+      if(el) el.textContent=filters.storeCounts[s.charAt(0).toUpperCase()+s.slice(1)]||0;
+    });
+  }
+  if(filters.brands && !state.loadedBrands.length){
+    state.loadedBrands=filters.brands;
+    renderBrandFilters(filters.brands);
+  }
+}
+
+function renderBrandFilters(brands){
+  const container=document.getElementById('brandsList');
+  if(!container||!brands) return;
+  container.innerHTML=brands.slice(0,20).map(b=>`
+    <label class="filter-option">
+      <input type="checkbox" value="${escHtml(b.name)}" class="brand-filter">
+      <span class="custom-checkbox"></span>
+      ${escHtml(b.name)}
+      <span class="filter-option-count">${b.count}</span>
+    </label>
+  `).join('');
+  container.querySelectorAll('.brand-filter').forEach(cb=>{
+    cb.addEventListener('change',()=>{
+      const checked=[...document.querySelectorAll('.brand-filter:checked')].map(x=>x.value);
+      state.brands=checked; state.page=1; loadProducts();
+    });
+  });
+}
+
+async function loadSuggestions(query){
+  if(query.length<2){ closeSuggestions(); return; }
+  try{
+    const res=await fetch('/api/search-suggest?q='+encodeURIComponent(query)+'&limit=6');
+    const data=await res.json();
+    renderSuggestions(data.suggestions||[]);
+  }catch(e){ closeSuggestions(); }
+}
+
+function renderSuggestions(items){
+  const dd=document.getElementById('autocompleteDropdown');
+  if(!items.length){ dd.classList.remove('visible'); return; }
+  dd.innerHTML=items.map(it=>`
+    <div class="autocomplete-item" onclick="selectSuggestion('${escHtml(it.slug||it.name)}','${escHtml(it.name)}')">
+      ${it.images&&it.images[0]?`<img class="autocomplete-item-img" src="${escHtml(it.images[0])}" alt="" loading="lazy">`:
+        `<div class="autocomplete-item-img" style="background:var(--glass-bg);display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--text-muted)">IMG</div>`}
+      <span class="autocomplete-item-name">${escHtml(it.name)}</span>
+      <span class="autocomplete-item-price">${formatPrice(it.bestPrice)}</span>
+    </div>
+  `).join('');
+  dd.classList.add('visible');
+}
+
+function closeSuggestions(){
+  document.getElementById('autocompleteDropdown').classList.remove('visible');
+}
+
+window.selectSuggestion=function(slug,name){
+  if(slug) { window.navigateTo('/product/'+slug); return; }
+  document.getElementById('searchInput').value=name;
+  state.search=name; state.page=1; loadProducts(); closeSuggestions();
+};
+
+function initTilt(){
+  document.querySelectorAll('.glass-card-3d').forEach(card=>{
+    card.addEventListener('mousemove',(e)=>{
+      const rect=card.getBoundingClientRect();
+      const x=e.clientX-rect.left, y=e.clientY-rect.top;
+      const cx=rect.width/2, cy=rect.height/2;
+      const rx=(y-cy)/20, ry=(cx-x)/20;
+      card.style.transform=`perspective(1000px) rotateX(${rx}deg) rotateY(${ry}deg) translateZ(10px) translateY(-4px)`;
+    });
+    card.addEventListener('mouseleave',()=>{
+      card.style.transform='perspective(1000px) rotateX(0) rotateY(0) translateZ(0) translateY(0)';
+    });
+  });
+}
+
+/* ══════════════════════════════════════════
+   MULTI-THEME SYSTEM
+══════════════════════════════════════════ */
+const THEMES = {
+  dark:     { icon:'🌿', name:'Dark',     check:'#34d399' },
+  light:    { icon:'☀️', name:'Light',    check:'#059669' },
+  gaming:   { icon:'🎮', name:'Gaming',   check:'#c0392b' },
+  midnight: { icon:'🌌', name:'Midnight', check:'#a78bfa' }
+};
+
+window.applyTheme = function(t){
+  document.documentElement.setAttribute('data-theme', t);
+  localStorage.setItem('theme', t);
+  const ico = document.getElementById('themeIcon');
+  if(ico) ico.textContent = THEMES[t]?.icon || '🌿';
+  document.querySelectorAll('.theme-check').forEach(el=>{
+    el.style.display = (el.dataset.for === t) ? 'inline' : 'none';
+  });
+  const dd = document.getElementById('themeDropdown');
+  if(dd) dd.style.background = (t==='light') ? 'rgba(245,245,240,0.97)' : 'rgba(10,15,13,0.97)';
+  window.closeThemePicker();
+};
+
+window.toggleThemePicker = function(){
+  const dd = document.getElementById('themeDropdown');
+  if(!dd) return;
+  const isOpen = dd.style.display === 'block';
+  dd.style.display = isOpen ? 'none' : 'block';
+};
+
+window.closeThemePicker = function(){
+  const dd = document.getElementById('themeDropdown');
+  if(dd) dd.style.display = 'none';
+};
+
+function initTheme(){
+  const saved = localStorage.getItem('theme') || 'dark';
+  window.applyTheme(saved);
+  document.querySelectorAll('.theme-opt').forEach(el=>{
+    el.addEventListener('mouseenter',()=>{ el.style.background='var(--glass-hover)'; });
+    el.addEventListener('mouseleave',()=>{ el.style.background=''; });
+  });
+  document.addEventListener('click', e=>{
+    if(!e.target.closest('#themePickerWrap')) window.closeThemePicker();
+  });
+}
+
+function initFilters(){
+  document.querySelectorAll('.filter-section-header').forEach(header=>{
+    header.addEventListener('click',()=>{
+      const bodyId=header.getAttribute('data-section')+'Body';
+      const body=document.getElementById(bodyId);
+      if(!body) return;
+      header.classList.toggle('collapsed');
+      body.classList.toggle('collapsed');
+    });
+  });
+  document.querySelectorAll('.store-filter').forEach(cb=>{
+    cb.addEventListener('change',()=>{
+      state.stores=[...document.querySelectorAll('.store-filter:checked')].map(x=>x.value);
+      state.page=1; loadProducts();
+    });
+  });
+  const minInput=document.getElementById('priceMin');
+  const maxInput=document.getElementById('priceMax');
+  const rangeInput=document.getElementById('priceRange');
+  function applyPrice(){
+    state.priceMin=minInput.value||''; state.priceMax=maxInput.value||''; state.page=1; loadProducts();
+  }
+  let priceTimer;
+  [minInput,maxInput].forEach(el=>el.addEventListener('input',()=>{ clearTimeout(priceTimer); priceTimer=setTimeout(applyPrice,600); }));
+  rangeInput.addEventListener('input',()=>{ maxInput.value=rangeInput.value; clearTimeout(priceTimer); priceTimer=setTimeout(applyPrice,400); });
+  document.getElementById('inStockOnly').addEventListener('change',e=>{ state.inStock=e.target.checked; state.page=1; loadProducts(); });
+  document.getElementById('resetFilters').addEventListener('click',()=>{
+    state.stores=[]; state.brands=[]; state.priceMin=''; state.priceMax=''; state.inStock=false; state.category=''; state.subcategory=''; state.page=1; state.specFilters={};
+    document.querySelectorAll('.store-filter,.brand-filter').forEach(cb=>cb.checked=false);
+    minInput.value=''; maxInput.value=''; rangeInput.value=10000;
+    document.getElementById('inStockOnly').checked=false;
+    document.querySelectorAll('.category-chip').forEach(c=>{c.classList.remove('active'); if(!c.dataset.cat) c.classList.add('active');});
+    renderSpecFilters('');
+    loadProducts();
+  });
+}
+
+function initSearch(){
+  const input=document.getElementById('searchInput');
+  input.value=state.search;
+  input.addEventListener('input',e=>{
+    clearTimeout(state.searchDebounceTimer);
+    const v=e.target.value.trim();
+    state.searchDebounceTimer=setTimeout(()=>{
+      loadSuggestions(v);
+      state.search=v; state.page=1; loadProducts();
+    },300);
+  });
+  document.addEventListener('click',e=>{
+    if(!e.target.closest('.search-box')) closeSuggestions();
+  });
+}
+
+function initSort(){
+  document.querySelectorAll('.sort-btn').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      document.querySelectorAll('.sort-btn').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      state.sort=btn.dataset.sort; state.page=1; loadProducts();
+    });
+  });
+}
+
+function initViewToggle(){
+  document.getElementById('gridView').addEventListener('click',()=>{
+    state.isGridView=true;
+    document.getElementById('productsGrid').classList.remove('list-view');
+    document.getElementById('gridView').classList.add('active');
+    document.getElementById('listView').classList.remove('active');
+  });
+  document.getElementById('listView').addEventListener('click',()=>{
+    state.isGridView=false;
+    document.getElementById('productsGrid').classList.add('list-view');
+    document.getElementById('listView').classList.add('active');
+    document.getElementById('gridView').classList.remove('active');
+  });
+}
+
+function initCategoryChips(){
+  document.querySelectorAll('#categoryChips .category-chip').forEach(chip=>{
+    chip.addEventListener('click',()=>{
+      document.querySelectorAll('#categoryChips .category-chip').forEach(c=>c.classList.remove('active'));
+      chip.classList.add('active');
+      state.category=chip.dataset.cat; state.subcategory=''; state.page=1; loadProducts();
+    });
+  });
+  if(state.category){
+    document.querySelectorAll('#categoryChips .category-chip').forEach(c=>{
+      c.classList.toggle('active',c.dataset.cat===state.category);
+    });
+  }
+}
+
+function initMobileMenu(){
+  const toggle=document.querySelector('.mobile-menu-toggle');
+  const sidebar=document.getElementById('sidebar');
+  if(toggle&&sidebar){
+    toggle.addEventListener('click',()=>sidebar.classList.toggle('open'));
+    document.addEventListener('click',e=>{
+      if(sidebar.classList.contains('open')&&!sidebar.contains(e.target)&&!toggle.contains(e.target))
+        sidebar.classList.remove('open');
+    });
+  }
+}
+
+function showToast(msg,type='success'){
+  const container=document.getElementById('toastContainer');
+  const toast=document.createElement('div');
+  toast.className='toast '+type;
+  toast.innerHTML=`<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="${type==='success'?'var(--success)':'var(--danger)'}" stroke-width="2">${type==='success'?'<polyline points="20 6 9 17 4 12"/>':'<circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/>'}</svg><span>${msg}</span>`;
+  container.appendChild(toast);
+  setTimeout(()=>{ toast.style.animation='toastOut 0.3s ease forwards'; setTimeout(()=>toast.remove(),300); },3500);
+}
+
+function init(){
+  initTheme();
+  initMobileMenu();
+  getParams();
+  initSearch();
+  initSort();
+  initViewToggle();
+  initFilters();
+  initCategoryChips();
+  loadProducts();
+  window.addEventListener('load',()=>{ document.body.style.opacity='1'; });
+  document.querySelectorAll('a').forEach(link=>{
+    link.addEventListener('click',e=>{
+      if(link.hostname!==window.location.hostname||!link.href.endsWith('.html')) return;
+      e.preventDefault();
+      window.navigateTo(link.getAttribute('href'));
+    });
+  });
+}
+
+/* ─────────────────── spec filters ─────────────────── */
+function renderSpecFilters(subcategory){
+  const key = SUB_TO_SPECFILTER[subcategory];
+  const section = document.getElementById('specFiltersSection');
+  const content = document.getElementById('specFiltersContent');
+  if(!key || !SPEC_FILTERS[key] || !SPEC_FILTERS[key].length){
+    section.style.display='none'; content.innerHTML=''; return;
+  }
+  section.style.display='block';
+  const filters = SPEC_FILTERS[key];
+
+  // Register filter types
+  filters.forEach(f=>{ state.specFilterTypes[f.key]=f.type; });
+
+  content.innerHTML = filters.map(f=>{
+    const activeVals = state.specFilters[f.key]||[];
+    const headerCls = 'filter-section-header';
+    const bodyId = 'spec-body-'+f.key;
+
+    if(f.type==='boolean'){
+      const checked = activeVals.includes('true');
+      return `
+        <div class="filter-section" style="margin-bottom:12px;">
+          <label class="filter-option" style="padding:8px 0;">
+            <input type="checkbox" class="spec-bool-filter" data-key="${f.key}" ${checked?'checked':''}>
+            <span class="custom-checkbox"></span>
+            ${escHtml(f.label)}
+          </label>
+        </div>`;
+    }
+
+    if(f.type==='text_search'){
+      const currentVal = activeVals[0]||'';
+      return `
+        <div class="filter-section" style="margin-bottom:12px;">
+          <div class="${headerCls}" data-section="spec-${f.key}" onclick="toggleSpecSection(this,'${bodyId}')">
+            ${escHtml(f.label)}
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="filter-section-body" id="${bodyId}">
+            <input class="spec-filter-search" type="text" placeholder="Rechercher..." data-key="${f.key}" value="${escHtml(currentVal)}">
+          </div>
+        </div>`;
+    }
+
+    if(f.type==='range'){
+      const minVal = activeVals[0]||'';
+      const maxVal = activeVals[1]||'';
+      return `
+        <div class="filter-section" style="margin-bottom:12px;">
+          <div class="${headerCls}" data-section="spec-${f.key}" onclick="toggleSpecSection(this,'${bodyId}')">
+            ${escHtml(f.label)}
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="filter-section-body" id="${bodyId}">
+            <div class="price-range-inputs">
+              <input class="price-range-input spec-range-min" type="number" placeholder="Min" data-key="${f.key}" style="font-size:12px;" value="${escHtml(minVal)}">
+              <input class="price-range-input spec-range-max" type="number" placeholder="Max" data-key="${f.key}" style="font-size:12px;" value="${escHtml(maxVal)}">
+            </div>
+          </div>
+        </div>`;
+    }
+
+    /* checkbox (default) */
+    const badge = activeVals.length ? `<span style="font-size:10px;background:var(--emerald);color:white;border-radius:10px;padding:1px 6px;margin-left:4px;">${activeVals.length}</span>` : '';
+    return `
+      <div class="filter-section" style="margin-bottom:12px;">
+        <div class="${headerCls}" data-section="spec-${f.key}" onclick="toggleSpecSection(this,'${bodyId}')">
+          ${escHtml(f.label)}${badge}
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="filter-section-body" id="${bodyId}">
+          ${(f.options||[]).map(opt=>`
+            <label class="filter-option">
+              <input type="checkbox" class="spec-checkbox-filter" data-key="${f.key}" value="${escHtml(opt)}" ${activeVals.includes(opt)?'checked':''}>
+              <span class="custom-checkbox"></span>
+              ${escHtml(opt)}
+            </label>`).join('')}
+        </div>
+      </div>`;
+  }).join('');
+
+  /* Active chips summary */
+  updateSpecChips();
+
+  /* ── Wire events ── */
+  content.querySelectorAll('.spec-bool-filter').forEach(cb=>{
+    cb.addEventListener('change',()=>{
+      const k=cb.dataset.key;
+      if(cb.checked) state.specFilters[k]=['true'];
+      else delete state.specFilters[k];
+      state.page=1; loadProducts();
+    });
+  });
+
+  content.querySelectorAll('.spec-checkbox-filter').forEach(cb=>{
+    cb.addEventListener('change',()=>{
+      const k=cb.dataset.key;
+      const checked=[...content.querySelectorAll('.spec-checkbox-filter[data-key="'+k+'"]:checked')].map(x=>x.value);
+      if(checked.length) state.specFilters[k]=checked;
+      else delete state.specFilters[k];
+      /* update badge on header */
+      const hdrBadge=content.querySelector('[data-section="spec-'+k+'"] span[style*="background:var(--emerald)"]');
+      if(hdrBadge){ hdrBadge.textContent=checked.length; hdrBadge.style.display=checked.length?'':'none'; }
+      state.page=1; loadProducts();
+    });
+  });
+
+  let rangeTimers={};
+  content.querySelectorAll('.spec-range-min,.spec-range-max').forEach(inp=>{
+    inp.addEventListener('input',()=>{
+      const k=inp.dataset.key;
+      clearTimeout(rangeTimers[k]);
+      rangeTimers[k]=setTimeout(()=>{
+        const minEl=content.querySelector('.spec-range-min[data-key="'+k+'"]');
+        const maxEl=content.querySelector('.spec-range-max[data-key="'+k+'"]');
+        const minV=(minEl&&minEl.value.trim())||'';
+        const maxV=(maxEl&&maxEl.value.trim())||'';
+        if(minV||maxV) state.specFilters[k]=[minV,maxV];
+        else delete state.specFilters[k];
+        state.page=1; loadProducts();
+      },500);
+    });
+  });
+
+  let textTimers={};
+  content.querySelectorAll('.spec-filter-search[data-key]').forEach(inp=>{
+    inp.addEventListener('input',()=>{
+      const k=inp.dataset.key;
+      clearTimeout(textTimers[k]);
+      textTimers[k]=setTimeout(()=>{
+        const v=inp.value.trim();
+        if(v) state.specFilters[k]=[v];
+        else delete state.specFilters[k];
+        state.page=1; loadProducts();
+      },500);
+    });
+  });
+}
+
+function updateSpecChips(){
+  /* Show active spec filter chips at top of spec section */
+  const content=document.getElementById('specFiltersContent');
+  if(!content) return;
+  let chipsDiv=document.getElementById('specActiveChips');
+  if(!chipsDiv){
+    chipsDiv=document.createElement('div');
+    chipsDiv.id='specActiveChips';
+    chipsDiv.className='spec-active-chips';
+    content.prepend(chipsDiv);
+  }
+  const entries=Object.entries(state.specFilters||{});
+  chipsDiv.style.display=entries.length?'flex':'none';
+  chipsDiv.innerHTML=entries.map(([k,vals])=>
+    vals.map(v=>`<span class="spec-active-chip" onclick="removeSpecFilter('${escHtml(k)}','${escHtml(v)}')">${escHtml(v)} ×</span>`).join('')
+  ).join('');
+}
+
+window.removeSpecFilter=function(k,v){
+  if(!state.specFilters[k]) return;
+  state.specFilters[k]=state.specFilters[k].filter(x=>x!==v);
+  if(!state.specFilters[k].length) delete state.specFilters[k];
+  state.page=1;
+  renderSpecFilters(state.subcategory);
+  loadProducts();
+};
+
+window.toggleSpecSection=function(header,bodyId){
+  const body=document.getElementById(bodyId);
+  if(!body) return;
+  header.classList.toggle('collapsed');
+  body.classList.toggle('collapsed');
+};
+
+window.onSpecTextInput=function(inp){ /* handled by event listener */ };
+
+/* ─────────────────── mega nav logic ─────────────────── */
+window.toggleCat=function(id){
+  const parent=document.getElementById('cat-'+id);
+  const children=document.getElementById('children-'+id);
+  if(!parent||!children) return;
+  const isOpen=parent.classList.contains('open');
+  parent.classList.toggle('open',!isOpen);
+  children.classList.toggle('open',!isOpen);
+};
+
+window.navSelectAll=function(){
+  state.category=''; state.subcategory=''; state.stores=[]; state.page=1; state.specFilters={};
+  clearNavActive(); document.getElementById('navAll').classList.add('active-parent');
+  renderSpecFilters('');
+  // sync chips
+  document.querySelectorAll('#categoryChips .category-chip').forEach(c=>{
+    c.classList.toggle('active',!c.dataset.cat);
+  });
+  loadProducts();
+};
+
+window.navSub=function(category,subcategory){
+  state.category=category; state.subcategory=subcategory; state.stores=[]; state.page=1; state.specFilters={};
+  clearNavActive();
+  // mark active sub
+  document.querySelectorAll('.cat-sub').forEach(el=>{
+    el.classList.remove('active');
+    if(el.textContent.trim().includes(subcategory.trim())) el.classList.add('active');
+  });
+  // sync chip
+  document.querySelectorAll('#categoryChips .category-chip').forEach(c=>{
+    c.classList.toggle('active', c.dataset.cat===category);
+  });
+  renderSpecFilters(subcategory);
+  loadProducts();
+};
+
+window.navStore=function(store){
+  state.stores=[store]; state.category=''; state.subcategory=''; state.page=1;
+  clearNavActive();
+  document.getElementById('store-'+store)?.classList.add('active');
+  document.querySelectorAll('#categoryChips .category-chip').forEach(c=>c.classList.remove('active'));
+  // uncheck store filters and re-check
+  document.querySelectorAll('.store-filter').forEach(cb=>{ cb.checked=(cb.value===store); });
+  loadProducts();
+};
+
+function clearNavActive(){
+  document.querySelectorAll('.cat-parent,.cat-sub,.store-nav-item,#navAll').forEach(el=>el.classList.remove('active-parent','active'));
+}
+
+// subcategory handled natively in buildApiUrl
+
+// Mark active on load based on URL / state
+(function markActiveOnLoad(){
+  const p=new URLSearchParams(window.location.search);
+  const cat=p.get('category')||state.category;
+  const store=p.get('store')||(state.stores[0]||'');
+  if(store){ document.getElementById('store-'+store)?.classList.add('active'); }
+  else if(cat){
+    const catMap={
+      'Informatique':'info','Téléphonie & Tablettes':'phone','TV & Son':'tv',
+      'Gaming':'gaming','Photo & Vidéo':'photo','Électroménager':'electro','Bureautique':'bureau'
+    };
+    const key=catMap[cat];
+    if(key){
+      document.getElementById('cat-'+key)?.classList.add('open','active-parent');
+      document.getElementById('children-'+key)?.classList.add('open');
+    }
+  } else {
+    document.getElementById('navAll')?.classList.add('active-parent');
+  }
+})();
+
+if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init);
+else init();
+})();
+</script>
+</body>
+</html>

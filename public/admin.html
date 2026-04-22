@@ -1,0 +1,2340 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Administration — ComparateurTN</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --emerald:#059669;
+ --emerald-light:#34d399;
+  --gold:#d4a574; 
+  --gold-light:#e8c9a0; 
+  --amber:#b45309;
+  --coral:#e07a5f;
+  --glass-bg:rgba(255,255,255,0.05); 
+  --glass-border:rgba(255,255,255,0.1);
+  --glass-shadow:rgba(0,0,0,0.3); 
+  --glass-hover:rgba(255,255,255,0.08);
+  --bg-dark:#0a0f0d; 
+  --bg-gradient-1:#0d1a14; 
+  --bg-gradient-2:#132419; 
+  --bg-gradient-3:#1a2e23;
+  --text-primary:#f5f5f4; 
+  --text-secondary:rgba(245,245,244,0.7); 
+  --text-muted:rgba(245,245,244,0.4);
+  --success:#22c55e; 
+  --warning:#eab308; 
+  --danger:#dc2626; 
+  --info:#0ea5e9;
+  --sidebar-width:280px; 
+  --border-radius:20px; 
+  --card-padding:24px;
+  --transition-fast:0.2s ease; 
+  --transition-normal:0.3s ease;
+  --store-tunisianet:#e2001a;
+   --store-spacenet:#0066cc;
+  --store-skymil:#ff6600; 
+  --store-mytek:#00933b;
+}
+[data-theme="light"] {
+  --glass-bg:rgba(255,255,255,0.6); 
+  --glass-border:rgba(0,0,0,0.1);
+  --glass-shadow:rgba(0,0,0,0.1); 
+  --glass-hover:rgba(255,255,255,0.8);
+  --bg-dark:#f5f5f0; 
+  --bg-gradient-1:#e8f5e9; 
+  --bg-gradient-2:#f1f8e9; 
+  --bg-gradient-3:#fefefe;
+  --text-primary:#1a1a1a; 
+  --text-secondary:rgba(26,26,26,0.7); 
+  --text-muted:rgba(26,26,26,0.5);
+}
+[data-theme="light"] .orb { opacity:.15; }
+[data-theme="light"] .glass-card::before { background:linear-gradient(90deg,transparent,rgba(0,0,0,0.05),transparent); }
+
+*,*::before,*::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body { font-family:'Outfit',sans-serif; background:var(--bg-dark); color:var(--text-primary); min-height:100vh; overflow-x:hidden; line-height:1.6; opacity:0; transition:opacity .3s ease; }
+a { text-decoration:none; color:inherit; }
+
+.background { position:fixed; inset:0; z-index:-2; background:linear-gradient(135deg,var(--bg-gradient-1) 0%,var(--bg-gradient-2) 50%,var(--bg-gradient-3) 100%); }
+.background::before { content:''; position:absolute; inset:0; background:radial-gradient(ellipse 80% 50% at 20% 40%,rgba(120,0,255,.15) 0%,transparent 50%),radial-gradient(ellipse 60% 40% at 80% 60%,rgba(0,200,255,.12) 0%,transparent 50%),radial-gradient(ellipse 50% 30% at 50% 80%,rgba(255,0,200,.1) 0%,transparent 50%); }
+.orb { position:fixed; border-radius:50%; filter:blur(80px); opacity:.4; z-index:-1; animation:float 20s ease-in-out infinite; }
+.orb-1 { width:400px; height:400px; background:var(--emerald); top:10%; left:10%; }
+.orb-2 { width:350px; height:350px; background:var(--gold); top:60%; right:10%; animation-delay:-5s; }
+.orb-3 { width:300px; height:300px; background:var(--coral); bottom:10%; left:30%; animation-delay:-10s; }
+@keyframes float { 0%,100%{transform:translate(0,0) scale(1)} 25%{transform:translate(30px,-30px) scale(1.05)} 50%{transform:translate(-20px,20px) scale(.95)} 75%{transform:translate(20px,10px) scale(1.02)} }
+
+.dashboard { display:flex; min-height:100vh; }
+
+/* ── Sidebar ── */
+.sidebar { 
+position:fixed;
+ left:0; 
+ top:0; 
+ width:var(--sidebar-width); 
+ height:100vh; 
+ background:var(--glass-bg); 
+ backdrop-filter:blur(20px); 
+ -webkit-backdrop-filter:blur(20px); 
+ border-right:1px solid var(--glass-border); 
+ padding:24px; z-index:100; 
+ transition:all var(--transition-normal); 
+ overflow-y:auto; 
+ display:flex; 
+ flex-direction:column; 
+ }
+.sidebar::-webkit-scrollbar { width:6px; }
+.sidebar::-webkit-scrollbar-thumb { background:var(--glass-border); border-radius:3px; }
+.sidebar::-webkit-scrollbar-thumb:hover { background:var(--emerald-light); }
+.sidebar-header { display:flex; align-items:center; gap:12px; padding-bottom:30px; border-bottom:1px solid var(--glass-border); margin-bottom:30px; }
+.logo { width:45px; height:45px; background:linear-gradient(135deg,var(--emerald),var(--gold)); border-radius:12px; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:20px; box-shadow:0 8px 32px rgba(5,150,105,.3); flex-shrink:0; }
+.logo-text { font-size:20px; font-weight:600; background:linear-gradient(135deg,var(--emerald-light),var(--gold)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+.nav-menu { list-style:none; flex:1; }
+.nav-menu ul { list-style:none; padding:0; margin:0; }
+.nav-section { margin-bottom:25px; list-style:none; }
+.nav-section-title { font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:1.5px; color:var(--text-muted); margin-bottom:12px; padding-left:15px; display:block; }
+.nav-item { margin-bottom:5px; list-style:none; }
+.nav-link { display:flex; align-items:center; gap:14px; padding:14px 18px; color:var(--text-secondary); border-radius:12px; transition:all var(--transition-fast); position:relative; font-size:14px; font-weight:500; cursor:pointer; }
+.nav-link:hover { background:var(--glass-hover); color:var(--text-primary); }
+.nav-link.active { background:var(--glass-hover); color:var(--text-primary); }
+.nav-link.active::before { content:''; position:absolute; left:0; top:50%; transform:translateY(-50%); width:3px; height:60%; background:linear-gradient(180deg,var(--emerald-light),var(--gold)); border-radius:0 2px 2px 0; }
+.nav-icon { width:22px; height:22px; opacity:.8; flex-shrink:0; }
+.nav-link.active .nav-icon,.nav-link:hover .nav-icon { opacity:1; }
+.sidebar-footer { padding-top:20px; border-top:1px solid var(--glass-border); margin-top:auto; }
+.user-profile { display:flex; align-items:center; gap:12px; padding:12px; border-radius:12px; cursor:pointer; transition:background var(--transition-fast); }
+.user-profile:hover { background:var(--glass-hover); }
+.user-avatar { width:42px; height:42px; border-radius:12px; background:linear-gradient(135deg,var(--emerald),var(--gold)); display:flex; align-items:center; justify-content:center; font-weight:600; font-size:16px; flex-shrink:0; }
+.user-info { flex:1; }
+.user-name { font-weight:500; font-size:14px; }
+.user-role { font-size:12px; color:var(--text-muted); }
+
+/* ── Main ── */
+.main-content { flex:1; margin-left:var(--sidebar-width); padding:30px; min-height:100vh; }
+.navbar { display:flex; align-items:center; justify-content:space-between; margin-bottom:30px; gap:20px; flex-wrap:wrap; }
+.page-title { font-size:28px; font-weight:600; }
+.navbar-right { display:flex; align-items:center; gap:12px; }
+.nav-btn { width:45px; height:45px; background:var(--glass-bg); backdrop-filter:blur(10px); border:1px solid var(--glass-border); border-radius:12px; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:all var(--transition-fast); color:var(--text-secondary); }
+.nav-btn:hover { background:var(--glass-hover); border-color:var(--emerald-light); }
+.nav-btn svg { width:20px; height:20px; }
+
+/* ── Glass Card ── */
+.glass-card { background:var(--glass-bg); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px); border:1px solid var(--glass-border); border-radius:var(--border-radius); padding:var(--card-padding); position:relative; overflow:hidden; transition:all var(--transition-normal); animation:fadeInUp .6s ease-out backwards; }
+.glass-card::before { content:''; position:absolute; top:0; left:0; right:0; height:1px; background:linear-gradient(90deg,transparent,rgba(255,255,255,.2),transparent); }
+@keyframes fadeInUp { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
+
+/* ── Stats ── */
+.stats-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:20px; margin-bottom:28px; }
+.stat-card { cursor:default; }
+.stat-card-inner { display:flex; align-items:flex-start; justify-content:space-between; }
+.stat-info h3 { font-size:12px; font-weight:600; color:var(--text-secondary); margin-bottom:8px; text-transform:uppercase; letter-spacing:.5px; }
+.stat-value { font-family:'Space Mono',monospace; font-size:30px; font-weight:700; margin-bottom:10px; background:linear-gradient(135deg,var(--text-primary),var(--text-secondary)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+.stat-change { display:inline-flex; align-items:center; gap:4px; font-size:12px; font-weight:500; padding:3px 9px; border-radius:20px; }
+.stat-change.positive { color:var(--success); background:rgba(34,197,94,.15); }
+.stat-change.neutral { color:var(--text-muted); background:var(--glass-bg); }
+.stat-icon { width:52px; height:52px; border-radius:14px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.stat-icon.cyan { background:linear-gradient(135deg,rgba(52,211,153,.2),rgba(52,211,153,.05)); box-shadow:0 8px 32px rgba(52,211,153,.2); }
+.stat-icon.gold { background:linear-gradient(135deg,rgba(212,165,116,.2),rgba(212,165,116,.05)); box-shadow:0 8px 32px rgba(212,165,116,.2); }
+.stat-icon.coral { background:linear-gradient(135deg,rgba(224,122,95,.2),rgba(224,122,95,.05)); box-shadow:0 8px 32px rgba(224,122,95,.2); }
+.stat-icon.info { background:linear-gradient(135deg,rgba(14,165,233,.2),rgba(14,165,233,.05)); box-shadow:0 8px 32px rgba(14,165,233,.2); }
+.stat-icon svg { width:24px; height:24px; }
+.stats-grid .glass-card:nth-child(1){animation-delay:.05s}
+.stats-grid .glass-card:nth-child(2){animation-delay:.1s}
+.stats-grid .glass-card:nth-child(3){animation-delay:.15s}
+.stats-grid .glass-card:nth-child(4){animation-delay:.2s}
+
+/* ── Section Tabs ── */
+.section-tabs { display:flex; gap:4px; margin-bottom:24px; background:var(--glass-bg); backdrop-filter:blur(10px); border:1px solid var(--glass-border); border-radius:14px; padding:6px; width:fit-content; }
+.tab-btn { padding:10px 22px; border-radius:10px; border:none; background:transparent; color:var(--text-secondary); font-family:inherit; font-size:14px; font-weight:500; cursor:pointer; transition:all var(--transition-fast); display:flex; align-items:center; gap:8px; white-space:nowrap; }
+.tab-btn svg { width:16px; height:16px; }
+.tab-btn:hover { color:var(--text-primary); background:var(--glass-hover); }
+.tab-btn.active { background:linear-gradient(135deg,rgba(52,211,153,.2),rgba(5,150,105,.1)); color:var(--emerald-light); border:1px solid rgba(52,211,153,.2); }
+
+/* ── Section panels ── */
+.section-panel { display:none; animation:fadeInUp .4s ease-out; }
+.section-panel.active { display:block; }
+
+/* ── Toolbar ── */
+.table-toolbar { display:flex; align-items:center; justify-content:space-between; margin-bottom:20px; gap:12px; flex-wrap:wrap; }
+.toolbar-left { display:flex; align-items:center; gap:10px; flex-wrap:wrap; flex:1; }
+.search-box-admin { position:relative; }
+.search-input-admin { padding:10px 16px 10px 42px; background:var(--glass-bg); border:1px solid var(--glass-border); border-radius:10px; color:var(--text-primary); font-family:inherit; font-size:14px; transition:all var(--transition-fast); width:260px; }
+.search-input-admin::placeholder { color:var(--text-muted); }
+.search-input-admin:focus { outline:none; border-color:var(--emerald-light); box-shadow:0 0 0 3px rgba(52,211,153,.12); }
+.search-icon-admin { position:absolute; left:14px; top:50%; transform:translateY(-50%); width:16px; height:16px; color:var(--text-muted); pointer-events:none; }
+.filter-select { padding:10px 14px; background:var(--glass-bg); border:1px solid var(--glass-border); border-radius:10px; color:var(--text-primary); font-family:inherit; font-size:13px; cursor:pointer; appearance:none; -webkit-appearance:none; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2334d399' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 10px center; padding-right:30px; }
+.filter-select:focus { outline:none; border-color:var(--emerald-light); }
+.filter-select option { background:rgba(13,26,20,.97); }
+[data-theme="light"] .filter-select option { background:rgba(245,245,240,.97); color:#1a1a1a; }
+.btn { display:inline-flex; align-items:center; gap:8px; padding:10px 18px; border-radius:10px; border:none; font-family:inherit; font-size:13px; font-weight:600; cursor:pointer; transition:all var(--transition-fast); }
+.btn svg { width:15px; height:15px; }
+.btn-primary { background:linear-gradient(135deg,var(--emerald),var(--emerald-light)); color:white; box-shadow:0 4px 16px rgba(5,150,105,.3); }
+.btn-primary:hover { transform:translateY(-1px); box-shadow:0 6px 24px rgba(5,150,105,.45); }
+.btn-danger { background:rgba(220,38,38,.15); color:var(--danger); border:1px solid rgba(220,38,38,.25); }
+.btn-danger:hover { background:rgba(220,38,38,.25); }
+.btn-ghost { background:var(--glass-bg); border:1px solid var(--glass-border); color:var(--text-secondary); }
+.btn-ghost:hover { background:var(--glass-hover); color:var(--text-primary); border-color:var(--emerald-light); }
+.btn-sm { padding:7px 14px; font-size:12px; }
+.btn:disabled { opacity:.5; cursor:not-allowed; transform:none !important; }
+
+/* ── Table ── */
+.table-wrap { overflow-x:auto; }
+.table-wrap::-webkit-scrollbar { height:6px; }
+.table-wrap::-webkit-scrollbar-thumb { background:linear-gradient(90deg,var(--emerald),var(--gold)); border-radius:3px; }
+.data-table { width:100%; min-width:800px; border-collapse:collapse; }
+.data-table th { padding:14px 16px; text-align:left; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.8px; color:var(--text-muted); border-bottom:1px solid var(--glass-border); white-space:nowrap; cursor:pointer; user-select:none; transition:color var(--transition-fast); }
+.data-table th:hover { color:var(--emerald-light); }
+.data-table th.sorted { color:var(--emerald-light); }
+.data-table th .sort-arrow { margin-left:4px; opacity:.5; }
+.data-table th.sorted .sort-arrow { opacity:1; }
+.data-table tbody tr { transition:background var(--transition-fast); animation:rowFadeIn .4s ease-out backwards; }
+@keyframes rowFadeIn { from{opacity:0;transform:translateX(-8px)} to{opacity:1;transform:translateX(0)} }
+.data-table tbody tr:hover { background:var(--glass-hover); }
+.data-table td { padding:14px 16px; font-size:13px; color:var(--text-secondary); border-bottom:1px solid rgba(255,255,255,.03); vertical-align:middle; }
+.product-thumb { width:44px; height:44px; border-radius:10px; object-fit:contain; background:var(--glass-bg); padding:4px; border:1px solid var(--glass-border); }
+.product-thumb-placeholder { width:44px; height:44px; border-radius:10px; background:var(--glass-bg); border:1px solid var(--glass-border); display:flex; align-items:center; justify-content:center; }
+.product-thumb-placeholder svg { width:18px; height:18px; opacity:.3; }
+.product-name-cell { font-weight:500; color:var(--text-primary); max-width:220px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.category-tag { padding:3px 10px; border-radius:20px; font-size:11px; font-weight:500; background:var(--glass-bg); border:1px solid var(--glass-border); color:var(--text-secondary); white-space:nowrap; }
+.price-cell { font-family:'Space Mono',monospace; font-weight:700; font-size:13px; }
+.price-cell.best { color:var(--emerald-light); }
+.store-price-mini { display:flex; flex-direction:column; gap:2px; }
+.store-price-row { display:flex; align-items:center; gap:5px; font-size:11px; }
+.sdot { width:7px; height:7px; border-radius:50%; flex-shrink:0; }
+.stock-badge { display:inline-flex; align-items:center; gap:5px; padding:3px 10px; border-radius:20px; font-size:11px; font-weight:500; }
+.stock-badge.in { background:rgba(34,197,94,.12); color:var(--success); }
+.stock-badge.out { background:rgba(220,38,38,.12); color:var(--danger); }
+.action-btns { display:flex; gap:6px; align-items:center; }
+.action-btn { width:32px; height:32px; border-radius:8px; border:1px solid var(--glass-border); background:var(--glass-bg); display:flex; align-items:center; justify-content:center; cursor:pointer; transition:all var(--transition-fast); color:var(--text-secondary); }
+.action-btn:hover { background:var(--glass-hover); }
+.action-btn.edit:hover { border-color:var(--emerald-light); color:var(--emerald-light); }
+.action-btn.delete:hover { border-color:var(--danger); color:var(--danger); }
+.action-btn.view:hover { border-color:var(--info); color:var(--info); }
+.action-btn svg { width:14px; height:14px; }
+
+/* ── Pagination ── */
+.pagination { display:flex; align-items:center; justify-content:space-between; margin-top:20px; flex-wrap:wrap; gap:12px; }
+.pagination-info { font-size:13px; color:var(--text-muted); }
+.pagination-btns { display:flex; gap:6px; }
+.page-btn { width:36px; height:36px; border-radius:8px; border:1px solid var(--glass-border); background:var(--glass-bg); display:flex; align-items:center; justify-content:center; cursor:pointer; transition:all var(--transition-fast); font-family:inherit; font-size:13px; color:var(--text-secondary); }
+.page-btn:hover { background:var(--glass-hover); border-color:var(--emerald-light); color:var(--text-primary); }
+.page-btn.active { background:linear-gradient(135deg,var(--emerald),var(--emerald-light)); border-color:transparent; color:white; font-weight:700; }
+.page-btn svg { width:14px; height:14px; }
+.page-btn:disabled { opacity:.4; cursor:not-allowed; }
+
+/* ── Scraper Panel ── */
+.scraper-stores-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:16px; margin-bottom:24px; }
+.scraper-store-card { border-radius:16px; padding:20px; border:1px solid var(--glass-border); background:var(--glass-bg); backdrop-filter:blur(20px); transition:all var(--transition-normal); }
+.scraper-store-card:hover { background:var(--glass-hover); }
+.scraper-store-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; }
+.scraper-store-name { display:flex; align-items:center; gap:10px; font-weight:700; font-size:15px; }
+.store-dot-md { width:12px; height:12px; border-radius:50%; flex-shrink:0; }
+.scraper-run-btn { padding:8px 16px; border-radius:10px; border:none; font-family:inherit; font-size:12px; font-weight:700; cursor:pointer; transition:all var(--transition-fast); display:flex; align-items:center; gap:6px; }
+.scraper-run-btn svg { width:14px; height:14px; }
+.scraper-run-btn:hover { transform:translateY(-1px); }
+.scraper-run-btn:disabled { opacity:.5; cursor:not-allowed; transform:none; }
+.scraper-store-stats { display:flex; gap:16px; }
+.scraper-stat { font-size:12px; color:var(--text-muted); }
+.scraper-stat span { color:var(--text-primary); font-weight:600; font-family:'Space Mono',monospace; }
+
+.scraper-run-all { width:100%; padding:14px; border-radius:14px; border:none; font-family:inherit; font-size:15px; font-weight:700; cursor:pointer; transition:all var(--transition-fast); display:flex; align-items:center; justify-content:center; gap:10px; margin-bottom:24px; background:linear-gradient(135deg,var(--emerald),var(--emerald-light)); color:white; box-shadow:0 8px 32px rgba(5,150,105,.3); }
+.scraper-run-all:hover { transform:translateY(-2px); box-shadow:0 12px 40px rgba(5,150,105,.5); }
+.scraper-run-all:disabled { opacity:.6; cursor:not-allowed; transform:none; }
+.scraper-run-all svg { width:18px; height:18px; }
+
+/* ── Progress ── */
+.scraper-progress { background:var(--glass-bg); border:1px solid var(--glass-border); border-radius:14px; padding:20px; margin-bottom:24px; display:none; }
+.scraper-progress.visible { display:block; animation:fadeInUp .3s ease; }
+.progress-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
+.progress-store-name { font-weight:600; font-size:14px; display:flex; align-items:center; gap:8px; }
+.progress-pct { font-family:'Space Mono',monospace; font-size:14px; color:var(--emerald-light); font-weight:700; }
+.progress-bar-wrap { height:8px; background:rgba(255,255,255,.08); border-radius:10px; overflow:hidden; margin-bottom:10px; }
+.progress-bar-fill { height:100%; border-radius:10px; background:linear-gradient(90deg,var(--emerald),var(--emerald-light)); transition:width .5s ease; position:relative; }
+.progress-bar-fill::after { content:''; position:absolute; top:0; left:0; right:0; height:50%; background:linear-gradient(180deg,rgba(255,255,255,.3),transparent); }
+.progress-msg { font-size:12px; color:var(--text-muted); }
+
+/* ── Scraper Results ── */
+.scraper-results { display:none; }
+.scraper-results.visible { display:block; animation:fadeInUp .4s ease; }
+.results-tabs { display:flex; gap:6px; margin-bottom:16px; }
+.result-tab { padding:7px 16px; border-radius:8px; border:1px solid var(--glass-border); background:var(--glass-bg); color:var(--text-secondary); font-family:inherit; font-size:13px; cursor:pointer; transition:all var(--transition-fast); }
+.result-tab.active { background:linear-gradient(135deg,rgba(52,211,153,.15),rgba(5,150,105,.08)); border-color:rgba(52,211,153,.3); color:var(--emerald-light); }
+.result-content { display:none; }
+.result-content.active { display:block; animation:fadeInUp .3s ease; }
+.result-item { display:flex; align-items:center; justify-content:space-between; padding:12px 0; border-bottom:1px solid var(--glass-border); gap:12px; }
+.result-item:last-child { border-bottom:none; }
+.result-item-name { font-size:13px; font-weight:500; color:var(--text-primary); flex:1; }
+.result-item-meta { font-size:12px; color:var(--text-muted); }
+.price-change-badge { display:inline-flex; align-items:center; gap:4px; padding:3px 10px; border-radius:20px; font-size:12px; font-weight:600; font-family:'Space Mono',monospace; }
+.price-change-badge.up { background:rgba(220,38,38,.12); color:var(--danger); }
+.price-change-badge.down { background:rgba(34,197,94,.12); color:var(--success); }
+
+/* ── Scraper Logs Table ── */
+.log-status { display:inline-flex; align-items:center; gap:6px; padding:4px 10px; border-radius:20px; font-size:11px; font-weight:600; }
+.log-status.success { background:rgba(34,197,94,.12); color:var(--success); }
+.log-status.partial { background:rgba(234,179,8,.12); color:var(--warning); }
+.log-status.failed { background:rgba(220,38,38,.12); color:var(--danger); }
+.log-status::before { content:''; width:6px; height:6px; border-radius:50%; background:currentColor; }
+
+/* ── Modal ── */
+.modal-backdrop { position:fixed; inset:0; z-index:400; background:rgba(0,0,0,.6); backdrop-filter:blur(8px); display:flex; align-items:center; justify-content:center; padding:20px; opacity:0; pointer-events:none; transition:opacity .3s ease; }
+.modal-backdrop.open { opacity:1; pointer-events:all; }
+.modal { background:rgba(13,26,20,.97); backdrop-filter:blur(24px); border:1px solid var(--glass-border); border-radius:24px; width:100%; max-width:640px; max-height:90vh; overflow-y:auto; position:relative; transform:translateY(24px); transition:transform .3s ease; box-shadow:0 40px 100px rgba(0,0,0,.5); }
+[data-theme="light"] .modal { background:rgba(245,245,240,.97); }
+.modal-backdrop.open .modal { transform:translateY(0); }
+.modal::-webkit-scrollbar { width:6px; }
+.modal::-webkit-scrollbar-thumb { background:var(--glass-border); border-radius:3px; }
+.modal-header { display:flex; align-items:center; justify-content:space-between; padding:24px 28px 0; margin-bottom:24px; }
+.modal-title { font-size:20px; font-weight:700; }
+.modal-close { width:36px; height:36px; border-radius:10px; border:1px solid var(--glass-border); background:var(--glass-bg); display:flex; align-items:center; justify-content:center; cursor:pointer; transition:all var(--transition-fast); color:var(--text-secondary); }
+.modal-close:hover { background:var(--glass-hover); color:var(--text-primary); border-color:var(--danger); }
+.modal-close svg { width:16px; height:16px; }
+.modal-body { padding:0 28px 28px; }
+.form-row { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px; }
+.form-row.full { grid-template-columns:1fr; }
+.form-group-modal { display:flex; flex-direction:column; gap:6px; }
+.form-label-modal { font-size:13px; font-weight:600; color:var(--text-secondary); }
+.form-input-modal { padding:11px 14px; background:var(--glass-bg); border:1.5px solid var(--glass-border); border-radius:10px; color:var(--text-primary); font-family:inherit; font-size:14px; transition:all var(--transition-fast); }
+.form-input-modal:focus { outline:none; border-color:var(--emerald-light); box-shadow:0 0 0 3px rgba(52,211,153,.12); background:var(--glass-hover); }
+.form-input-modal::placeholder { color:var(--text-muted); }
+select.form-input-modal { appearance:none; -webkit-appearance:none; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2334d399' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 12px center; padding-right:32px; }
+select.form-input-modal option { background:rgba(13,26,20,.98); }
+[data-theme="light"] select.form-input-modal option { background:rgba(245,245,240,.98); color:#1a1a1a; }
+.section-divider { font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:var(--emerald-light); margin:20px 0 14px; padding-bottom:8px; border-bottom:1px solid var(--glass-border); }
+.store-price-form { display:grid; grid-template-columns:1fr 1fr 1fr auto; gap:10px; align-items:center; margin-bottom:10px; }
+.store-label { font-size:13px; font-weight:700; display:flex; align-items:center; gap:6px; }
+.toggle-switch { position:relative; width:44px; height:24px; flex-shrink:0; }
+.toggle-switch input { display:none; }
+.toggle-slider { position:absolute; inset:0; background:rgba(255,255,255,.1); border-radius:12px; cursor:pointer; transition:all var(--transition-fast); border:1px solid var(--glass-border); }
+.toggle-slider::before { content:''; position:absolute; width:18px; height:18px; left:2px; top:2px; background:var(--text-muted); border-radius:50%; transition:all var(--transition-fast); }
+.toggle-switch input:checked + .toggle-slider { background:linear-gradient(135deg,var(--emerald),var(--emerald-light)); border-color:var(--emerald); }
+.toggle-switch input:checked + .toggle-slider::before { transform:translateX(20px); background:white; }
+.modal-footer { display:flex; gap:10px; justify-content:flex-end; padding-top:20px; border-top:1px solid var(--glass-border); margin-top:4px; }
+
+/* ── Delete Confirm ── */
+.confirm-modal { max-width:420px; }
+.confirm-body { text-align:center; padding:28px; }
+.confirm-icon { width:64px; height:64px; border-radius:20px; background:rgba(220,38,38,.1); border:1px solid rgba(220,38,38,.2); display:flex; align-items:center; justify-content:center; margin:0 auto 20px; }
+.confirm-icon svg { width:28px; height:28px; color:var(--danger); }
+.confirm-title { font-size:18px; font-weight:700; margin-bottom:8px; }
+.confirm-text { font-size:14px; color:var(--text-secondary); margin-bottom:24px; line-height:1.6; }
+.confirm-btns { display:flex; gap:10px; justify-content:center; }
+
+/* ── Toast ── */
+.toast-container { position:fixed; top:24px; right:24px; z-index:600; display:flex; flex-direction:column; gap:10px; }
+.toast { background:rgba(13,26,20,.96); backdrop-filter:blur(20px); border:1px solid var(--glass-border); border-radius:12px; padding:14px 18px; display:flex; align-items:center; gap:12px; min-width:260px; animation:toastIn .3s ease; box-shadow:0 20px 60px rgba(0,0,0,.4); font-size:14px; }
+[data-theme="light"] .toast { background:rgba(245,245,240,.97); }
+@keyframes toastIn { from{opacity:0;transform:translateX(40px)} to{opacity:1;transform:translateX(0)} }
+@keyframes toastOut { from{opacity:1} to{opacity:0;transform:translateX(40px)} }
+
+/* ── Empty ── */
+.empty-state { text-align:center; padding:60px 20px; color:var(--text-muted); }
+.empty-state svg { width:56px; height:56px; margin-bottom:16px; opacity:.3; }
+.empty-state h3 { font-size:18px; font-weight:600; margin-bottom:6px; color:var(--text-secondary); }
+
+/* ── Skeleton ── */
+.sk { background:linear-gradient(90deg,var(--glass-bg) 25%,var(--glass-hover) 50%,var(--glass-bg) 75%); background-size:200% 100%; animation:shimmer 1.5s infinite; border-radius:6px; }
+@keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+
+/* ── Mobile ── */
+.mobile-menu-toggle { display:none; position:fixed; bottom:24px; right:24px; z-index:300; width:54px; height:54px; background:linear-gradient(135deg,var(--emerald),var(--gold)); border-radius:16px; border:none; cursor:pointer; box-shadow:0 8px 32px rgba(5,150,105,.4); align-items:center; justify-content:center; }
+.mobile-menu-toggle svg { width:24px; height:24px; color:white; }
+.site-footer { text-align:center; padding:24px; margin-left:var(--sidebar-width); font-size:13px; color:var(--text-muted); border-top:1px solid var(--glass-border); }
+
+@media(max-width:1200px){ .stats-grid{grid-template-columns:repeat(2,1fr);} .scraper-stores-grid{grid-template-columns:1fr;} }
+@media(max-width:992px){ :root{--sidebar-width:0px;} .sidebar{transform:translateX(-100%);width:280px;} .sidebar.open{transform:translateX(0);} .main-content{margin-left:0;} .mobile-menu-toggle{display:flex;} .site-footer{margin-left:0;} }
+@media(max-width:768px){ .stats-grid{grid-template-columns:1fr 1fr;} .form-row{grid-template-columns:1fr;} .store-price-form{grid-template-columns:1fr 1fr;} }
+@media(max-width:480px){ .stats-grid{grid-template-columns:1fr;} .section-tabs{flex-wrap:wrap;} .main-content{padding:20px 15px;} }
+</style>
+</head>
+<body>
+<div class="background"></div>
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<div class="orb orb-3"></div>
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- Product Modal -->
+<div class="modal-backdrop" id="productModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="modalTitle">Ajouter un produit</div>
+      <button class="modal-close" onclick="closeModal('productModal')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="editProductId">
+      <div class="form-row">
+        <div class="form-group-modal">
+          <label class="form-label-modal">Nom du produit *</label>
+          <input class="form-input-modal" id="fName" placeholder="Ex: MacBook Pro 14 M3">
+        </div>
+        <div class="form-group-modal">
+          <label class="form-label-modal">Marque *</label>
+          <input class="form-input-modal" id="fBrand" placeholder="Ex: Apple">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group-modal">
+          <label class="form-label-modal">Catégorie principale *</label>
+          <select class="form-input-modal" id="fCategory" onchange="onCategoryChange()">
+            <option value="">— Sélectionner —</option>
+            <option value="Informatique">💻 Informatique</option>
+            <option value="Téléphonie &amp; Tablettes">📱 Téléphonie &amp; Tablettes</option>
+            <option value="TV &amp; Son">📺 TV &amp; Son</option>
+            <option value="Gaming">🎮 Gaming</option>
+            <option value="Photo &amp; Vidéo">📷 Photo &amp; Vidéo</option>
+            <option value="Électroménager">🏠 Électroménager</option>
+            <option value="Bureautique">📋 Bureautique</option>
+          </select>
+        </div>
+        <div class="form-group-modal">
+          <label class="form-label-modal">Sous-catégorie *</label>
+          <select class="form-input-modal" id="fSubcategory" onchange="renderSpecFields()">
+            <option value="">— Choisir catégorie d'abord —</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row full">
+        <div class="form-group-modal">
+          <label class="form-label-modal">Description</label>
+          <textarea class="form-input-modal" id="fDescription" rows="3" placeholder="Description du produit…" style="resize:vertical;"></textarea>
+        </div>
+      </div>
+      <div class="form-row full">
+        <div class="form-group-modal">
+          <label class="form-label-modal">Images (URLs, une par ligne)</label>
+          <textarea class="form-input-modal" id="fImages" rows="2" placeholder="https://…&#10;https://…" style="resize:vertical;"></textarea>
+        </div>
+      </div>
+
+      <div id="specFieldsWrap"></div>
+
+      <div class="section-divider">Prix par store</div>
+      <div id="storePricesWrap">
+        <div class="store-price-form" style="margin-bottom:8px;">
+          <div class="store-label"><span class="sdot" style="background:#e2001a;width:10px;height:10px;border-radius:50%;display:inline-block;"></span>Tunisianet</div>
+          <input class="form-input-modal" id="price-Tunisianet" type="number" placeholder="Prix TND" min="0" step="0.001">
+          <input class="form-input-modal" id="url-Tunisianet" placeholder="URL produit">
+          <label class="toggle-switch" title="En stock"><input type="checkbox" id="stock-Tunisianet" checked><span class="toggle-slider"></span></label>
+        </div>
+        <div class="store-price-form" style="margin-bottom:8px;">
+          <div class="store-label"><span class="sdot" style="background:#0066cc;width:10px;height:10px;border-radius:50%;display:inline-block;"></span>SpaceNet</div>
+          <input class="form-input-modal" id="price-SpaceNet" type="number" placeholder="Prix TND" min="0" step="0.001">
+          <input class="form-input-modal" id="url-SpaceNet" placeholder="URL produit">
+          <label class="toggle-switch" title="En stock"><input type="checkbox" id="stock-SpaceNet" checked><span class="toggle-slider"></span></label>
+        </div>
+        <div class="store-price-form" style="margin-bottom:8px;">
+          <div class="store-label"><span class="sdot" style="background:#ff6600;width:10px;height:10px;border-radius:50%;display:inline-block;"></span>Skymil</div>
+          <input class="form-input-modal" id="price-Skymil" type="number" placeholder="Prix TND" min="0" step="0.001">
+          <input class="form-input-modal" id="url-Skymil" placeholder="URL produit">
+          <label class="toggle-switch" title="En stock"><input type="checkbox" id="stock-Skymil" checked><span class="toggle-slider"></span></label>
+        </div>
+        <div class="store-price-form">
+          <div class="store-label"><span class="sdot" style="background:#00933b;width:10px;height:10px;border-radius:50%;display:inline-block;"></span>Mytek</div>
+          <input class="form-input-modal" id="price-Mytek" type="number" placeholder="Prix TND" min="0" step="0.001">
+          <input class="form-input-modal" id="url-Mytek" placeholder="URL produit">
+          <label class="toggle-switch" title="En stock"><input type="checkbox" id="stock-Mytek" checked><span class="toggle-slider"></span></label>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-ghost" onclick="closeModal('productModal')">Annuler</button>
+        <button class="btn btn-primary" id="saveProductBtn" onclick="saveProduct()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+          Enregistrer
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Delete Confirm Modal -->
+<div class="modal-backdrop" id="deleteModal">
+  <div class="modal confirm-modal">
+    <div class="confirm-body">
+      <div class="confirm-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg></div>
+      <div class="confirm-title">Supprimer ce produit ?</div>
+      <div class="confirm-text" id="deleteConfirmText">Cette action est irréversible. Le produit sera définitivement supprimé.</div>
+      <div class="confirm-btns">
+        <button class="btn btn-ghost" onclick="closeModal('deleteModal')">Annuler</button>
+        <button class="btn btn-danger" id="confirmDeleteBtn" onclick="confirmDelete()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+          Supprimer
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Ad Delete Confirm Modal -->
+<div class="modal-backdrop" id="deleteAdModal">
+  <div class="modal confirm-modal">
+    <div class="confirm-body">
+      <div class="confirm-icon" style="background:rgba(212,165,116,.1);border-color:rgba(212,165,116,.25);">
+        <svg viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      </div>
+      <div class="confirm-title">Supprimer cette publicité ?</div>
+      <div class="confirm-text" id="deleteAdConfirmText">Cette action est irréversible.</div>
+      <div class="confirm-btns">
+        <button class="btn btn-ghost" onclick="closeModal('deleteAdModal')">Annuler</button>
+        <button class="btn btn-danger" id="confirmDeleteAdBtn" onclick="confirmDeleteAd()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+          Supprimer
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Ad Edit / Create Modal -->
+<div class="modal-backdrop" id="adModal">
+  <div class="modal" style="max-width:700px;">
+    <div class="modal-header">
+      <div class="modal-title" id="adModalTitle">Nouvelle publicité</div>
+      <button class="modal-close" onclick="closeModal('adModal')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="editAdId">
+
+      <div class="section-divider">Contenu de l'annonce</div>
+      <div class="form-row">
+        <div class="form-group-modal">
+          <label class="form-label-modal">Titre *</label>
+          <input class="form-input-modal" id="adTitle" placeholder="Ex: RTX 4070 Super — Promo !">
+        </div>
+        <div class="form-group-modal">
+          <label class="form-label-modal">Badge (optionnel)</label>
+          <input class="form-input-modal" id="adBadge" placeholder="Ex: -20%, PROMO, NOUVEAU">
+        </div>
+      </div>
+      <div class="form-row full">
+        <div class="form-group-modal">
+          <label class="form-label-modal">Sous-titre / description</label>
+          <input class="form-input-modal" id="adSubtitle" placeholder="Ex: Livraison gratuite dès 100 TND">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group-modal">
+          <label class="form-label-modal">Prix affiché (TND)</label>
+          <input class="form-input-modal" id="adPrice" type="number" placeholder="Ex: 1499" min="0" step="0.001">
+        </div>
+        <div class="form-group-modal">
+          <label class="form-label-modal">Ancien prix (TND)</label>
+          <input class="form-input-modal" id="adOldPrice" type="number" placeholder="Ex: 1799" min="0" step="0.001">
+        </div>
+      </div>
+
+      <div class="section-divider">Visuel & Lien</div>
+      <div class="form-row full">
+        <div class="form-group-modal">
+          <label class="form-label-modal">URL de l'image</label>
+          <input class="form-input-modal" id="adImage" placeholder="https://…/image.jpg">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group-modal">
+          <label class="form-label-modal">Couleur d'accent</label>
+          <div style="display:flex;gap:8px;align-items:center;">
+            <input class="form-input-modal" id="adAccentColor" value="#34d399" placeholder="#34d399" style="flex:1;">
+            <input type="color" id="adColorPicker" value="#34d399"
+              style="width:38px;height:38px;border-radius:8px;border:1px solid var(--glass-border);background:none;cursor:pointer;padding:2px;"
+              oninput="document.getElementById('adAccentColor').value=this.value">
+          </div>
+        </div>
+        <div class="form-group-modal">
+          <label class="form-label-modal">Texte du bouton</label>
+          <input class="form-input-modal" id="adCtaText" value="Voir l'offre" placeholder="Voir l'offre">
+        </div>
+      </div>
+      <div class="form-row full">
+        <div class="form-group-modal">
+          <label class="form-label-modal">URL de destination *</label>
+          <input class="form-input-modal" id="adCtaUrl" placeholder="https://…/produit">
+        </div>
+      </div>
+
+      <div class="section-divider">Ciblage par catégorie</div>
+      <div style="font-size:12px;color:var(--text-muted);margin-bottom:12px;">
+        Laissez vide pour afficher sur toutes les pages produits. Cochez les catégories souhaitées :
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px;" id="adCategoryCheckboxes">
+        <!-- filled by JS -->
+      </div>
+
+      <div class="section-divider">Paramètres</div>
+      <div class="form-row">
+        <div class="form-group-modal">
+          <label class="form-label-modal">Priorité (0 = normale, plus = devant)</label>
+          <input class="form-input-modal" id="adPriority" type="number" value="0" min="0">
+        </div>
+        <div class="form-group-modal">
+          <label class="form-label-modal">Active</label>
+          <label class="toggle-switch" style="margin-top:8px;">
+            <input type="checkbox" id="adActive" checked>
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group-modal">
+          <label class="form-label-modal">Date de début (optionnel)</label>
+          <input class="form-input-modal" id="adStartsAt" type="datetime-local">
+        </div>
+        <div class="form-group-modal">
+          <label class="form-label-modal">Date de fin (optionnel)</label>
+          <input class="form-input-modal" id="adEndsAt" type="datetime-local">
+        </div>
+      </div>
+
+      <!-- Live preview -->
+      <div class="section-divider">Aperçu</div>
+      <div style="display:flex;justify-content:center;">
+        <div id="adPreviewWrap" style="width:240px;"></div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-ghost" onclick="closeModal('adModal')">Annuler</button>
+        <button class="btn btn-primary" id="saveAdBtn" onclick="saveAd()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+          Enregistrer
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="dashboard">
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="logo">C</div>
+      <span class="logo-text">ComparateurTN</span>
+    </div>
+    <ul class="nav-menu">
+      <li class="nav-section">
+        <span class="nav-section-title">Administration</span>
+        <ul>
+          <li class="nav-item">
+            <div class="nav-link active" onclick="switchTab('products')">
+              <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+              Produits
+            </div>
+          </li>
+          <li class="nav-item">
+            <div class="nav-link" onclick="switchTab('scraper')">
+              <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+              Scraper
+            </div>
+          </li>
+          <li class="nav-item">
+            <div class="nav-link" onclick="switchTab('logs')">
+              <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+              Logs Scraper
+            </div>
+          </li>
+          <li class="nav-item">
+            <div class="nav-link" onclick="switchTab('ads')">
+              <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              Publicités
+            </div>
+          </li>
+        </ul>
+      </li>
+      <li class="nav-section">
+        <span class="nav-section-title">Site</span>
+        <ul>
+          <li class="nav-item">
+            <a href="/products" class="nav-link">
+              <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              Voir le site
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="/admin/logout" class="nav-link">
+              <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+              Déconnexion
+            </a>
+          </li>
+        </ul>
+      </li>
+    </ul>
+    <div class="sidebar-footer">
+      <div class="user-profile">
+        <div class="user-avatar">A</div>
+        <div class="user-info">
+          <div class="user-name" id="adminName">Administrateur</div>
+          <div class="user-role">Accès complet</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <main class="main-content">
+    <nav class="navbar">
+      <h1 class="page-title">Administration</h1>
+      <div class="navbar-right">
+        <button class="nav-btn" id="theme-toggle" title="Thème">
+          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </button>
+      </div>
+    </nav>
+
+    <!-- Stats -->
+    <div class="stats-grid" id="statsGrid">
+      <div class="glass-card stat-card">
+        <div class="stat-card-inner">
+          <div class="stat-info"><h3>Total Produits</h3><div class="stat-value" id="statTotal">—</div><span class="stat-change neutral">base de données</span></div>
+          <div class="stat-icon cyan"><svg viewBox="0 0 24 24" fill="none" stroke="var(--emerald-light)" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></div>
+        </div>
+      </div>
+      <div class="glass-card stat-card">
+        <div class="stat-card-inner">
+          <div class="stat-info"><h3>Changements 24h</h3><div class="stat-value" id="statChanges">—</div><span class="stat-change positive">prix mis à jour</span></div>
+          <div class="stat-icon gold"><svg viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+        </div>
+      </div>
+      <div class="glass-card stat-card">
+        <div class="stat-card-inner">
+          <div class="stat-info"><h3>Dernier Scraping</h3><div class="stat-value" id="statLastRun" style="font-size:18px;margin-top:4px;">—</div><span class="stat-change neutral" id="statLastStatus">jamais</span></div>
+          <div class="stat-icon coral"><svg viewBox="0 0 24 24" fill="none" stroke="var(--coral)" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+        </div>
+      </div>
+      <div class="glass-card stat-card">
+        <div class="stat-card-inner">
+          <div class="stat-info"><h3>Stores Surveillés</h3><div class="stat-value">4</div><span class="stat-change positive">actifs</span></div>
+          <div class="stat-icon info"><svg viewBox="0 0 24 24" fill="none" stroke="var(--info)" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="section-tabs">
+      <button class="tab-btn active" id="tab-products" onclick="switchTab('products')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        Produits
+      </button>
+      <button class="tab-btn" id="tab-scraper" onclick="switchTab('scraper')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+        Scraper
+      </button>
+      <button class="tab-btn" id="tab-logs" onclick="switchTab('logs')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        Logs
+      </button>
+      <button class="tab-btn" id="tab-ads" onclick="switchTab('ads')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        Publicités
+      </button>
+    </div>
+
+    <!-- ── PRODUCTS PANEL ── -->
+    <div class="section-panel active" id="panel-products">
+      <div class="glass-card" style="animation-delay:.25s">
+        <div class="table-toolbar">
+          <div class="toolbar-left">
+            <div class="search-box-admin">
+              <svg class="search-icon-admin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+              <input class="search-input-admin" id="productSearch" placeholder="Rechercher un produit…" oninput="debounceSearch()">
+            </div>
+            <select class="filter-select" id="categoryFilter" onchange="loadProducts()">
+              <option value="">Toutes catégories</option>
+              <optgroup label="💻 Informatique">
+                <option value="PC Portable">PC Portable</option>
+                <option value="PC Portable Gamer">PC Portable Gamer</option>
+                <option value="PC de Bureau">PC de Bureau</option>
+                <option value="PC Gamer">PC Gamer</option>
+                <option value="Processeur CPU">Processeur (CPU)</option>
+                <option value="Carte Mère">Carte Mère</option>
+                <option value="Mémoire RAM">Mémoire RAM</option>
+                <option value="Carte Graphique GPU">Carte Graphique (GPU)</option>
+                <option value="SSD">SSD</option>
+                <option value="Disque Dur HDD">Disque Dur (HDD)</option>
+                <option value="Alimentation PC">Alimentation (PSU)</option>
+                <option value="Boîtier PC">Boîtier PC</option>
+                <option value="Refroidissement">Refroidissement</option>
+                <option value="Écran PC">Écran / Moniteur</option>
+                <option value="Clavier">Clavier</option>
+                <option value="Souris">Souris</option>
+                <option value="Imprimante">Imprimante</option>
+                <option value="Réseau WiFi">Réseau & Wi-Fi</option>
+                <option value="Accessoires Informatiques">Accessoires Informatiques</option>
+              </optgroup>
+              <optgroup label="📱 Téléphonie & Tablettes">
+                <option value="Smartphone">Smartphone</option>
+                <option value="Tablette">Tablette</option>
+                <option value="Smartwatch">Smartwatch</option>
+                <option value="Écouteurs">Écouteurs & Casques</option>
+                <option value="Chargeur Mobile">Chargeurs & Câbles</option>
+                <option value="Power Bank">Power Banks</option>
+              </optgroup>
+              <optgroup label="📺 TV & Son">
+                <option value="Télévision">Télévision</option>
+                <option value="Barre de Son">Barre de Son</option>
+                <option value="Enceinte Bluetooth">Enceinte Bluetooth</option>
+                <option value="Home Cinéma">Home Cinéma</option>
+                <option value="Vidéoprojecteur">Vidéoprojecteur</option>
+                <option value="Casque Audio">Casque Audio</option>
+              </optgroup>
+              <optgroup label="🎮 Gaming">
+                <option value="Console de Jeux">Console de Jeux</option>
+                <option value="Manette">Manette</option>
+                <option value="Clavier Gaming">Clavier Gaming</option>
+                <option value="Souris Gaming">Souris Gaming</option>
+                <option value="Casque Gaming">Casque Gaming</option>
+                <option value="Chaise Gaming">Chaise Gaming</option>
+                <option value="Écran Gaming">Écran Gaming</option>
+              </optgroup>
+              <optgroup label="📷 Photo & Vidéo">
+                <option value="Appareil Photo">Appareil Photo</option>
+                <option value="Caméscope">Caméscope</option>
+                <option value="Drone">Drone</option>
+                <option value="Objectif">Objectif & Optique</option>
+              </optgroup>
+              <optgroup label="🏠 Électroménager">
+                <option value="Réfrigérateur">Réfrigérateur</option>
+                <option value="Machine à Laver">Machine à Laver</option>
+                <option value="Climatiseur">Climatiseur</option>
+                <option value="Four">Four & Cuisinière</option>
+                <option value="Micro-ondes">Micro-ondes</option>
+                <option value="Aspirateur">Aspirateur</option>
+                <option value="Cafetière">Cafetière</option>
+                <option value="Mixeur Robot">Mixeur & Robot</option>
+              </optgroup>
+              <optgroup label="📋 Bureautique">
+                <option value="Imprimante Bureau">Imprimante Bureau</option>
+                <option value="Onduleur UPS">Onduleur (UPS)</option>
+                <option value="Fournitures Bureau">Fournitures Bureau</option>
+              </optgroup>
+            </select>
+            <select class="filter-select" id="storeFilter" onchange="loadProducts()">
+              <option value="">Tous les stores</option>
+              <option value="Tunisianet">Tunisianet</option>
+              <option value="SpaceNet">SpaceNet</option>
+              <option value="Skymil">Skymil</option>
+              <option value="Mytek">Mytek</option>
+            </select>
+          </div>
+          <button class="btn btn-primary" onclick="openAddModal()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Ajouter un produit
+          </button>
+        </div>
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Image</th>
+                <th onclick="sortBy('name')">Nom <span class="sort-arrow">↕</span></th>
+                <th onclick="sortBy('category')">Catégorie <span class="sort-arrow">↕</span></th>
+                <th>Tunisianet</th>
+                <th>SpaceNet</th>
+                <th>Skymil</th>
+                <th>Mytek</th>
+                <th onclick="sortBy('bestPrice')">Meilleur Prix <span class="sort-arrow">↕</span></th>
+                <th onclick="sortBy('updatedAt')">Mis à jour <span class="sort-arrow">↕</span></th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="productsTableBody">
+              <tr><td colspan="10" style="text-align:center;padding:40px;color:var(--text-muted)"><div class="sk" style="height:14px;width:60%;margin:0 auto;"></div></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="pagination" id="productsPagination"></div>
+      </div>
+    </div>
+
+    <!-- ── SCRAPER PANEL ── -->
+    <div class="section-panel" id="panel-scraper">
+      <div class="glass-card" style="animation-delay:.25s">
+        <div class="section-header" style="margin-bottom:20px;">
+          <div style="font-size:18px;font-weight:600;display:flex;align-items:center;gap:10px;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--emerald-light)" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+            Contrôle du Scraper
+          </div>
+        </div>
+
+        <button class="scraper-run-all" id="runAllBtn" onclick="runScraper('all')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          Lancer le scraping — Tous les stores
+        </button>
+
+        <div class="scraper-stores-grid">
+          <div class="scraper-store-card">
+            <div class="scraper-store-header">
+              <div class="scraper-store-name"><span class="store-dot-md" style="background:#e2001a"></span>Tunisianet</div>
+              <button class="scraper-run-btn" style="background:rgba(226,0,26,.15);color:#e2001a;border:1px solid rgba(226,0,26,.3);" onclick="runScraper('Tunisianet')" id="btn-Tunisianet">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                Lancer
+              </button>
+            </div>
+            <div class="scraper-store-stats"><span class="scraper-stat">Produits: <span id="sc-Tunisianet">—</span></span><span class="scraper-stat">Dernier: <span id="sl-Tunisianet">jamais</span></span></div>
+          </div>
+          <div class="scraper-store-card">
+            <div class="scraper-store-header">
+              <div class="scraper-store-name"><span class="store-dot-md" style="background:#0066cc"></span>SpaceNet</div>
+              <button class="scraper-run-btn" style="background:rgba(0,102,204,.15);color:#0066cc;border:1px solid rgba(0,102,204,.3);" onclick="runScraper('SpaceNet')" id="btn-SpaceNet">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                Lancer
+              </button>
+            </div>
+            <div class="scraper-store-stats"><span class="scraper-stat">Produits: <span id="sc-SpaceNet">—</span></span><span class="scraper-stat">Dernier: <span id="sl-SpaceNet">jamais</span></span></div>
+          </div>
+          <div class="scraper-store-card">
+            <div class="scraper-store-header">
+              <div class="scraper-store-name"><span class="store-dot-md" style="background:#ff6600"></span>Skymil</div>
+              <button class="scraper-run-btn" style="background:rgba(255,102,0,.15);color:#ff6600;border:1px solid rgba(255,102,0,.3);" onclick="runScraper('Skymil')" id="btn-Skymil">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                Lancer
+              </button>
+            </div>
+            <div class="scraper-store-stats"><span class="scraper-stat">Produits: <span id="sc-Skymil">—</span></span><span class="scraper-stat">Dernier: <span id="sl-Skymil">jamais</span></span></div>
+          </div>
+          <div class="scraper-store-card">
+            <div class="scraper-store-header">
+              <div class="scraper-store-name"><span class="store-dot-md" style="background:#00933b"></span>Mytek</div>
+              <button class="scraper-run-btn" style="background:rgba(0,147,59,.15);color:#00933b;border:1px solid rgba(0,147,59,.3);" onclick="runScraper('Mytek')" id="btn-Mytek">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                Lancer
+              </button>
+            </div>
+            <div class="scraper-store-stats"><span class="scraper-stat">Produits: <span id="sc-Mytek">—</span></span><span class="scraper-stat">Dernier: <span id="sl-Mytek">jamais</span></span></div>
+          </div>
+        </div>
+
+        <!-- Progress -->
+        <div class="scraper-progress" id="scraperProgress">
+          <div class="progress-header">
+            <div class="progress-store-name" id="progressStoreName">
+              <div class="sk" style="width:120px;height:16px;"></div>
+            </div>
+            <div class="progress-pct" id="progressPct">0%</div>
+          </div>
+          <div class="progress-bar-wrap"><div class="progress-bar-fill" id="progressBar" style="width:0%"></div></div>
+          <div class="progress-msg" id="progressMsg">Initialisation…</div>
+        </div>
+
+        <!-- Results -->
+        <div class="scraper-results" id="scraperResults">
+          <div style="font-size:16px;font-weight:600;margin-bottom:16px;">Résultats du dernier scraping</div>
+          <div class="results-tabs">
+            <button class="result-tab active" onclick="switchResultTab('new')">Nouveaux produits (<span id="newCount">0</span>)</button>
+            <button class="result-tab" onclick="switchResultTab('changes')">Changements de prix (<span id="changesCount">0</span>)</button>
+            <button class="result-tab" onclick="switchResultTab('errors')">Erreurs (<span id="errorsCount">0</span>)</button>
+          </div>
+          <div class="result-content active" id="result-new">
+            <div id="newProductsList"></div>
+          </div>
+          <div class="result-content" id="result-changes">
+            <div id="priceChangesList"></div>
+          </div>
+          <div class="result-content" id="result-errors">
+            <div id="errorsList"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── LOGS PANEL ── -->
+    <div class="section-panel" id="panel-logs">
+      <div class="glass-card" style="animation-delay:.25s">
+        <div class="table-toolbar">
+          <div style="font-size:16px;font-weight:600;display:flex;align-items:center;gap:8px;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--emerald-light)" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            Historique des scrapings
+          </div>
+          <button class="btn btn-ghost btn-sm" onclick="loadLogs()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.5"/></svg>
+            Actualiser
+          </button>
+        </div>
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Store</th>
+                <th>Statut</th>
+                <th>Nouveaux</th>
+                <th>Changements</th>
+                <th>Erreurs</th>
+                <th>Durée</th>
+              </tr>
+            </thead>
+            <tbody id="logsTableBody">
+              <tr><td colspan="7" style="text-align:center;padding:40px;color:var(--text-muted)">Chargement…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── ADS PANEL ── -->
+    <div class="section-panel" id="panel-ads">
+      <div class="glass-card" style="animation-delay:.25s">
+        <div class="table-toolbar">
+          <div style="font-size:16px;font-weight:600;display:flex;align-items:center;gap:8px;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            Publicités sponsorisées
+          </div>
+          <button class="btn btn-primary" onclick="openAddAdModal()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Nouvelle publicité
+          </button>
+        </div>
+
+        <!-- Stats row -->
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:22px;" id="adsStatsRow">
+          <div style="background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:14px;padding:16px;text-align:center;">
+            <div style="font-family:'Space Mono',monospace;font-size:26px;font-weight:700;color:var(--gold)" id="statAdsTotal">—</div>
+            <div style="font-size:11px;color:var(--text-muted);margin-top:4px;text-transform:uppercase;letter-spacing:.5px">Total</div>
+          </div>
+          <div style="background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:14px;padding:16px;text-align:center;">
+            <div style="font-family:'Space Mono',monospace;font-size:26px;font-weight:700;color:var(--success)" id="statAdsActive">—</div>
+            <div style="font-size:11px;color:var(--text-muted);margin-top:4px;text-transform:uppercase;letter-spacing:.5px">Actives</div>
+          </div>
+          <div style="background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:14px;padding:16px;text-align:center;">
+            <div style="font-family:'Space Mono',monospace;font-size:26px;font-weight:700;color:var(--info)" id="statAdsImpressions">—</div>
+            <div style="font-size:11px;color:var(--text-muted);margin-top:4px;text-transform:uppercase;letter-spacing:.5px">Impressions</div>
+          </div>
+        </div>
+
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th style="width:44px">Couleur</th>
+                <th>Titre</th>
+                <th>Catégories ciblées</th>
+                <th>Prix</th>
+                <th>Priorité</th>
+                <th>Impressions</th>
+                <th>Clics</th>
+                <th>Statut</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="adsTableBody">
+              <tr><td colspan="9" style="text-align:center;padding:40px;color:var(--text-muted)">Chargement…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<button class="mobile-menu-toggle">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+</button>
+<footer class="site-footer">
+  <p>© 2026 ComparateurTN — Panneau d'administration</p>
+</footer>
+
+<script>
+(function(){
+'use strict';
+
+const STORES = { Tunisianet:'#e2001a', SpaceNet:'#0066cc', Skymil:'#ff6600', Mytek:'#00933b' };
+const SPEC_FIELDS = {
+  /* ── Informatique ── */
+  'PC Portable':[
+    'processor','processorGen','processorBrand','cores','ram','ramType','ramSlots',
+    'storage','storage2','storageType','gpu','gpuBrand','gpuVram',
+    'screenSize','screenResolution','screenType','refreshRate','touchscreen',
+    'battery','batteryCapacity','os','weight','color','usb','usbc','hdmi',
+    'wifi','bluetooth','webcam','backlight','fingerprint','numpad'
+  ],
+  'PC Portable Gamer':[
+    'processor','processorGen','processorBrand','cores','ram','ramType','ramSlots',
+    'storage','storage2','storageType','gpu','gpuBrand','gpuVram','gpuTdp',
+    'screenSize','screenResolution','screenType','refreshRate','responseTime',
+    'battery','batteryCapacity','os','weight','color',
+    'usb','usbc','hdmi','wifi','bluetooth','backlight','fingerprint'
+  ],
+  'PC de Bureau':[
+    'processor','processorGen','processorBrand','cores','threads','ram','ramType',
+    'storage','storage2','storageType','gpu','gpuVram','os','formFactor',
+    'psu','wifi','bluetooth','usb','usbc','hdmi','color'
+  ],
+  'PC Gamer':[
+    'processor','processorGen','processorBrand','cores','threads','ram','ramType',
+    'storage','storage2','storageType','gpu','gpuBrand','gpuVram','gpuTdp',
+    'os','formFactor','psu','wifi','bluetooth','usb','usbc','hdmi','rgb','color'
+  ],
+  'Processeur CPU':[
+    'socket','cores','threads','baseFreq','boostFreq','tdp','cache','l2Cache',
+    'architecture','lithography','coolerIncluded','pcie','iGPU','maxRamSpeed','ramType'
+  ],
+  'Carte Mère':[
+    'socket','chipset','formFactor','ramSlots','ramType','ramMax','ramSpeed',
+    'pcie','m2Slots','sataSlots','usb','usbc','wifi','bluetooth',
+    'audioChipset','lan','rgb','thunderbolt'
+  ],
+  'Mémoire RAM':[
+    'capacity','type','speed','latency','kit','voltage','rgb','eccSupport',
+    'profile','height','warranty'
+  ],
+  'Carte Graphique GPU':[
+    'chipset','gpuBrand','vram','vramType','vramBus','coreClock','boostClock',
+    'memoryClock','tdp','ports','hdmiPorts','dpPorts','length','width','slots',
+    'cooling','fanCount','rgb','pcie','powerConnector'
+  ],
+  'SSD':[
+    'capacity','formFactor','interface','protocol','readSpeed','writeSpeed',
+    'nand','cache','tbw','dram','warranty','height'
+  ],
+  'Disque Dur HDD':[
+    'capacity','formFactor','rpm','interface','cache','warranty','noise','vibration'
+  ],
+  'Alimentation PC':[
+    'power','certification','modular','efficiency','fanSize','connectors',
+    'pcie8pin','sata','protections','warranty','rgb','length'
+  ],
+  'Boîtier PC':[
+    'formFactor','supportedMb','maxGpuLength','maxCpuHeight','driveBays',
+    'fans','fanSlots','rgb','sidepanel','usbFront','usbcFront',
+    'dustFilter','radiatorSupport','dimensions','weight'
+  ],
+  'Refroidissement':[
+    'type','socket','tdp','fanSize','fanCount','height','rgb','heatpipes',
+    'bearing','noise','airflow','staticPressure','warranty'
+  ],
+  'Écran PC':[
+    'screenSize','resolution','panelType','refreshRate','responseTime',
+    'ports','hdmiVersion','dpVersion','curved','hdr','brightness',
+    'contrast','colorGamut','colorDepth','speakers','adjustable','vesa','freesync','gsync'
+  ],
+  'Écran Gaming':[
+    'screenSize','resolution','panelType','refreshRate','responseTime',
+    'ports','hdmiVersion','dpVersion','curved','hdr','brightness',
+    'contrast','colorGamut','gsync','freesync','adjustable','vesa','rgb'
+  ],
+  'Clavier':[
+    'type','layout','switch','switchBrand','backlight','backlightColor',
+    'wireless','numpad','connectivity','polling','antiGhosting','nKey',
+    'material','macroKeys','knob','usbc','dimensions','weight'
+  ],
+  'Souris':[
+    'dpi','maxDpi','buttons','wireless','sensor','weight','rgb',
+    'polling','connectivity','grip','cable','switches','battery','charging'
+  ],
+  'Clavier Gaming':[
+    'type','layout','switch','switchBrand','backlight','backlightColor',
+    'wireless','numpad','polling','antiGhosting','nKey','connectivity',
+    'macroKeys','knob','usbc','dimensions','weight'
+  ],
+  'Souris Gaming':[
+    'dpi','maxDpi','buttons','wireless','sensor','weight','rgb',
+    'polling','connectivity','grip','cable','switches','battery','charging',
+    'shape','side','dimensions'
+  ],
+  'Imprimante':[
+    'type','color','wireless','duplex','ppm','ppmColor','resolution','inkType',
+    'connectivity','paperSize','adf','scanner','fax','display','trayCapacity'
+  ],
+  'Imprimante Bureau':[
+    'type','color','wireless','duplex','ppm','ppmColor','resolution','inkType',
+    'connectivity','paperSize','adf','scanner','fax','display','trayCapacity','monthlyDuty'
+  ],
+  'Réseau WiFi':[
+    'type','standard','speed','ports','bands','mu_mimo','range',
+    'antennas','beamforming','vpn','usb','security','processor'
+  ],
+  'Accessoires Informatiques':['type','compatibility','connectivity','color'],
+
+  /* ── Téléphonie & Tablettes ── */
+  'Smartphone':[
+    'os','osVersion','processor','processorBrand','cores','ram','storage',
+    'screenSize','screenResolution','screenType','refreshRate','brightness',
+    'battery','chargingSpeed','wirelessCharging','reverseCharging',
+    'camera','cameraCount','frontCamera','videoResolution',
+    'connectivity','wifi','bluetooth','nfc','gps','simSlots','simType',
+    'color','weight','dimensions','fingerprint','faceUnlock','waterproof','stylus'
+  ],
+  'Tablette':[
+    'os','osVersion','processor','processorBrand','ram','storage','storageExpand',
+    'screenSize','screenResolution','screenType','refreshRate','brightness',
+    'battery','chargingSpeed','wirelessCharging',
+    'camera','frontCamera','videoResolution',
+    'connectivity','wifi','bluetooth','gps','simSlots',
+    'stylus','keyboard','color','weight','dimensions','waterproof','fingerprint'
+  ],
+  'Smartwatch':[
+    'os','screenSize','screenType','resolution','battery','batteryDays',
+    'gps','heartRate','spo2','ecg','waterproof','strapSize','straps',
+    'connectivity','bluetooth','wifi','nfc','cellular',
+    'stepCounter','sleepTracking','sensors','color','dimensions','weight'
+  ],
+  'Écouteurs':[
+    'type','wireless','anc','transparency','battery','batteryCase',
+    'driver','driverSize','frequency','microphone','connectivity',
+    'multiPoint','ipRating','codec','charging','color','weight','neckband'
+  ],
+  'Casque Audio':[
+    'type','wireless','anc','transparency','battery','driver','driverSize',
+    'impedance','sensitivity','frequency','microphone','connectivity',
+    'foldable','ipRating','codec','multiPoint','color','weight'
+  ],
+  'Chargeur Mobile':[
+    'power','ports','portCount','wireless','wirelessPower','compatibility',
+    'cable','dimensions','weight','certification'
+  ],
+  'Power Bank':[
+    'capacity','power','ports','portCount','wireless','wirelessPower',
+    'weight','dimensions','charging','display','certification','solar'
+  ],
+  'Coque Protection':['compatibility','material','type','color','magsafe','wireless'],
+
+  /* ── TV & Son ── */
+  'Télévision':[
+    'screenSize','resolution','panelType','smartTV','os','hdr','hdr10plus',
+    'dolbyVision','refreshRate','ports','hdmiPorts','usbPorts',
+    'bluetooth','wifi','speakers','soundOutput','dolbyAtmos','dtsx',
+    'gamingMode','vrr','allm','memc','energyClass','dimensions','weight'
+  ],
+  'Barre de Son':[
+    'channels','power','wireless','dolby','dts','dolbyAtmos','subwoofer',
+    'wirelessSub','hdmiArc','optical','bluetooth','wifi','connectivity',
+    'surround','upfiring','dimensions','color'
+  ],
+  'Enceinte Bluetooth':[
+    'power','battery','waterproof','ipRating','connectivity','frequency',
+    'drivers','tws','bass','mic','color','dimensions','weight','solar','charging'
+  ],
+  'Home Cinéma':[
+    'channels','power','dolby','dts','dolbyAtmos','wireless','subwoofer',
+    'hdmi','optical','bluetooth','wifi','surround','connectivity'
+  ],
+  'Vidéoprojecteur':[
+    'resolution','lumens','throw','lamp','smartTV','connectivity',
+    'os','keystone','zoom','contrast','hdr','bluetooth','wifi',
+    'speakers','dimensions','weight','battery'
+  ],
+  'Box Streaming':['resolution','os','storage','wifi','bluetooth','voice','ethernet','usb','hdr'],
+
+  /* ── Gaming ── */
+  'Console de Jeux':[
+    'resolution','storage','storageType','online','bundled','optical',
+    'wifi','bluetooth','usb','hdmi','ram','processor','gpu','color','dimensions','weight'
+  ],
+  'Manette':[
+    'wireless','connectivity','compatibility','vibration','battery','batteryLife',
+    'layout','triggers','gyro','nfc','color','dimensions','weight'
+  ],
+  'Casque Gaming':[
+    'wireless','connectivity','surround','microphone','micDetachable','battery',
+    'driver','driverSize','frequency','impedance','platform','rgb',
+    'anc','color','weight','usb','jack'
+  ],
+  'Chaise Gaming':[
+    'material','maxWeight','armrests','armrestAdjust','recliner','reclineAngle',
+    'lumbar','headrest','neckPillow','wheelType','base','color','dimensions','weight'
+  ],
+
+  /* ── Photo & Vidéo ── */
+  'Appareil Photo':[
+    'type','sensor','sensorSize','resolution','iso','isoMax','video','videoFps',
+    'mount','stabilization','screen','screenSize','viewfinder','autofocus',
+    'afPoints','burstSpeed','battery','batteryShots','wifi','bluetooth',
+    'gps','weather','weight','dimensions'
+  ],
+  'Caméscope':[
+    'resolution','videoFps','zoom','opticalZoom','stabilization','storage',
+    'battery','batteryLife','screen','screenSize','microphone','wifi',
+    'bluetooth','weight','dimensions'
+  ],
+  'Drone':[
+    'resolution','videoResolution','videoFps','range','battery','flightTime',
+    'weight','stabilization','obstacle','gps','followMe','speed',
+    'foldable','windResistance','transmission','camera'
+  ],
+  'Objectif':[
+    'mount','focal','aperture','stabilization','af','afMotor','filter',
+    'elements','groups','blades','dimensions','weight','weather'
+  ],
+  'Stabilisateur':['payload','axes','battery','batteryLife','bluetooth','weight','loadMax','foldable'],
+
+  /* ── Électroménager ── */
+  'Réfrigérateur':[
+    'type','totalCapacity','fridgeCapacity','freezerCapacity','energyClass',
+    'color','dimensions','noFrost','dispenser','inverter','noise',
+    'shelves','doors','led','icemaker','deodorizer'
+  ],
+  'Machine à Laver':[
+    'type','capacity','spinSpeed','energyClass','waterConsumption',
+    'steamFunction','programs','display','inverter','noise',
+    'dimensions','color','loadType','quickWash'
+  ],
+  'Climatiseur':[
+    'capacity','btu','type','inverter','hotCold','energyClass','wifi',
+    'selfCleaning','turboMode','sleepMode','filterType','noise',
+    'dimensions','color','coverage','refrigerant'
+  ],
+  'Four':[
+    'type','capacity','functions','selfCleaning','pyrolysis','energyClass',
+    'grill','convection','steam','dimensions','color','display','timer'
+  ],
+  'Micro-ondes':[
+    'capacity','power','type','grill','grillPower','convection','functions',
+    'color','dimensions','inverter','turntable','display'
+  ],
+  'Aspirateur':[
+    'type','suction','bagless','filtration','hepaFilter','battery','batteryLife',
+    'noise','tankCapacity','weight','radius','self_emptying','robotMapping','wifi'
+  ],
+  'Cafetière':[
+    'type','capacity','pressure','grinder','milk','pods','capsules',
+    'programmable','display','color','dimensions','power','removableTank'
+  ],
+  'Mixeur Robot':[
+    'power','capacity','bowlCapacity','speed','accessories','functions',
+    'color','dimensions','weight','noise'
+  ],
+
+  /* ── Bureautique ── */
+  'Onduleur UPS':[
+    'power','va','runtime','outlets','usb','display','type',
+    'lineInteractive','avr','batteryType','dimensions','weight'
+  ],
+  'Fournitures Bureau':['type','compatibility','color','quantity','brand']
+};
+const SPEC_LABELS = {
+  /* Processeur / CPU */
+  processor:'Processeur',processorGen:'Génération',processorBrand:'Marque CPU',
+  cores:'Cœurs',threads:'Threads',baseFreq:'Fréq. base (GHz)',boostFreq:'Fréq. boost (GHz)',
+  tdp:'TDP (W)',cache:'Cache L3',l2Cache:'Cache L2',architecture:'Architecture',
+  lithography:'Lithographie (nm)',coolerIncluded:'Ventirad inclus',iGPU:'GPU intégré',
+  maxRamSpeed:'Vitesse RAM max',
+
+  /* RAM */
+  ram:'RAM (Go)',ramType:'Type RAM',ramSlots:'Slots RAM',ramMax:'RAM max (Go)',
+  ramSpeed:'Vitesse RAM (MHz)',type:'Type',speed:'Vitesse',latency:'Latence (CL)',
+  kit:'Kit',voltage:'Voltage (V)',rgb:'RGB',eccSupport:'ECC',
+  profile:'Profil (XMP/EXPO)',warranty:'Garantie',
+
+  /* GPU */
+  gpu:'GPU / Carte Graphique',gpuBrand:'Marque GPU',gpuVram:'VRAM (Go)',gpuTdp:'TDP GPU (W)',
+  vram:'VRAM (Go)',vramType:'Type VRAM',vramBus:'Bus VRAM (bit)',
+  coreClock:'Fréq. cœur (MHz)',boostClock:'Fréq. boost (MHz)',memoryClock:'Fréq. mémoire',
+  chipset:'Chipset',fanCount:'Nombre ventilateurs',slots:'Slots PCIe occupés',
+  powerConnector:'Connecteur alim.',cooling:'Refroidissement',length:'Longueur (mm)',
+  width:'Largeur (mm)',
+
+  /* Écran / Moniteur */
+  screenSize:'Taille écran (pouces)',screenResolution:'Résolution',screenType:'Type dalle',
+  resolution:'Résolution',panelType:'Type dalle',refreshRate:'Fréq. rafraîch. (Hz)',
+  responseTime:'Temps réponse (ms)',curved:'Incurvé',hdr:'HDR',hdr10plus:'HDR10+',
+  dolbyVision:'Dolby Vision',brightness:'Luminosité (nits)',contrast:'Contraste',
+  colorGamut:'Gamut couleurs',colorDepth:'Profondeur couleurs (bits)',
+  gsync:'G-Sync',freesync:'FreeSync',adjustable:'Réglable en hauteur',
+  vesa:'VESA',speakers:'Haut-parleurs intégrés',touchscreen:'Tactile',
+
+  /* Ports / Connectique */
+  ports:'Ports',hdmiPorts:'Ports HDMI',dpPorts:'Ports DisplayPort',
+  hdmiVersion:'Version HDMI',dpVersion:'Version DisplayPort',
+  usb:'USB (arrière)',usbFront:'USB (avant)',usbcFront:'USB-C (avant)',
+  usbc:'USB-C',hdmi:'HDMI',hdmiArc:'HDMI ARC',optical:'Optique',
+  thunderbolt:'Thunderbolt',pcie:'PCIe',m2Slots:'Slots M.2',sataSlots:'Ports SATA',
+  jackFront:'Jack 3.5mm',
+
+  /* Stockage */
+  storage:'Stockage principal',storage2:'Stockage secondaire',storageType:'Type stockage',
+  interface:'Interface',protocol:'Protocole (NVMe/SATA)',readSpeed:'Lecture (MB/s)',
+  writeSpeed:'Écriture (MB/s)',nand:'Type NAND',tbw:'TBW (To)',dram:'Cache DRAM',
+  capacity:'Capacité',formFactor:'Format',rpm:'Vitesse rotation (tr/min)',
+  storageExpand:'Stockage extensible',
+
+  /* Alimentation */
+  power:'Puissance (W)',certification:'Certification 80+',modular:'Modulaire',
+  efficiency:'Efficacité',fanSize:'Taille ventilateur',connectors:'Connecteurs',
+  pcie8pin:'PCIe 8-pin',sata:'SATA',protections:'Protections',
+
+  /* Boîtier */
+  supportedMb:'Formats carte mère',maxGpuLength:'Long. GPU max (mm)',
+  maxCpuHeight:'Haut. CPU max (mm)',driveBays:'Baies disques',fans:'Ventilateurs inclus',
+  fanSlots:'Emplacements vent.',sidepanel:'Panneau latéral',dustFilter:'Filtre poussière',
+  radiatorSupport:'Radiateur max',
+
+  /* Refroidissement */
+  socket:'Socket(s)',height:'Hauteur (mm)',heatpipes:'Caloducs',
+  bearing:'Type palier',noise:'Bruit (dB)',airflow:'Débit air (CFM)',
+  staticPressure:'Pression statique',
+
+  /* Réseau */
+  standard:'Standard WiFi',bands:'Bandes',mu_mimo:'MU-MIMO',range:'Portée',
+  antennas:'Antennes',beamforming:'Beamforming',vpn:'VPN intégré',security:'Sécurité',
+
+  /* PC Portable spécifique */
+  battery:'Batterie',batteryCapacity:'Capacité batterie (Wh)',os:'Système d\'exploitation',
+  osVersion:'Version OS',weight:'Poids (kg)',color:'Couleur',
+  webcam:'Webcam',backlight:'Rétroéclairage clavier',fingerprint:'Capteur d\'empreinte',
+  numpad:'Pavé numérique',psu:'Alimentation (W)',
+
+  /* Carte mère */
+  audioChipset:'Chipset audio',lan:'LAN (Gbps)',
+
+  /* Clavier */
+  switch:'Type switch',switchBrand:'Marque switch',backlightColor:'Couleur rétroéclairage',
+  wireless:'Sans fil',layout:'Disposition',polling:'Polling rate (Hz)',
+  antiGhosting:'Anti-ghosting',nKey:'N-Key Rollover',material:'Matériau',
+  macroKeys:'Touches macro',knob:'Molette/Bouton',connectivity:'Connectivité',
+
+  /* Souris */
+  dpi:'DPI',maxDpi:'DPI max',buttons:'Boutons',sensor:'Capteur',
+  grip:'Prise en main',cable:'Câble',switches:'Switches clics',
+  charging:'Charge',shape:'Forme',side:'Boutons latéraux',
+
+  /* Imprimante */
+  color:'Impression couleur',duplex:'Recto-verso auto',ppm:'Pages/min (N&B)',
+  ppmColor:'Pages/min (couleur)',inkType:'Type encre',adf:'Chargeur doc auto',
+  scanner:'Scanner intégré',fax:'Fax',paperSize:'Format papier',
+  trayCapacity:'Capacité bac (feuilles)',monthlyDuty:'Volume mensuel max',
+  display:'Affichage',
+
+  /* Smartphone / Tablette */
+  camera:'Caméra principale (MP)',cameraCount:'Nombre caméras',
+  frontCamera:'Caméra avant (MP)',videoResolution:'Vidéo max',
+  chargingSpeed:'Charge rapide (W)',wirelessCharging:'Charge sans fil',
+  reverseCharging:'Charge inversée',simSlots:'Slots SIM',simType:'Type SIM',
+  nfc:'NFC',faceUnlock:'Déverrouillage facial',waterproof:'Étanchéité',
+  stylus:'Stylet',keyboard:'Clavier',
+
+  /* Smartwatch */
+  batteryDays:'Autonomie (jours)',spo2:'SpO2',ecg:'ECG',
+  strapSize:'Taille bracelet',straps:'Bracelets',stepCounter:'Podomètre',
+  sleepTracking:'Suivi sommeil',sensors:'Capteurs',cellular:'Cellulaire (4G)',
+  heartRate:'Cardiofréquencemètre',gps:'GPS',
+
+  /* Écouteurs / Casque */
+  anc:'ANC',transparency:'Mode transparence',batteryCase:'Autonomie boîtier (h)',
+  driver:'Driver',driverSize:'Taille driver (mm)',frequency:'Fréquence (Hz)',
+  microphone:'Microphone',multiPoint:'Multi-points',ipRating:'Indice IP',
+  codec:'Codec audio (aptX/LDAC)',neckband:'Tour de cou',impedance:'Impédance (Ω)',
+  sensitivity:'Sensibilité (dB)',foldable:'Pliable',
+  surround:'Son surround',platform:'Plateforme',
+
+  /* Chargeur / Power Bank */
+  portCount:'Nombre de ports',wirelessPower:'Puissance sans fil (W)',
+  cable:'Câble inclus',solar:'Panneau solaire',
+
+  /* TV */
+  smartTV:'Smart TV',hdrFormat:'Format HDR',dolbyAtmos:'Dolby Atmos',
+  dtsx:'DTS:X',gamingMode:'Mode Gaming',vrr:'VRR',allm:'ALLM',memc:'MEMC',
+  usbPorts:'Ports USB',soundOutput:'Puissance son (W)',
+  energyClass:'Classe énergie',
+
+  /* Barres de son / HiFi */
+  channels:'Canaux',dolby:'Dolby Atmos',dts:'DTS:X',
+  subwoofer:'Caisson de basses',wirelessSub:'Caisson sans fil',
+  upfiring:'Haut-parleurs haut',hdmi:'HDMI',bluetooth:'Bluetooth',
+  wifi:'Wi-Fi',
+
+  /* Enceinte Bluetooth */
+  battery:'Autonomie (h)',drivers:'Nombre drivers',tws:'Mode TWS',
+  bass:'Mode basses',mic:'Microphone intégré',
+
+  /* Vidéoprojecteur */
+  lumens:'Luminosité (ANSI lm)',throw:'Ratio projection',lamp:'Durée lampe (h)',
+  keystone:'Correction keystone',zoom:'Zoom optique',
+
+  /* Appareil Photo */
+  sensorSize:'Taille capteur',iso:'ISO natif',isoMax:'ISO max',
+  video:'Vidéo',videoFps:'FPS vidéo',mount:'Monture',
+  stabilization:'Stabilisation (IBIS/OIS)',screen:'Écran arrière',
+  viewfinder:'Viseur',autofocus:'Autofocus',afPoints:'Points AF',
+  burstSpeed:'Rafale (im/s)',batteryShots:'Autonomie (déclench.)',weather:'Tropicalisé',
+
+  /* Caméscope */
+  opticalZoom:'Zoom optique (x)',batteryLife:'Autonomie (min)',
+
+  /* Drone */
+  flightTime:'Temps de vol (min)',followMe:'Mode Follow-me',
+  foldable:'Pliable',windResistance:'Résistance vent',
+  transmission:'Transmission vidéo',
+
+  /* Objectif */
+  focal:'Focale (mm)',aperture:'Ouverture max',af:'Autofocus',
+  afMotor:'Moteur AF',filter:'Diamètre filtre (mm)',
+  elements:'Éléments optiques',groups:'Groupes',blades:'Lamelles diaphragme',
+
+  /* Stabilisateur */
+  payload:'Charge max (kg)',axes:'Axes',loadMax:'Charge max (g)',
+
+  /* Réfrigérateur */
+  totalCapacity:'Capacité totale (L)',fridgeCapacity:'Volume réfrigérateur (L)',
+  freezerCapacity:'Volume congélateur (L)',noFrost:'No Frost',
+  dispenser:'Distributeur eau/glace',inverter:'Compresseur Inverter',
+  shelves:'Étagères',doors:'Nombre portes',led:'Éclairage LED',
+  icemaker:'Machine à glaçons',deodorizer:'Déodorisant',
+
+  /* Lave-linge */
+  spinSpeed:'Essorage (tr/min)',waterConsumption:'Conso. eau (L)',
+  steamFunction:'Fonction vapeur',programs:'Programmes',
+  loadType:'Chargement',quickWash:'Lavage rapide',
+
+  /* Climatiseur */
+  btu:'Puissance (BTU)',selfCleaning:'Auto-nettoyage',turboMode:'Mode Turbo',
+  sleepMode:'Mode Nuit',filterType:'Type filtre',coverage:'Surface max (m²)',
+  refrigerant:'Réfrigérant',hotCold:'Chaud/Froid',
+
+  /* Four / Micro-ondes */
+  functions:'Fonctions de cuisson',pyrolysis:'Pyrolyse',
+  convection:'Convection',steam:'Cuisson vapeur',timer:'Minuterie',
+  grillPower:'Puissance grill (W)',turntable:'Plateau tournant',
+
+  /* Aspirateur */
+  suction:'Aspiration (Pa)',bagless:'Sans sac',filtration:'Filtration',
+  hepaFilter:'Filtre HEPA',tankCapacity:'Capacité bac (L)',
+  radius:'Rayon d\'action (m)',self_emptying:'Auto-vidage',
+  robotMapping:'Cartographie',
+
+  /* Cafetière */
+  pods:'Capsules compatibles',grinder:'Broyeur intégré',
+  milk:'Mousseur lait',capsules:'Capsules',programmable:'Programmable',
+  removableTank:'Réservoir amovible',pressure:'Pression (bar)',
+
+  /* Mixeur Robot */
+  bowlCapacity:'Volume bol (L)',accessories:'Accessoires',
+
+  /* Onduleur UPS */
+  va:'Puissance (VA)',runtime:'Autonomie (min)',outlets:'Prises protégées',
+  lineInteractive:'Line-Interactive',avr:'Régulation tension (AVR)',
+  batteryType:'Type batterie',
+
+  /* Générique */
+  dimensions:'Dimensions (mm)',formFactor:'Format',os:'Système d\'exploitation',
+  compatibility:'Compatibilité',brand:'Marque',quantity:'Quantité',
+  color:'Couleur',weight:'Poids',
+};
+
+/* ── Catégorie principale → sous-catégories (identique à navSub() dans store.html) ── */
+const SUBCATEGORIES = {
+  'Informatique':[
+    ['Ordinateurs Portables','Ordinateurs Portables'],['PC Bureau','PC Bureau'],
+    ['Processeurs','Processeurs (CPU)'],['Cartes Mère','Cartes Mère'],
+    ['RAM','Mémoire RAM'],['Cartes Graphiques','Cartes Graphiques (GPU)'],
+    ['Stockage','SSD / Disques Durs'],['Alimentation','Alimentations (PSU)'],
+    ['Boîtiers','Boîtiers PC'],['Refroidissement','Refroidissement'],
+    ['Moniteurs','Moniteurs'],['Claviers','Claviers & Souris'],
+    ['Imprimantes','Imprimantes'],['Réseau','Réseau & Wi-Fi']
+  ],
+  'Téléphonie & Tablettes':[
+    ['Smartphones','Smartphones'],['Tablettes','Tablettes'],
+    ['Smartwatch','Smartwatch & Bracelet'],['Écouteurs','Écouteurs & Casques'],
+    ['Coques','Coques & Protection'],['Chargeurs','Chargeurs & Câbles'],
+    ['Power Bank','Power Banks']
+  ],
+  'TV & Son':[
+    ['Télévisions','Télévisions'],['Barres de Son','Barres de Son'],
+    ['Enceintes','Enceintes Bluetooth'],['Home Cinéma','Home Cinéma'],
+    ['Vidéoprojecteurs','Vidéoprojecteurs'],['Streaming','Boxes & Streaming']
+  ],
+  'Gaming':[
+    ['Consoles','Consoles de Jeux'],['PC Gamer','PC Gamer'],
+    ['Manettes','Manettes'],['Claviers Gaming','Claviers Gaming'],
+    ['Casques Gaming','Casques Gaming'],['Chaises Gaming','Chaises Gaming']
+  ],
+  'Photo & Vidéo':[
+    ['Appareils Photo','Appareils Photo'],['Caméscopes','Caméscopes'],
+    ['Drones','Drones'],['Objectifs','Objectifs & Optique'],
+    ['Stabilisateurs','Stabilisateurs & Trépieds']
+  ],
+  'Électroménager':[
+    ['Réfrigérateurs','Réfrigérateurs'],['Lave-linge','Lave-linge'],
+    ['Climatisation','Climatiseurs'],['Fours','Fours & Micro-ondes'],
+    ['Aspirateurs','Aspirateurs'],['Cafetières','Cafetières'],
+    ['Mixeurs','Mixeurs & Robots']
+  ],
+  'Bureautique':[
+    ['Imprimantes','Imprimantes'],['Scanners','Scanners'],
+    ['Onduleurs','Onduleurs (UPS)'],['Fournitures','Fournitures Bureau']
+  ]
+};
+
+/* Sous-catégorie (valeur stockée) → clé dans SPEC_FIELDS */
+const SUB_TO_SPEC = {
+  'Ordinateurs Portables':'PC Portable','PC Bureau':'PC de Bureau',
+  'Processeurs':'Processeur CPU','Cartes Mère':'Carte Mère',
+  'RAM':'Mémoire RAM','Cartes Graphiques':'Carte Graphique GPU',
+  'Stockage':'SSD','Alimentation':'Alimentation PC',
+  'Boîtiers':'Boîtier PC','Refroidissement':'Refroidissement',
+  'Moniteurs':'Écran PC','Claviers':'Clavier',
+  'Imprimantes':'Imprimante','Réseau':'Réseau WiFi',
+  'Smartphones':'Smartphone','Tablettes':'Tablette',
+  'Smartwatch':'Smartwatch','Écouteurs':'Écouteurs',
+  'Coques':'Coque Protection','Chargeurs':'Chargeur Mobile',
+  'Power Bank':'Power Bank','Télévisions':'Télévision',
+  'Barres de Son':'Barre de Son','Enceintes':'Enceinte Bluetooth',
+  'Home Cinéma':'Home Cinéma','Vidéoprojecteurs':'Vidéoprojecteur',
+  'Streaming':'Box Streaming','Consoles':'Console de Jeux',
+  'PC Gamer':'PC Gamer','Manettes':'Manette',
+  'Claviers Gaming':'Clavier Gaming','Casques Gaming':'Casque Gaming',
+  'Chaises Gaming':'Chaise Gaming','Appareils Photo':'Appareil Photo',
+  'Caméscopes':'Caméscope','Drones':'Drone',
+  'Objectifs':'Objectif','Stabilisateurs':'Stabilisateur',
+  'Réfrigérateurs':'Réfrigérateur','Lave-linge':'Machine à Laver',
+  'Climatisation':'Climatiseur','Fours':'Four',
+  'Aspirateurs':'Aspirateur','Cafetières':'Cafetière',
+  'Mixeurs':'Mixeur Robot','Imprimantes_b':'Imprimante Bureau',
+  'Scanners':'Scanner','Onduleurs':'Onduleur UPS',
+  'Fournitures':'Fournitures Bureau'
+};
+
+window.onCategoryChange = function(){
+  const cat = document.getElementById('fCategory').value;
+  const subSel = document.getElementById('fSubcategory');
+  subSel.innerHTML = '<option value="">— Sélectionner —</option>';
+  if(cat && SUBCATEGORIES[cat]){
+    SUBCATEGORIES[cat].forEach(([val,label])=>{
+      const o = document.createElement('option');
+      o.value = val; o.textContent = label;
+      subSel.appendChild(o);
+    });
+  }
+  document.getElementById('specFieldsWrap').innerHTML = '';
+};
+
+function generateSlug(name){
+  return name.toLowerCase()
+    .normalize('NFD').replace(/[̀-ͯ]/g,'')
+    .replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'')
+    .substring(0,80)+'-'+Date.now().toString(36);
+}
+
+let state = { page:1, limit:20, total:0, totalPages:1, sort:'updatedAt', sortDir:-1, search:'', category:'', store:'', searchTimer:null };
+let deleteTargetId = null;
+let scraperPollingTimer = null;
+
+/* ── helpers ── */
+function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function fmtPrice(n){ return n!=null ? Number(n).toLocaleString('fr-TN',{minimumFractionDigits:0,maximumFractionDigits:0})+' TND' : '—'; }
+function timeAgo(d){ if(!d) return '—'; const s=Math.floor((Date.now()-new Date(d))/1000); if(s<60) return 'à l\'instant'; if(s<3600) return Math.floor(s/60)+'min'; if(s<86400) return Math.floor(s/3600)+'h'; return Math.floor(s/86400)+'j'; }
+function fmtDate(d){ if(!d) return '—'; return new Date(d).toLocaleString('fr-TN',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'}); }
+function fmtDuration(ms){ if(!ms) return '—'; if(ms<1000) return ms+'ms'; if(ms<60000) return (ms/1000).toFixed(1)+'s'; return Math.floor(ms/60000)+'m '+(Math.floor(ms/1000)%60)+'s'; }
+
+/* ── theme ── */
+function initTheme(){
+  const t=document.getElementById('theme-toggle');
+  const sun=t.querySelector('.icon-sun'), moon=t.querySelector('.icon-moon');
+  function setTheme(v){ document.documentElement.setAttribute('data-theme',v); localStorage.setItem('theme',v); sun.style.display=v==='light'?'none':'block'; moon.style.display=v==='light'?'block':'none'; }
+  setTheme(localStorage.getItem('theme')||'dark');
+  t.addEventListener('click',()=>setTheme(document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark'));
+}
+
+/* ── mobile menu ── */
+function initMobileMenu(){
+  const toggle=document.querySelector('.mobile-menu-toggle'), sidebar=document.getElementById('sidebar');
+  if(!toggle||!sidebar) return;
+  toggle.addEventListener('click',()=>sidebar.classList.toggle('open'));
+  document.addEventListener('click',e=>{ if(sidebar.classList.contains('open')&&!sidebar.contains(e.target)&&!toggle.contains(e.target)) sidebar.classList.remove('open'); });
+}
+
+/* ── tabs ── */
+window.switchTab=function(tab){
+  document.querySelectorAll('.section-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.nav-link').forEach(l=>l.classList.remove('active'));
+  document.getElementById('panel-'+tab).classList.add('active');
+  document.getElementById('tab-'+tab)?.classList.add('active');
+  const navLinks=document.querySelectorAll('.nav-link');
+  navLinks.forEach(l=>{ if(l.getAttribute('onclick')===`switchTab('${tab}')`) l.classList.add('active'); });
+  if(tab==='logs') loadLogs();
+};
+
+/* ── toast ── */
+function showToast(msg,type='success'){
+  const c=document.getElementById('toastContainer'), t=document.createElement('div');
+  t.className='toast';
+  const col=type==='success'?'var(--success)':type==='error'?'var(--danger)':'var(--warning)';
+  const icon=type==='success'?'<polyline points="20 6 9 17 4 12"/>':type==='error'?'<circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/>':'<circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/>';
+  t.innerHTML=`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="${col}" stroke-width="2">${icon}</svg><span>${esc(msg)}</span>`;
+  c.appendChild(t);
+  setTimeout(()=>{ t.style.animation='toastOut .3s ease forwards'; setTimeout(()=>t.remove(),300); },3500);
+}
+
+/* ── modal ── */
+window.openModal=function(id){ document.getElementById(id).classList.add('open'); document.body.style.overflow='hidden'; };
+window.closeModal=function(id){ document.getElementById(id).classList.remove('open'); document.body.style.overflow=''; };
+document.addEventListener('keydown',e=>{ if(e.key==='Escape'){ closeModal('productModal'); closeModal('deleteModal'); } });
+document.querySelectorAll('.modal-backdrop').forEach(b=>b.addEventListener('click',e=>{ if(e.target===b){ closeModal(b.id); } }));
+
+/* ── stats ── */
+async function loadStats(){
+  try{
+    const [prodRes,logRes]=await Promise.all([
+      fetch('/admin/api/products?page=1&limit=1'),
+      fetch('/admin/api/scraper/logs?limit=1')
+    ]);
+    const prodData=await prodRes.json();
+    const logData=await logRes.json();
+    animateCounter('statTotal',prodData.total||0);
+    if(logData.logs&&logData.logs[0]){
+      const log=logData.logs[0];
+      document.getElementById('statChanges').textContent=log.priceChanges?.length||0;
+      document.getElementById('statLastRun').textContent=timeAgo(log.runDate);
+      const el=document.getElementById('statLastStatus');
+      el.textContent=log.status||'—';
+      el.className='stat-change '+(log.status==='success'?'positive':log.status==='failed'?'negative':'neutral');
+    } else {
+      document.getElementById('statChanges').textContent='0';
+    }
+    const storeNames=Object.keys(STORES);
+    storeNames.forEach(async s=>{
+      try{
+        const r=await fetch(`/admin/api/products?stores=${s}&page=1&limit=1`);
+        const d=await r.json();
+        const el=document.getElementById('sc-'+s);
+        if(el) el.textContent=d.total||0;
+        const lr=await fetch(`/admin/api/scraper/logs?store=${s}&limit=1`);
+        const ld=await lr.json();
+        const lel=document.getElementById('sl-'+s);
+        if(lel) lel.textContent=ld.logs&&ld.logs[0]?timeAgo(ld.logs[0].runDate):'jamais';
+      }catch(e){}
+    });
+  }catch(e){}
+}
+
+function animateCounter(id,target){
+  const el=document.getElementById(id); if(!el) return;
+  const start=0, dur=1200, startTime=performance.now();
+  function update(now){ const p=Math.min((now-startTime)/dur,1); const ease=1-Math.pow(1-p,3); el.textContent=Math.floor(start+(target-start)*ease).toLocaleString(); if(p<1) requestAnimationFrame(update); }
+  requestAnimationFrame(update);
+}
+
+/* ── products table ── */
+async function loadProducts(){
+  const tbody=document.getElementById('productsTableBody');
+  tbody.innerHTML=`<tr><td colspan="10" style="text-align:center;padding:40px"><div class="sk" style="height:14px;width:40%;margin:0 auto;"></div></td></tr>`;
+  state.search=document.getElementById('productSearch').value.trim();
+  state.category=document.getElementById('categoryFilter').value;
+  state.store=document.getElementById('storeFilter').value;
+  const p=new URLSearchParams({ page:state.page, limit:state.limit, sort:state.sort, sortDir:state.sortDir, search:state.search, category:state.category, stores:state.store });
+  try{
+    const res=await fetch('/admin/api/products?'+p.toString());
+    const data=await res.json();
+    state.total=data.total||0; state.totalPages=data.totalPages||1;
+    if(!data.products||!data.products.length){
+      tbody.innerHTML=`<tr><td colspan="10"><div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg><h3>Aucun produit</h3><p>Essayez de modifier les filtres.</p></div></td></tr>`;
+      renderPagination(); return;
+    }
+    tbody.innerHTML=data.products.map((p,i)=>{
+      const img=p.images&&p.images[0];
+      const prices=p.prices||[];
+      return `<tr style="animation-delay:${i*.03}s">
+        <td>${img?`<img class="product-thumb" src="${esc(img)}" alt="" loading="lazy" onerror="this.style.display='none'">`:`<div class="product-thumb-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>`}</td>
+        <td><div class="product-name-cell" title="${esc(p.name)}">${esc(p.name)}</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">${esc(p.brand||'')}</div></td>
+        <td><span class="category-tag">${esc(p.category||'—')}</span></td>
+        ${['Tunisianet','SpaceNet','Skymil','Mytek'].map(s=>{ const e=prices.find(x=>x.store===s); return `<td>${e&&e.price?`<div style="font-family:'Space Mono',monospace;font-size:12px;font-weight:700;color:${STORES[s]}">${fmtPrice(e.price)}</div><div style="font-size:11px;margin-top:2px">${e.inStock!==false?'<span style="color:var(--success)">●</span> Stock':'<span style="color:var(--danger)">●</span> Rupture'}</div>`:'<span style="color:var(--text-muted);font-size:12px">—</span>'}</td>`; }).join('')}
+        <td><span class="price-cell best">${fmtPrice(p.bestPrice)}</span><div style="font-size:11px;color:var(--text-muted);margin-top:2px">${esc(p.bestPriceStore||'')}</div></td>
+        <td style="font-size:12px;color:var(--text-muted)">${timeAgo(p.updatedAt)}</td>
+        <td><div class="action-btns">
+          <button class="action-btn view" title="Voir" onclick="viewProduct('${esc(p.slug||'')}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+          <button class="action-btn edit" title="Modifier" onclick="openEditModal('${esc(p._id)}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+          <button class="action-btn delete" title="Supprimer" onclick="openDeleteModal('${esc(p._id)}','${esc(p.name)}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg></button>
+        </div></td>
+      </tr>`;
+    }).join('');
+    renderPagination();
+  }catch(e){ tbody.innerHTML=`<tr><td colspan="10" style="text-align:center;padding:40px;color:var(--danger)">Erreur de chargement.</td></tr>`; }
+}
+
+function renderPagination(){
+  const wrap=document.getElementById('productsPagination');
+  const info=`<div class="pagination-info">${state.total} produit${state.total!==1?'s':''} — Page ${state.page}/${state.totalPages}</div>`;
+  let btns='<div class="pagination-btns">';
+  btns+=`<button class="page-btn" ${state.page<=1?'disabled':''} onclick="goPage(${state.page-1})"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg></button>`;
+  const s=Math.max(1,state.page-2), e=Math.min(state.totalPages,state.page+2);
+  for(let i=s;i<=e;i++) btns+=`<button class="page-btn${i===state.page?' active':''}" onclick="goPage(${i})">${i}</button>`;
+  btns+=`<button class="page-btn" ${state.page>=state.totalPages?'disabled':''} onclick="goPage(${state.page+1})"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></button></div>`;
+  wrap.innerHTML=info+btns;
+}
+
+window.goPage=function(p){ state.page=p; loadProducts(); };
+
+window.sortBy=function(col){
+  if(state.sort===col) state.sortDir*=-1; else { state.sort=col; state.sortDir=-1; }
+  document.querySelectorAll('.data-table th').forEach(th=>th.classList.remove('sorted'));
+  loadProducts();
+};
+
+function debounceSearch(){ clearTimeout(state.searchTimer); state.searchTimer=setTimeout(()=>{ state.page=1; loadProducts(); },350); }
+window.debounceSearch=debounceSearch;
+
+window.viewProduct=function(slug){ if(slug) window.open('/product/'+slug,'_blank'); };
+
+/* ── spec fields ── */
+window.renderSpecFields=function(existingSpecs){
+  const sub=document.getElementById('fSubcategory').value;
+  const specKey=SUB_TO_SPEC[sub]||sub;
+  const fields=SPEC_FIELDS[specKey]||[];
+  const wrap=document.getElementById('specFieldsWrap');
+  if(!fields.length){ wrap.innerHTML=''; return; }
+  wrap.innerHTML=`<div class="section-divider">Caractéristiques — ${esc(sub||specKey)}</div><div class="form-row" style="grid-template-columns:repeat(2,1fr);gap:12px;">`+
+    fields.map(f=>`<div class="form-group-modal"><label class="form-label-modal">${esc(SPEC_LABELS[f]||f)}</label><input class="form-input-modal" id="spec-${esc(f)}" placeholder="${esc(SPEC_LABELS[f]||f)}" value="${esc(existingSpecs&&existingSpecs[f]!=null?existingSpecs[f]:'')}" ></div>`).join('')+
+    '</div>';
+};
+
+function collectSpecs(){
+  const sub=document.getElementById('fSubcategory').value;
+  const specKey=SUB_TO_SPEC[sub]||sub;
+  const fields=SPEC_FIELDS[specKey]||[];
+  const specs={};
+  fields.forEach(f=>{ const el=document.getElementById('spec-'+f); if(el&&el.value.trim()) specs[f]=el.value.trim(); });
+  return specs;
+}
+
+/* ── add/edit modal ── */
+window.openAddModal=function(){
+  document.getElementById('editProductId').value='';
+  document.getElementById('modalTitle').textContent='Ajouter un produit';
+  document.getElementById('saveProductBtn').innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>Enregistrer';
+  ['fName','fBrand','fDescription','fImages'].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
+  document.getElementById('fCategory').value='';
+  const _subReset=document.getElementById('fSubcategory'); if(_subReset){ _subReset.innerHTML='<option value="">— Choisir catégorie d\'abord —</option>'; }
+  document.getElementById('specFieldsWrap').innerHTML='';
+  Object.keys(STORES).forEach(s=>{ const p=document.getElementById('price-'+s),u=document.getElementById('url-'+s),st=document.getElementById('stock-'+s); if(p)p.value=''; if(u)u.value=''; if(st)st.checked=true; });
+  openModal('productModal');
+};
+
+window.openEditModal=async function(id){
+  try{
+    const res=await fetch('/admin/api/products/'+id);
+    const data=await res.json();
+    const p=data.product;
+    if(!p) return;
+    document.getElementById('editProductId').value=p._id;
+    document.getElementById('modalTitle').textContent='Modifier le produit';
+    document.getElementById('fName').value=p.name||'';
+    document.getElementById('fBrand').value=p.brand||'';
+    document.getElementById('fCategory').value=p.category||'';
+    (function(){
+      const cat=p.category||'';
+      const subSel=document.getElementById('fSubcategory');
+      subSel.innerHTML='<option value="">— Sélectionner —</option>';
+      if(cat && SUBCATEGORIES[cat]){
+        SUBCATEGORIES[cat].forEach(([val,label])=>{
+          const o=document.createElement('option'); o.value=val; o.textContent=label;
+          subSel.appendChild(o);
+        });
+      }
+      subSel.value=p.subcategory||'';
+    })();
+    document.getElementById('fDescription').value=p.description||'';
+    document.getElementById('fImages').value=(p.images||[]).join('\n');
+    renderSpecFields(p.specs||{});
+    Object.keys(STORES).forEach(s=>{
+      const entry=(p.prices||[]).find(x=>x.store===s);
+      const pe=document.getElementById('price-'+s), ue=document.getElementById('url-'+s), se=document.getElementById('stock-'+s);
+      if(pe) pe.value=entry&&entry.price!=null?entry.price:'';
+      if(ue) ue.value=entry&&entry.url?entry.url:'';
+      if(se) se.checked=entry?entry.inStock!==false:true;
+    });
+    openModal('productModal');
+  }catch(e){ showToast('Erreur de chargement','error'); }
+};
+
+window.saveProduct=async function(){
+  const id=document.getElementById('editProductId').value.trim();
+  const name=document.getElementById('fName').value.trim();
+  const category=document.getElementById('fCategory').value;
+  const subcategory=document.getElementById('fSubcategory').value.trim();
+  if(!name){ showToast('Le nom est requis','error'); return; }
+  if(!category){ showToast('La catégorie est requise','error'); return; }
+  if(!subcategory){ showToast('La sous-catégorie est requise','error'); return; }
+  const prices=Object.keys(STORES).map(s=>{
+    const price=document.getElementById('price-'+s)?.value;
+    const url=document.getElementById('url-'+s)?.value.trim();
+    const inStock=document.getElementById('stock-'+s)?.checked;
+    if(!price) return null;
+    return { store:s, price:parseFloat(price), url:url||'', inStock:inStock!==false, lastUpdated:new Date() };
+  }).filter(Boolean);
+  const slug=!id ? generateSlug(name) : undefined;
+  const body={
+    name, brand:document.getElementById('fBrand').value.trim(),
+    category, subcategory,
+    ...(slug ? {slug} : {}),
+    description:document.getElementById('fDescription').value.trim(),
+    images:document.getElementById('fImages').value.split('\n').map(s=>s.trim()).filter(Boolean),
+    specs:collectSpecs(), prices
+  };
+  const btn=document.getElementById('saveProductBtn');
+  btn.disabled=true; btn.innerHTML='<div style="width:16px;height:16px;border:2px solid rgba(255,255,255,.3);border-top-color:white;border-radius:50%;animation:spin 1s linear infinite;"></div>Enregistrement…';
+  try{
+    const url=id?'/admin/api/product/'+id:'/admin/api/product';
+    const method=id?'PUT':'POST';
+    const res=await fetch(url,{ method, headers:{'Content-Type':'application/json'}, body:JSON.stringify(body) });
+    const data=await res.json();
+    if(!res.ok) throw new Error(data.error||'Erreur');
+    showToast(id?'Produit mis à jour avec succès':'Produit ajouté avec succès','success');
+    closeModal('productModal');
+    loadProducts(); loadStats();
+  }catch(e){ showToast(e.message||'Erreur lors de l\'enregistrement','error'); }
+  finally{ btn.disabled=false; btn.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>Enregistrer'; }
+};
+
+/* ── delete ── */
+window.openDeleteModal=function(id,name){
+  deleteTargetId=id;
+  document.getElementById('deleteConfirmText').textContent=`Supprimer "${name}" définitivement ?`;
+  openModal('deleteModal');
+};
+window.confirmDelete=async function(){
+  if(!deleteTargetId) return;
+  const btn=document.getElementById('confirmDeleteBtn');
+  btn.disabled=true;
+  try{
+    const res=await fetch('/admin/api/product/'+deleteTargetId,{ method:'DELETE' });
+    if(!res.ok) throw new Error('Erreur');
+    showToast('Produit supprimé','success');
+    closeModal('deleteModal'); deleteTargetId=null;
+    loadProducts(); loadStats();
+  }catch(e){ showToast('Erreur lors de la suppression','error'); btn.disabled=false; }
+};
+
+/* ── scraper ── */
+window.runScraper=async function(store){
+  const allBtn=document.getElementById('runAllBtn');
+  allBtn.disabled=true; allBtn.innerHTML='<div style="width:18px;height:18px;border:2.5px solid rgba(255,255,255,.3);border-top-color:white;border-radius:50%;animation:spin 1s linear infinite;"></div>Scraping en cours…';
+  Object.keys(STORES).forEach(s=>{ const b=document.getElementById('btn-'+s); if(b){b.disabled=true;} });
+  document.getElementById('scraperProgress').classList.add('visible');
+  document.getElementById('scraperResults').classList.remove('visible');
+  document.getElementById('progressPct').textContent='0%';
+  document.getElementById('progressBar').style.width='0%';
+  document.getElementById('progressMsg').textContent='Initialisation du scraper…';
+  document.getElementById('progressStoreName').textContent=store==='all'?'Tous les stores':store;
+  try{
+    await fetch('/admin/api/scraper/run',{ method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ stores:store==='all'?['all']:[store] }) });
+    startPolling();
+  }catch(e){
+    showToast('Impossible de lancer le scraper','error');
+    resetScraperUI();
+  }
+};
+
+function startPolling(){
+  clearInterval(scraperPollingTimer);
+  scraperPollingTimer=setInterval(pollScraperStatus,2000);
+}
+
+async function pollScraperStatus(){
+  try{
+    const res=await fetch('/admin/api/scraper/status');
+    const data=await res.json();
+    const pct=data.progress||0;
+    document.getElementById('progressPct').textContent=pct+'%';
+    document.getElementById('progressBar').style.width=pct+'%';
+    document.getElementById('progressMsg').textContent=data.message||'En cours…';
+    if(data.currentStore) document.getElementById('progressStoreName').textContent=data.currentStore;
+    if(data.status==='done'||data.status==='idle'){
+      clearInterval(scraperPollingTimer);
+      resetScraperUI();
+      showToast('Scraping terminé avec succès','success');
+      if(data.results) showScraperResults(data.results);
+      loadStats();
+    } else if(data.status==='error'){
+      clearInterval(scraperPollingTimer);
+      resetScraperUI();
+      showToast('Erreur lors du scraping','error');
+    }
+  }catch(e){}
+}
+
+function resetScraperUI(){
+  const allBtn=document.getElementById('runAllBtn');
+  allBtn.disabled=false; allBtn.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>Lancer le scraping — Tous les stores';
+  Object.keys(STORES).forEach(s=>{ const b=document.getElementById('btn-'+s); if(b){b.disabled=false;} });
+}
+
+function showScraperResults(results){
+  document.getElementById('scraperResults').classList.add('visible');
+  const newProds=results.newProductsFound||[];
+  const changes=results.priceChanges||[];
+  const errors=results.errors||[];
+  document.getElementById('newCount').textContent=newProds.length;
+  document.getElementById('changesCount').textContent=changes.length;
+  document.getElementById('errorsCount').textContent=errors.length;
+  document.getElementById('newProductsList').innerHTML=newProds.length
+    ?newProds.map(n=>`<div class="result-item"><span class="result-item-name">${esc(n)}</span><span class="result-item-meta">Nouveau</span></div>`).join('')
+    :'<div style="color:var(--text-muted);padding:20px;text-align:center;font-size:13px;">Aucun nouveau produit détecté.</div>';
+  document.getElementById('priceChangesList').innerHTML=changes.length
+    ?changes.map(c=>{ const up=c.newPrice>c.oldPrice; return `<div class="result-item"><span class="result-item-name">${esc(c.productName)}<span style="font-size:11px;color:var(--text-muted);margin-left:6px;">${esc(c.store)}</span></span><div style="display:flex;gap:8px;align-items:center;"><span style="font-size:12px;color:var(--text-muted);text-decoration:line-through;">${fmtPrice(c.oldPrice)}</span><span class="price-change-badge ${up?'up':'down'}">${up?'▲':'▼'} ${fmtPrice(c.newPrice)}</span></div></div>`; }).join('')
+    :'<div style="color:var(--text-muted);padding:20px;text-align:center;font-size:13px;">Aucun changement de prix.</div>';
+  document.getElementById('errorsList').innerHTML=errors.length
+    ?errors.map(e=>`<div class="result-item"><span class="result-item-name" style="color:var(--danger)">${esc(e)}</span></div>`).join('')
+    :'<div style="color:var(--text-muted);padding:20px;text-align:center;font-size:13px;">Aucune erreur.</div>';
+}
+
+window.switchResultTab=function(tab){
+  document.querySelectorAll('.result-tab').forEach((b,i)=>b.classList.toggle('active',['new','changes','errors'][i]===tab));
+  document.querySelectorAll('.result-content').forEach(c=>c.classList.remove('active'));
+  document.getElementById('result-'+tab)?.classList.add('active');
+};
+
+/* ── logs ── */
+async function loadLogs(){
+  const tbody=document.getElementById('logsTableBody');
+  tbody.innerHTML=`<tr><td colspan="7" style="text-align:center;padding:30px;color:var(--text-muted)">Chargement…</td></tr>`;
+  try{
+    const res=await fetch('/admin/api/scraper/logs?limit=20');
+    const data=await res.json();
+    const logs=data.logs||[];
+    if(!logs.length){ tbody.innerHTML=`<tr><td colspan="7"><div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><h3>Aucun log</h3><p>Lancez d'abord un scraping.</p></div></td></tr>`; return; }
+    tbody.innerHTML=logs.map((l,i)=>`
+      <tr style="animation-delay:${i*.04}s">
+        <td style="font-size:12px">${fmtDate(l.runDate)}</td>
+        <td><span style="display:flex;align-items:center;gap:7px;font-weight:600;font-size:13px;"><span style="width:10px;height:10px;border-radius:50%;background:${STORES[l.store]||'var(--text-muted)'}"></span>${esc(l.store||'Tous')}</span></td>
+        <td><span class="log-status ${l.status||'failed'}">${esc(l.status||'—')}</span></td>
+        <td style="font-family:'Space Mono',monospace;font-size:12px;color:var(--success)">${l.newProductsFound?.length||0}</td>
+        <td style="font-family:'Space Mono',monospace;font-size:12px;color:var(--warning)">${l.priceChanges?.length||0}</td>
+        <td style="font-family:'Space Mono',monospace;font-size:12px;color:var(--danger)">${l.errors?.length||0}</td>
+        <td style="font-size:12px;color:var(--text-muted)">${fmtDuration(l.duration)}</td>
+      </tr>`).join('');
+  }catch(e){ tbody.innerHTML=`<tr><td colspan="7" style="text-align:center;padding:30px;color:var(--danger)">Erreur de chargement.</td></tr>`; }
+}
+
+/* ── auth check ── */
+async function checkAuth(){
+  try{
+    const res=await fetch('/admin/api/auth-check');
+    if(!res.ok||!(await res.json()).authenticated){
+      window.location.href='/admin/login';
+    }
+  }catch(e){ window.location.href='/admin/login'; }
+}
+
+/* ── boot ── */
+async function init(){
+  initTheme();
+  initMobileMenu();
+  await checkAuth();
+  window.addEventListener('load',()=>{ document.body.style.opacity='1'; });
+  loadStats();
+  loadProducts();
+}
+
+if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init);
+else init();
+
+/* ══════════════════════════════════════════════════
+   ADS MANAGEMENT
+══════════════════════════════════════════════════ */
+
+const AD_CATEGORIES = [
+  'Informatique','Téléphonie & Tablettes','TV & Son',
+  'Gaming','Photo & Vidéo','Électroménager','Bureautique'
+];
+
+let deleteAdTargetId = null;
+
+/* ── switchTab extended for ads ── */
+const _origSwitchTab = window.switchTab;
+window.switchTab = function(tab) {
+  _origSwitchTab(tab);
+  if(tab === 'ads') loadAds();
+};
+
+/* ── Load ads list ── */
+async function loadAds() {
+  const tbody = document.getElementById('adsTableBody');
+  if(!tbody) return;
+  tbody.innerHTML = `<tr><td colspan="9" style="text-align:center;padding:30px;color:var(--text-muted)">Chargement…</td></tr>`;
+  try {
+    const res = await fetch('/admin/api/ads');
+    const data = await res.json();
+    const ads = data.ads || [];
+
+    // Update stats
+    const total = ads.length;
+    const active = ads.filter(a => a.active).length;
+    const impressions = ads.reduce((s,a) => s + (a.impressions||0), 0);
+    document.getElementById('statAdsTotal').textContent = total;
+    document.getElementById('statAdsActive').textContent = active;
+    document.getElementById('statAdsImpressions').textContent = impressions.toLocaleString();
+
+    if(!ads.length) {
+      tbody.innerHTML = `<tr><td colspan="9"><div class="empty-state">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <h3>Aucune publicité</h3>
+        <p>Créez votre première publicité sponsorisée.</p>
+      </div></td></tr>`;
+      return;
+    }
+
+    tbody.innerHTML = ads.map((ad, i) => {
+      const cats = (ad.targetCategories||[]).join(', ') || '<span style="color:var(--text-muted);font-size:11px;">Toutes</span>';
+      const priceHtml = ad.price != null
+        ? `<span style="font-family:'Space Mono',monospace;font-weight:700;font-size:12px;">${Number(ad.price).toLocaleString('fr-TN')} TND</span>`
+        : '<span style="color:var(--text-muted);font-size:12px">—</span>';
+      return `<tr style="animation-delay:${i*.04}s">
+        <td>
+          <div style="width:28px;height:28px;border-radius:8px;background:${esc(ad.accentColor||'#34d399')};box-shadow:0 4px 12px ${esc(ad.accentColor||'#34d399')}50;"></div>
+        </td>
+        <td>
+          <div style="font-weight:600;font-size:13px;color:var(--text-primary);max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${esc(ad.title)}">${esc(ad.title)}</div>
+          ${ad.badge ? `<span style="font-size:10px;background:${esc(ad.accentColor||'#34d399')}20;color:${esc(ad.accentColor||'#34d399')};border-radius:20px;padding:1px 7px;font-weight:700;">${esc(ad.badge)}</span>` : ''}
+        </td>
+        <td style="font-size:12px;color:var(--text-secondary);max-width:160px;">${cats}</td>
+        <td>${priceHtml}</td>
+        <td style="font-family:'Space Mono',monospace;font-size:12px;">${ad.priority||0}</td>
+        <td style="font-family:'Space Mono',monospace;font-size:12px;color:var(--info);">${(ad.impressions||0).toLocaleString()}</td>
+        <td style="font-family:'Space Mono',monospace;font-size:12px;color:var(--emerald-light);">${(ad.clicks||0).toLocaleString()}</td>
+        <td>
+          <span class="log-status ${ad.active ? 'success' : 'failed'}" style="cursor:pointer;" onclick="toggleAdStatus('${esc(ad._id)}', this)" title="Cliquer pour changer">
+            ${ad.active ? 'Active' : 'Inactive'}
+          </span>
+        </td>
+        <td>
+          <div class="action-btns">
+            <button class="action-btn edit" title="Modifier" onclick="openEditAdModal('${esc(ad._id)}')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+            </button>
+            <button class="action-btn delete" title="Supprimer" onclick="openDeleteAdModal('${esc(ad._id)}','${esc(ad.title)}')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+            </button>
+          </div>
+        </td>
+      </tr>`;
+    }).join('');
+  } catch(e) {
+    tbody.innerHTML = `<tr><td colspan="9" style="text-align:center;padding:30px;color:var(--danger)">Erreur de chargement</td></tr>`;
+  }
+}
+
+/* ── Category checkboxes builder ── */
+function buildCategoryCheckboxes(selected = []) {
+  const wrap = document.getElementById('adCategoryCheckboxes');
+  if(!wrap) return;
+  wrap.innerHTML = AD_CATEGORIES.map(cat => {
+    const checked = selected.includes(cat) ? 'checked' : '';
+    const icons = {'Informatique':'💻','Téléphonie & Tablettes':'📱','TV & Son':'📺','Gaming':'🎮','Photo & Vidéo':'📷','Électroménager':'🏠','Bureautique':'📋'};
+    return `<label class="filter-option" style="padding:8px 10px;border:1px solid var(--glass-border);border-radius:10px;background:var(--glass-bg);">
+      <input type="checkbox" class="ad-cat-cb" value="${esc(cat)}" ${checked}>
+      <span class="custom-checkbox"></span>
+      <span style="font-size:12px;">${icons[cat]||''} ${esc(cat)}</span>
+    </label>`;
+  }).join('');
+}
+
+/* ── Live preview ── */
+function updateAdPreview() {
+  const wrap = document.getElementById('adPreviewWrap');
+  if(!wrap) return;
+  const color = document.getElementById('adAccentColor').value || '#34d399';
+  const title = document.getElementById('adTitle').value || 'Titre de l\'annonce';
+  const subtitle = document.getElementById('adSubtitle').value;
+  const badge = document.getElementById('adBadge').value;
+  const price = document.getElementById('adPrice').value;
+  const oldPrice = document.getElementById('adOldPrice').value;
+  const cta = document.getElementById('adCtaText').value || 'Voir l\'offre';
+  const img = document.getElementById('adImage').value;
+  const priceHtml = price
+    ? `<div style="display:flex;align-items:baseline;gap:6px;margin-bottom:8px;">
+        <span style="font-family:'Space Mono',monospace;font-size:13px;font-weight:700;color:${esc(color)}">${Number(price).toLocaleString('fr-TN')} TND</span>
+        ${oldPrice ? `<span style="font-size:10px;color:var(--text-muted);text-decoration:line-through;">${Number(oldPrice).toLocaleString('fr-TN')} TND</span>` : ''}
+      </div>` : '';
+
+  wrap.innerHTML = `
+    <div style="border-radius:14px;overflow:hidden;border:1px solid var(--glass-border);background:var(--glass-bg);position:relative;">
+      <div style="height:3px;background:${esc(color)};"></div>
+      ${badge ? `<span style="position:absolute;top:8px;right:8px;background:${esc(color)};color:white;font-size:9px;font-weight:800;padding:2px 7px;border-radius:20px;text-transform:uppercase;">${esc(badge)}</span>` : ''}
+      ${img
+        ? `<div style="height:90px;overflow:hidden;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.02);">
+            <img src="${esc(img)}" style="width:100%;height:100%;object-fit:contain;padding:8px;" onerror="this.parentElement.style.display='none'">
+           </div>`
+        : `<div style="height:50px;display:flex;align-items:center;justify-content:center;opacity:.2;">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+           </div>`}
+      <div style="padding:8px 10px 10px;">
+        <div style="font-size:11px;font-weight:700;color:var(--text-primary);margin-bottom:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${esc(title)}</div>
+        ${subtitle ? `<div style="font-size:10px;color:var(--text-muted);margin-bottom:6px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${esc(subtitle)}</div>` : ''}
+        ${priceHtml}
+        <div style="display:flex;align-items:center;justify-content:center;gap:4px;width:100%;padding:7px;border-radius:8px;background:${esc(color)};color:white;font-size:10px;font-weight:700;">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          ${esc(cta)}
+        </div>
+      </div>
+      <div style="font-size:9px;color:var(--text-muted);text-align:center;padding:3px 0;letter-spacing:.5px;">Sponsorisé</div>
+    </div>`;
+}
+
+/* ── Open add modal ── */
+window.openAddAdModal = function() {
+  document.getElementById('editAdId').value = '';
+  document.getElementById('adModalTitle').textContent = 'Nouvelle publicité';
+  document.getElementById('adTitle').value = '';
+  document.getElementById('adSubtitle').value = '';
+  document.getElementById('adBadge').value = '';
+  document.getElementById('adImage').value = '';
+  document.getElementById('adAccentColor').value = '#34d399';
+  document.getElementById('adColorPicker').value = '#34d399';
+  document.getElementById('adCtaText').value = 'Voir l\'offre';
+  document.getElementById('adCtaUrl').value = '';
+  document.getElementById('adPrice').value = '';
+  document.getElementById('adOldPrice').value = '';
+  document.getElementById('adPriority').value = '0';
+  document.getElementById('adActive').checked = true;
+  document.getElementById('adStartsAt').value = '';
+  document.getElementById('adEndsAt').value = '';
+  buildCategoryCheckboxes([]);
+  updateAdPreview();
+  openModal('adModal');
+};
+
+/* ── Open edit modal ── */
+window.openEditAdModal = async function(id) {
+  try {
+    const res = await fetch('/admin/api/ads/' + id);
+    const data = await res.json();
+    const ad = data.ad;
+    if(!ad) return;
+    document.getElementById('editAdId').value = ad._id;
+    document.getElementById('adModalTitle').textContent = 'Modifier la publicité';
+    document.getElementById('adTitle').value = ad.title || '';
+    document.getElementById('adSubtitle').value = ad.subtitle || '';
+    document.getElementById('adBadge').value = ad.badge || '';
+    document.getElementById('adImage').value = ad.image || '';
+    document.getElementById('adAccentColor').value = ad.accentColor || '#34d399';
+    document.getElementById('adColorPicker').value = ad.accentColor || '#34d399';
+    document.getElementById('adCtaText').value = ad.ctaText || 'Voir l\'offre';
+    document.getElementById('adCtaUrl').value = ad.ctaUrl || '';
+    document.getElementById('adPrice').value = ad.price != null ? ad.price : '';
+    document.getElementById('adOldPrice').value = ad.oldPrice != null ? ad.oldPrice : '';
+    document.getElementById('adPriority').value = ad.priority || 0;
+    document.getElementById('adActive').checked = ad.active !== false;
+    document.getElementById('adStartsAt').value = ad.startsAt ? new Date(ad.startsAt).toISOString().slice(0,16) : '';
+    document.getElementById('adEndsAt').value = ad.endsAt ? new Date(ad.endsAt).toISOString().slice(0,16) : '';
+    buildCategoryCheckboxes(ad.targetCategories || []);
+    updateAdPreview();
+    openModal('adModal');
+  } catch(e) {
+    showToast('Erreur de chargement', 'error');
+  }
+};
+
+/* ── Save ad ── */
+window.saveAd = async function() {
+  const id = document.getElementById('editAdId').value.trim();
+  const title = document.getElementById('adTitle').value.trim();
+  const ctaUrl = document.getElementById('adCtaUrl').value.trim();
+  if(!title) { showToast('Le titre est requis', 'error'); return; }
+  if(!ctaUrl) { showToast('L\'URL de destination est requise', 'error'); return; }
+
+  const targetCategories = [...document.querySelectorAll('.ad-cat-cb:checked')].map(c => c.value);
+  const startsAt = document.getElementById('adStartsAt').value;
+  const endsAt = document.getElementById('adEndsAt').value;
+
+  const body = {
+    title,
+    subtitle: document.getElementById('adSubtitle').value.trim(),
+    badge: document.getElementById('adBadge').value.trim(),
+    image: document.getElementById('adImage').value.trim(),
+    accentColor: document.getElementById('adAccentColor').value.trim() || '#34d399',
+    ctaText: document.getElementById('adCtaText').value.trim() || 'Voir l\'offre',
+    ctaUrl,
+    price: document.getElementById('adPrice').value || null,
+    oldPrice: document.getElementById('adOldPrice').value || null,
+    targetCategories,
+    targetSubcategories: [],
+    active: document.getElementById('adActive').checked,
+    priority: parseInt(document.getElementById('adPriority').value) || 0,
+    startsAt: startsAt || null,
+    endsAt: endsAt || null
+  };
+
+  const btn = document.getElementById('saveAdBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<div style="width:16px;height:16px;border:2px solid rgba(255,255,255,.3);border-top-color:white;border-radius:50%;animation:spin 1s linear infinite;"></div>Enregistrement…';
+
+  try {
+    const url = id ? '/admin/api/ad/' + id : '/admin/api/ad';
+    const method = id ? 'PUT' : 'POST';
+    const res = await fetch(url, { method, headers: {'Content-Type': 'application/json'}, body: JSON.stringify(body) });
+    const data = await res.json();
+    if(!res.ok) throw new Error(data.error || 'Erreur');
+    showToast(id ? 'Publicité mise à jour' : 'Publicité créée', 'success');
+    closeModal('adModal');
+    loadAds();
+  } catch(e) {
+    showToast(e.message || 'Erreur lors de l\'enregistrement', 'error');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>Enregistrer';
+  }
+};
+
+/* ── Toggle status inline ── */
+window.toggleAdStatus = async function(id, el) {
+  try {
+    const res = await fetch('/admin/api/ad/' + id + '/toggle', { method: 'PATCH' });
+    const data = await res.json();
+    if(!res.ok) throw new Error(data.error || 'Erreur');
+    el.className = 'log-status ' + (data.active ? 'success' : 'failed');
+    el.textContent = data.active ? 'Active' : 'Inactive';
+    showToast(data.active ? 'Publicité activée' : 'Publicité désactivée', 'success');
+  } catch(e) {
+    showToast('Erreur lors du changement de statut', 'error');
+  }
+};
+
+/* ── Delete modal ── */
+window.openDeleteAdModal = function(id, title) {
+  deleteAdTargetId = id;
+  document.getElementById('deleteAdConfirmText').textContent = `Supprimer "${title}" définitivement ?`;
+  openModal('deleteAdModal');
+};
+
+window.confirmDeleteAd = async function() {
+  if(!deleteAdTargetId) return;
+  const btn = document.getElementById('confirmDeleteAdBtn');
+  btn.disabled = true;
+  try {
+    const res = await fetch('/admin/api/ad/' + deleteAdTargetId, { method: 'DELETE' });
+    if(!res.ok) throw new Error('Erreur');
+    showToast('Publicité supprimée', 'success');
+    closeModal('deleteAdModal');
+    deleteAdTargetId = null;
+    loadAds();
+  } catch(e) {
+    showToast('Erreur lors de la suppression', 'error');
+    btn.disabled = false;
+  }
+};
+
+/* ── Live preview: wire input events ── */
+(function wirePreview() {
+  const IDS = ['adTitle','adSubtitle','adBadge','adImage','adAccentColor','adCtaText','adPrice','adOldPrice'];
+  document.addEventListener('input', e => {
+    if(IDS.includes(e.target.id)) {
+      // sync color picker ↔ text
+      if(e.target.id === 'adAccentColor') {
+        const cp = document.getElementById('adColorPicker');
+        if(cp && /^#[0-9a-fA-F]{6}$/.test(e.target.value)) cp.value = e.target.value;
+      }
+      updateAdPreview();
+    }
+  });
+  // close adModal on Escape
+  document.addEventListener('keydown', e => {
+    if(e.key === 'Escape') { closeModal('adModal'); closeModal('deleteAdModal'); }
+  });
+  // backdrop click close
+  document.getElementById('adModal')?.addEventListener('click', e => {
+    if(e.target === document.getElementById('adModal')) closeModal('adModal');
+  });
+  document.getElementById('deleteAdModal')?.addEventListener('click', e => {
+    if(e.target === document.getElementById('deleteAdModal')) closeModal('deleteAdModal');
+  });
+})();
+
+})();
+</script>
+</body>
+</html>

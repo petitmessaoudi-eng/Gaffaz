@@ -1642,11 +1642,13 @@ window.switchTab=function(tab){
   document.querySelectorAll('.section-panel').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
   document.querySelectorAll('.nav-link').forEach(l=>l.classList.remove('active'));
-  document.getElementById('panel-'+tab).classList.add('active');
+  const panel=document.getElementById('panel-'+tab);
+  if(panel) panel.classList.add('active');
   document.getElementById('tab-'+tab)?.classList.add('active');
   const navLinks=document.querySelectorAll('.nav-link');
   navLinks.forEach(l=>{ if(l.getAttribute('onclick')===`switchTab('${tab}')`) l.classList.add('active'); });
   if(tab==='logs') loadLogs();
+  if(tab==='ads') { if(typeof loadAds==='function') loadAds(); }
 };
 
 /* ── toast ── */
@@ -1712,6 +1714,7 @@ function animateCounter(id,target){
 /* ── products table ── */
 async function loadProducts(){
   const tbody=document.getElementById('productsTableBody');
+  if(!tbody) return;
   tbody.innerHTML=`<tr><td colspan="10" style="text-align:center;padding:40px"><div class="sk" style="height:14px;width:40%;margin:0 auto;"></div></td></tr>`;
   state.search=document.getElementById('productSearch').value.trim();
   state.category=document.getElementById('categoryFilter').value;
@@ -2014,8 +2017,15 @@ async function checkAuth(){
 async function init(){
   initTheme();
   initMobileMenu();
+  // Show the page immediately — don't wait for auth
+  if(document.readyState === 'complete'){
+    document.body.style.opacity = '1';
+  } else {
+    window.addEventListener('load', () => { document.body.style.opacity = '1'; }, { once: true });
+    // Fallback: if load already fired or fires late, force opacity after a short delay
+    setTimeout(() => { document.body.style.opacity = '1'; }, 300);
+  }
   await checkAuth();
-  window.addEventListener('load',()=>{ document.body.style.opacity='1'; });
   loadStats();
   loadProducts();
 }
@@ -2033,13 +2043,6 @@ const AD_CATEGORIES = [
 ];
 
 let deleteAdTargetId = null;
-
-/* ── switchTab extended for ads ── */
-const _origSwitchTab = window.switchTab;
-window.switchTab = function(tab) {
-  _origSwitchTab(tab);
-  if(tab === 'ads') loadAds();
-};
 
 /* ── Load ads list ── */
 async function loadAds() {

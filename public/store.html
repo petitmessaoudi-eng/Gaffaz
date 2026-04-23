@@ -766,6 +766,314 @@ input[type="range"]::-webkit-slider-thumb {
 .category-chips-row {
   display:flex; gap:8px; flex-wrap:wrap; margin-bottom:20px;
 }
+/* ── PC Builder Banner ── */
+.pcb-banner {
+  display:flex; align-items:center; justify-content:space-between; gap:16px;
+  padding:16px 22px; border-radius:16px; margin-bottom:20px; cursor:pointer;
+  background:linear-gradient(135deg,rgba(5,150,105,0.12),rgba(52,211,153,0.06));
+  border:1.5px solid rgba(52,211,153,0.3);
+  transition:all 0.2s ease; position:relative; overflow:hidden;
+}
+.pcb-banner::before {
+  content:''; position:absolute; inset:0;
+  background:linear-gradient(135deg,rgba(52,211,153,0.05),transparent);
+  opacity:0; transition:opacity 0.2s;
+}
+.pcb-banner:hover { border-color:rgba(52,211,153,0.6); transform:translateY(-1px); box-shadow:0 8px 32px rgba(5,150,105,0.2); }
+.pcb-banner:hover::before { opacity:1; }
+.pcb-banner-left { display:flex; align-items:center; gap:14px; }
+.pcb-banner-icon { font-size:28px; line-height:1; }
+.pcb-banner-title { font-size:15px; font-weight:700; color:var(--emerald-light); margin-bottom:2px; }
+.pcb-banner-sub { font-size:12px; color:var(--text-muted); }
+.pcb-banner-btn {
+  display:flex; align-items:center; gap:7px; padding:10px 20px;
+  background:linear-gradient(135deg,var(--emerald),var(--emerald-light));
+  color:white; border-radius:11px; font-size:13px; font-weight:700;
+  white-space:nowrap; box-shadow:0 4px 16px rgba(5,150,105,0.35);
+  flex-shrink:0;
+}
+[data-theme="gaming"] .pcb-banner { background:linear-gradient(135deg,rgba(139,0,0,0.15),rgba(192,57,43,0.06)); border-color:rgba(192,57,43,0.35); }
+[data-theme="gaming"] .pcb-banner-title { color:#ff6b6b; }
+[data-theme="gaming"] .pcb-banner-btn { background:linear-gradient(135deg,#8b0000,#c0392b); }
+[data-theme="midnight"] .pcb-banner { background:linear-gradient(135deg,rgba(109,40,217,0.15),rgba(167,139,250,0.06)); border-color:rgba(167,139,250,0.3); }
+[data-theme="midnight"] .pcb-banner-title { color:#a78bfa; }
+[data-theme="midnight"] .pcb-banner-btn { background:linear-gradient(135deg,#4c1d95,#7c3aed); }
+
+
+.pcb-fab {
+  position:fixed; bottom:32px; right:32px; z-index:400;
+  display:flex !important; align-items:center; gap:10px;
+  padding:14px 22px; border-radius:18px; border:none;
+  background:linear-gradient(135deg,#059669,#34d399);
+  color:white; font-family:'Outfit',sans-serif; font-size:14px; font-weight:700;
+  cursor:pointer;
+  box-shadow:0 8px 32px rgba(5,150,105,0.55), 0 0 0 0 rgba(52,211,153,0.4);
+  transition:all 0.25s ease; white-space:nowrap;
+  letter-spacing:.3px;
+  animation:pcbFabPulse 3s ease-in-out infinite;
+}
+@keyframes pcbFabPulse {
+  0%,100%{box-shadow:0 8px 32px rgba(5,150,105,0.55),0 0 0 0 rgba(52,211,153,0.35)}
+  50%{box-shadow:0 10px 40px rgba(5,150,105,0.7),0 0 0 8px rgba(52,211,153,0)}
+}
+.pcb-fab:hover { transform:translateY(-3px) scale(1.04); box-shadow:0 14px 40px rgba(5,150,105,0.7); animation:none; }
+.pcb-fab svg { width:20px; height:20px; flex-shrink:0; }
+.pcb-fab-badge {
+  background:white; color:#059669; border-radius:20px;
+  padding:2px 8px; font-size:11px; font-weight:800; min-width:20px; text-align:center;
+}
+
+/* Overlay */
+.pcb-overlay {
+  position:fixed; inset:0; z-index:500;
+  background:rgba(0,0,0,0.7); backdrop-filter:blur(10px);
+  display:flex; align-items:center; justify-content:center;
+  padding:16px; opacity:0; pointer-events:none; transition:opacity .3s ease;
+}
+.pcb-overlay.open { opacity:1; pointer-events:all; }
+
+/* Main panel */
+.pcb-panel {
+  width:100%; max-width:1100px; max-height:92vh;
+  background:rgba(10,18,14,0.98); backdrop-filter:blur(30px);
+  border:1px solid var(--glass-border); border-radius:28px;
+  display:flex; flex-direction:column; overflow:hidden;
+  transform:translateY(40px) scale(0.97); transition:transform .35s cubic-bezier(0.34,1.56,0.64,1);
+  box-shadow:0 40px 100px rgba(0,0,0,0.6);
+}
+[data-theme="light"] .pcb-panel { background:rgba(245,245,240,0.98); }
+.pcb-overlay.open .pcb-panel { transform:translateY(0) scale(1); }
+
+/* Header */
+.pcb-header {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:20px 28px; border-bottom:1px solid var(--glass-border); flex-shrink:0;
+}
+.pcb-header-left { display:flex; align-items:center; gap:14px; }
+.pcb-header-icon {
+  width:46px; height:46px; border-radius:14px;
+  background:linear-gradient(135deg,var(--emerald),var(--emerald-light));
+  display:flex; align-items:center; justify-content:center;
+  box-shadow:0 6px 20px rgba(5,150,105,0.4);
+}
+.pcb-header-icon svg { width:22px; height:22px; color:white; }
+.pcb-title { font-size:20px; font-weight:700; }
+.pcb-subtitle { font-size:12px; color:var(--text-muted); margin-top:1px; }
+.pcb-close {
+  width:38px; height:38px; border-radius:10px; border:1px solid var(--glass-border);
+  background:var(--glass-bg); display:flex; align-items:center; justify-content:center;
+  cursor:pointer; transition:all .2s ease; color:var(--text-secondary);
+}
+.pcb-close:hover { background:var(--glass-hover); border-color:var(--danger); color:var(--danger); }
+.pcb-close svg { width:16px; height:16px; }
+
+/* Body */
+.pcb-body {
+  display:grid; grid-template-columns:340px 1fr; flex:1; overflow:hidden;
+}
+
+/* Left: slots list */
+.pcb-slots-panel {
+  border-right:1px solid var(--glass-border); overflow-y:auto; padding:20px;
+}
+.pcb-slots-panel::-webkit-scrollbar { width:5px; }
+.pcb-slots-panel::-webkit-scrollbar-thumb { background:var(--glass-border); border-radius:3px; }
+
+.pcb-slot {
+  border-radius:14px; border:1px solid var(--glass-border);
+  background:var(--glass-bg); margin-bottom:10px; overflow:hidden;
+  transition:all .2s ease; cursor:pointer;
+}
+.pcb-slot:hover { background:var(--glass-hover); border-color:rgba(255,255,255,.15); }
+.pcb-slot.active { border-color:var(--emerald-light); background:rgba(52,211,153,0.06); }
+.pcb-slot.selected { border-color:rgba(52,211,153,0.5); }
+.pcb-slot.required { }
+.pcb-slot-header {
+  display:flex; align-items:center; gap:12px; padding:12px 14px;
+}
+.pcb-slot-icon {
+  width:36px; height:36px; border-radius:10px; display:flex; align-items:center; justify-content:center;
+  font-size:18px; flex-shrink:0; background:var(--glass-bg); border:1px solid var(--glass-border);
+  transition:all .2s ease;
+}
+.pcb-slot.active .pcb-slot-icon { background:linear-gradient(135deg,var(--emerald),var(--emerald-light)); border-color:transparent; box-shadow:0 4px 12px rgba(5,150,105,0.4); }
+.pcb-slot-info { flex:1; min-width:0; }
+.pcb-slot-name { font-size:13px; font-weight:600; color:var(--text-primary); }
+.pcb-slot-status { font-size:11px; color:var(--text-muted); margin-top:2px; display:flex; align-items:center; gap:5px; }
+.pcb-slot-status.chosen { color:var(--emerald-light); }
+.pcb-slot-status.error { color:var(--danger); }
+.pcb-slot-required-badge {
+  font-size:9px; font-weight:700; padding:2px 7px; border-radius:10px;
+  background:rgba(234,179,8,0.15); color:var(--warning); border:1px solid rgba(234,179,8,0.25);
+  flex-shrink:0;
+}
+.pcb-slot-selected-info {
+  padding:0 14px 12px 14px; display:none;
+}
+.pcb-slot.selected .pcb-slot-selected-info { display:block; }
+.pcb-slot-product-mini {
+  display:flex; align-items:center; gap:8px;
+  background:var(--glass-bg); border-radius:9px; padding:8px 10px; border:1px solid var(--glass-border);
+}
+.pcb-slot-product-mini img { width:36px; height:36px; object-fit:contain; border-radius:6px; background:rgba(255,255,255,.05); }
+.pcb-slot-product-mini-name { font-size:11px; font-weight:500; flex:1; line-height:1.3; overflow:hidden; text-overflow:ellipsis; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; }
+.pcb-slot-product-mini-price { font-family:'Space Mono',monospace; font-size:11px; font-weight:700; color:var(--emerald-light); white-space:nowrap; }
+.pcb-slot-remove {
+  width:24px; height:24px; border-radius:6px; border:1px solid rgba(220,38,38,.3);
+  background:rgba(220,38,38,.1); display:flex; align-items:center; justify-content:center;
+  cursor:pointer; color:var(--danger); flex-shrink:0; transition:all .15s ease;
+}
+.pcb-slot-remove:hover { background:rgba(220,38,38,.25); }
+.pcb-slot-remove svg { width:12px; height:12px; }
+
+/* Right: picker */
+.pcb-picker-panel {
+  display:flex; flex-direction:column; overflow:hidden;
+}
+.pcb-picker-header {
+  padding:16px 20px 12px; border-bottom:1px solid var(--glass-border); flex-shrink:0;
+}
+.pcb-picker-title { font-size:15px; font-weight:600; margin-bottom:10px; display:flex; align-items:center; gap:8px; }
+.pcb-picker-title span { font-size:18px; }
+.pcb-picker-search {
+  display:flex; gap:10px; align-items:center;
+}
+.pcb-search-input {
+  flex:1; padding:10px 14px 10px 40px; background:var(--glass-bg);
+  border:1.5px solid var(--glass-border); border-radius:10px;
+  color:var(--text-primary); font-family:inherit; font-size:13px;
+  transition:all .2s ease;
+}
+.pcb-search-input:focus { outline:none; border-color:var(--emerald-light); box-shadow:0 0 0 3px rgba(52,211,153,.1); }
+.pcb-search-input::placeholder { color:var(--text-muted); }
+.pcb-search-wrap { position:relative; flex:1; }
+.pcb-search-icon { position:absolute; left:12px; top:50%; transform:translateY(-50%); width:16px; height:16px; color:var(--text-muted); pointer-events:none; }
+
+.pcb-picker-empty {
+  text-align:center; padding:60px 20px; color:var(--text-muted);
+}
+.pcb-picker-empty svg { width:48px; height:48px; margin-bottom:12px; opacity:.2; }
+.pcb-picker-empty p { font-size:13px; }
+
+.pcb-products-list {
+  flex:1; overflow-y:auto; padding:14px 16px;
+}
+.pcb-products-list::-webkit-scrollbar { width:5px; }
+.pcb-products-list::-webkit-scrollbar-thumb { background:var(--glass-border); border-radius:3px; }
+
+.pcb-product-item {
+  display:flex; align-items:center; gap:12px; padding:12px;
+  border-radius:12px; border:1px solid var(--glass-border);
+  background:var(--glass-bg); margin-bottom:8px; cursor:pointer;
+  transition:all .18s ease; animation:slideIn .25s ease backwards;
+}
+.pcb-product-item:hover { background:var(--glass-hover); border-color:rgba(255,255,255,.15); transform:translateX(3px); }
+.pcb-product-item.selected { border-color:var(--emerald-light); background:rgba(52,211,153,0.07); }
+@keyframes slideIn { from{opacity:0;transform:translateX(-10px)} to{opacity:1;transform:translateX(0)} }
+.pcb-product-img { width:52px; height:52px; object-fit:contain; border-radius:8px; background:rgba(255,255,255,.04); flex-shrink:0; padding:4px; }
+.pcb-product-img-ph { width:52px; height:52px; border-radius:8px; background:var(--glass-bg); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.pcb-product-img-ph svg { width:22px; height:22px; opacity:.25; }
+.pcb-product-info { flex:1; min-width:0; }
+.pcb-product-name { font-size:13px; font-weight:500; line-height:1.35; margin-bottom:4px; overflow:hidden; text-overflow:ellipsis; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; }
+.pcb-product-brand { font-size:11px; color:var(--text-muted); margin-bottom:4px; }
+.pcb-product-store-pills { display:flex; gap:4px; flex-wrap:wrap; }
+.pcb-product-store-pill { font-size:10px; padding:2px 6px; border-radius:8px; font-family:'Space Mono',monospace; font-weight:700; }
+.pcb-product-right { display:flex; flex-direction:column; align-items:flex-end; gap:6px; flex-shrink:0; }
+.pcb-product-price { font-family:'Space Mono',monospace; font-size:14px; font-weight:700; color:var(--emerald-light); white-space:nowrap; }
+.pcb-product-select-btn {
+  padding:6px 14px; border-radius:8px; border:none; font-family:inherit; font-size:11px; font-weight:700;
+  background:linear-gradient(135deg,var(--emerald),var(--emerald-light)); color:white; cursor:pointer;
+  transition:all .15s ease; white-space:nowrap;
+}
+.pcb-product-select-btn:hover { transform:scale(1.05); }
+.pcb-product-item.selected .pcb-product-select-btn {
+  background:rgba(220,38,38,.15); color:var(--danger); border:1px solid rgba(220,38,38,.3);
+}
+.pcb-product-loading { display:flex; align-items:center; justify-content:center; gap:10px; padding:30px; color:var(--text-muted); font-size:13px; }
+.pcb-spinner { width:16px; height:16px; border:2px solid var(--glass-border); border-top-color:var(--emerald-light); border-radius:50%; animation:spin 0.8s linear infinite; flex-shrink:0; }
+@keyframes spin { to{transform:rotate(360deg)} }
+
+/* Footer: summary & warnings */
+.pcb-footer {
+  border-top:1px solid var(--glass-border); padding:16px 20px; flex-shrink:0;
+  background:rgba(0,0,0,0.15);
+}
+[data-theme="light"] .pcb-footer { background:rgba(255,255,255,0.3); }
+
+.pcb-warnings { margin-bottom:12px; }
+.pcb-warning {
+  display:flex; align-items:flex-start; gap:10px; padding:10px 14px;
+  border-radius:10px; margin-bottom:8px; font-size:12px; line-height:1.5;
+  animation:fadeInUp .25s ease;
+}
+.pcb-warning:last-child { margin-bottom:0; }
+.pcb-warning.error { background:rgba(220,38,38,.1); border:1px solid rgba(220,38,38,.25); color:#fca5a5; }
+.pcb-warning.warn  { background:rgba(234,179,8,.1);  border:1px solid rgba(234,179,8,.25);  color:#fde68a; }
+.pcb-warning.info  { background:rgba(14,165,233,.1);  border:1px solid rgba(14,165,233,.25);  color:#bae6fd; }
+.pcb-warning.ok    { background:rgba(34,197,94,.1);  border:1px solid rgba(34,197,94,.25);  color:#86efac; }
+.pcb-warning svg   { width:16px; height:16px; flex-shrink:0; margin-top:1px; }
+
+.pcb-summary-row {
+  display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:14px;
+}
+.pcb-total-label { font-size:13px; color:var(--text-muted); }
+.pcb-total-price { font-family:'Space Mono',monospace; font-size:24px; font-weight:700; color:var(--emerald-light); }
+.pcb-total-items { font-size:11px; color:var(--text-muted); }
+.pcb-actions { display:flex; gap:10px; }
+.pcb-btn {
+  padding:10px 20px; border-radius:11px; border:none; font-family:inherit;
+  font-size:13px; font-weight:700; cursor:pointer; transition:all .2s ease;
+  display:flex; align-items:center; gap:8px;
+}
+.pcb-btn svg { width:15px; height:15px; }
+.pcb-btn-primary {
+  background:linear-gradient(135deg,var(--emerald),var(--emerald-light));
+  color:white; box-shadow:0 4px 16px rgba(5,150,105,.3);
+}
+.pcb-btn-primary:hover { transform:translateY(-1px); box-shadow:0 8px 24px rgba(5,150,105,.5); }
+.pcb-btn-ghost {
+  background:var(--glass-bg); border:1px solid var(--glass-border); color:var(--text-secondary);
+}
+.pcb-btn-ghost:hover { background:var(--glass-hover); color:var(--text-primary); }
+.pcb-btn-danger {
+  background:rgba(220,38,38,.12); border:1px solid rgba(220,38,38,.25); color:var(--danger);
+}
+.pcb-btn-danger:hover { background:rgba(220,38,38,.22); }
+
+/* Progress bar in slots panel header */
+.pcb-slots-header { padding-bottom:14px; margin-bottom:8px; border-bottom:1px solid var(--glass-border); }
+.pcb-progress-bar-wrap { height:5px; background:rgba(255,255,255,.07); border-radius:3px; overflow:hidden; margin-top:8px; }
+.pcb-progress-bar-fill { height:100%; border-radius:3px; background:linear-gradient(90deg,var(--emerald),var(--emerald-light)); transition:width .4s ease; }
+
+/* Share modal */
+.pcb-share-modal {
+  position:fixed; inset:0; z-index:600; display:flex; align-items:center; justify-content:center;
+  background:rgba(0,0,0,.65); backdrop-filter:blur(8px);
+  opacity:0; pointer-events:none; transition:opacity .25s ease;
+}
+.pcb-share-modal.open { opacity:1; pointer-events:all; }
+.pcb-share-box {
+  background:rgba(13,26,20,.98); backdrop-filter:blur(20px); border:1px solid var(--glass-border);
+  border-radius:20px; padding:28px; width:100%; max-width:480px;
+  transform:translateY(20px); transition:transform .3s ease;
+  box-shadow:0 30px 80px rgba(0,0,0,.5);
+}
+[data-theme="light"] .pcb-share-box { background:rgba(245,245,240,.98); }
+.pcb-share-modal.open .pcb-share-box { transform:translateY(0); }
+.pcb-share-textarea {
+  width:100%; padding:12px; background:var(--glass-bg); border:1px solid var(--glass-border);
+  border-radius:10px; color:var(--text-primary); font-family:'Space Mono',monospace;
+  font-size:11px; resize:none; min-height:120px; margin:14px 0;
+}
+
+@media(max-width:768px){
+  .pcb-body { grid-template-columns:1fr; }
+  .pcb-slots-panel { border-right:none; border-bottom:1px solid var(--glass-border); max-height:260px; }
+  .pcb-panel { max-width:100%; max-height:95vh; border-radius:20px; }
+  .pcb-fab { bottom:88px; right:16px; padding:11px 16px; font-size:12px; }
+  .pcb-banner-sub { display:none; }
+}
+
 @media(max-width:1200px){
   .store-layout{grid-template-columns:220px 1fr;}
 }
@@ -958,6 +1266,12 @@ input[type="range"]::-webkit-slider-thumb {
 
       <div class="nav-divider"></div>
 
+      <div class="admin-link" onclick="openPCBuilder()" style="cursor:pointer;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/><path d="M6 8h.01M9 8h6"/></svg>
+        <span style="flex:1;">Construire un PC</span>
+        <span style="font-size:9px;background:linear-gradient(135deg,var(--emerald),var(--emerald-light));color:white;border-radius:8px;padding:2px 7px;font-weight:700;">NOUVEAU</span>
+      </div>
+
       <a href="/admin" class="admin-link">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
         Administration
@@ -1112,6 +1426,22 @@ input[type="range"]::-webkit-slider-thumb {
       </aside>
 
       <div class="products-area">
+
+        <!-- ── PC Builder Banner ── -->
+        <div class="pcb-banner" onclick="openPCBuilder()">
+          <div class="pcb-banner-left">
+            <div class="pcb-banner-icon">🖥️</div>
+            <div>
+              <div class="pcb-banner-title">Construire votre PC</div>
+              <div class="pcb-banner-sub">Sélectionnez vos composants et vérifiez la compatibilité automatiquement</div>
+            </div>
+          </div>
+          <div class="pcb-banner-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+            Commencer
+          </div>
+        </div>
+
         <div class="products-toolbar">
           <div class="results-count"><span id="resultsCount">0</span> produits trouvés</div>
           <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
@@ -1142,6 +1472,126 @@ input[type="range"]::-webkit-slider-thumb {
 
 <button class="mobile-menu-toggle">
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+</button>
+
+<!-- ══════════════════════════════════════════
+     PC BUILDER MODAL
+══════════════════════════════════════════ -->
+<div class="pcb-overlay" id="pcbOverlay" onclick="pcbOverlayClick(event)">
+  <div class="pcb-panel">
+
+    <!-- Header -->
+    <div class="pcb-header">
+      <div class="pcb-header-left">
+        <div class="pcb-header-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+        </div>
+        <div>
+          <div class="pcb-title">Constructeur de PC</div>
+          <div class="pcb-subtitle">Sélectionnez vos composants et vérifiez la compatibilité</div>
+        </div>
+      </div>
+      <button class="pcb-close" onclick="closePCBuilder()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+
+    <!-- Body -->
+    <div class="pcb-body">
+
+      <!-- Left: component slots -->
+      <div class="pcb-slots-panel">
+        <div class="pcb-slots-header">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+            <span style="font-size:13px;font-weight:600;">Composants</span>
+            <span id="pcbSlotCounter" style="font-size:11px;color:var(--text-muted);">0/8 sélectionnés</span>
+          </div>
+          <div class="pcb-progress-bar-wrap">
+            <div class="pcb-progress-bar-fill" id="pcbProgressBar" style="width:0%"></div>
+          </div>
+        </div>
+        <div id="pcbSlotsList"></div>
+      </div>
+
+      <!-- Right: product picker -->
+      <div class="pcb-picker-panel">
+        <div class="pcb-picker-header">
+          <div class="pcb-picker-title">
+            <span id="pcbPickerIcon">🖥️</span>
+            <span id="pcbPickerTitle">Sélectionnez un composant à gauche</span>
+          </div>
+          <div class="pcb-picker-search">
+            <div class="pcb-search-wrap">
+              <svg class="pcb-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+              <input class="pcb-search-input" id="pcbSearchInput" placeholder="Rechercher un produit..." oninput="pcbSearch()" disabled>
+            </div>
+          </div>
+        </div>
+        <div class="pcb-products-list" id="pcbProductsList">
+          <div class="pcb-picker-empty">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+            <p>Cliquez sur un composant à gauche<br>pour commencer votre sélection</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Footer -->
+    <div class="pcb-footer">
+      <div class="pcb-warnings" id="pcbWarnings"></div>
+      <div class="pcb-summary-row">
+        <div>
+          <div class="pcb-total-label">Prix total estimé</div>
+          <div class="pcb-total-price" id="pcbTotalPrice">0 TND</div>
+          <div class="pcb-total-items" id="pcbTotalItems">Aucun composant sélectionné</div>
+        </div>
+        <div class="pcb-actions">
+          <button class="pcb-btn pcb-btn-danger" onclick="pcbReset()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.5"/></svg>
+            Réinitialiser
+          </button>
+          <button class="pcb-btn pcb-btn-ghost" onclick="pcbShare()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+            Partager
+          </button>
+          <button class="pcb-btn pcb-btn-primary" onclick="pcbExport()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Exporter
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Share sub-modal -->
+<div class="pcb-share-modal" id="pcbShareModal" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="pcb-share-box">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
+      <span style="font-size:16px;font-weight:700;">Partager la configuration</span>
+      <button class="pcb-close" onclick="document.getElementById('pcbShareModal').classList.remove('open')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div style="font-size:12px;color:var(--text-muted);margin-bottom:4px;">Copiez ce résumé pour partager votre configuration :</div>
+    <textarea class="pcb-share-textarea" id="pcbShareText" readonly></textarea>
+    <div style="display:flex;gap:10px;">
+      <button class="pcb-btn pcb-btn-primary" style="flex:1;" onclick="pcbCopyShare()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        Copier
+      </button>
+      <button class="pcb-btn pcb-btn-ghost" onclick="document.getElementById('pcbShareModal').classList.remove('open')">Fermer</button>
+    </div>
+  </div>
+</div>
+
+<!-- PC Builder FAB -->
+<button class="pcb-fab" id="pcbFab" onclick="openPCBuilder()" title="Construire un PC">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+  Construire un PC
+  <span class="pcb-fab-badge" id="pcbFabBadge" style="display:none">0</span>
 </button>
 
 <footer class="site-footer">
@@ -2055,7 +2505,666 @@ function clearNavActive(){
 
 if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init);
 else init();
+
+})(); /* ── End of main IIFE ── */
+
+
+/* ══════════════════════════════════════════════════════════════
+   PC BUILDER — Système complet de construction de PC
+══════════════════════════════════════════════════════════════ */
+
+const PCB = (function(){
+'use strict';
+
+/* ── Définition des slots / composants ── */
+const SLOTS = [
+  {
+    id:'cpu', name:'Processeur (CPU)', icon:'⚡', required:true,
+    categories:['Informatique'], subcategories:['Processeurs'],
+    searchHint:'Intel Core, AMD Ryzen…',
+    specsExtract: p => ({
+      brand: extractSpec(p,'processorBrand') || extractBrand(p),
+      socket: extractSpec(p,'socket'),
+      cores: extractSpec(p,'cores'),
+      threads: extractSpec(p,'threads'),
+      tdp: extractSpec(p,'tdp'),
+      ramType: extractSpec(p,'ramType'),
+    })
+  },
+  {
+    id:'motherboard', name:'Carte Mère', icon:'🔌', required:true,
+    categories:['Informatique'], subcategories:['Cartes Mère'],
+    searchHint:'ASUS, MSI, Gigabyte…',
+    specsExtract: p => ({
+      socket: extractSpec(p,'socket'),
+      chipset: extractSpec(p,'chipset'),
+      ramType: extractSpec(p,'ramType'),
+      ramSlots: extractSpec(p,'ramSlots'),
+      formFactor: extractSpec(p,'formFactor'),
+    })
+  },
+  {
+    id:'ram', name:'Mémoire RAM', icon:'💾', required:true,
+    categories:['Informatique'], subcategories:['RAM'],
+    searchHint:'DDR4, DDR5, 16Go, 32Go…',
+    specsExtract: p => ({
+      type: extractSpec(p,'type') || extractSpec(p,'ramType'),
+      capacity: extractSpec(p,'capacity'),
+      speed: extractSpec(p,'speed'),
+    })
+  },
+  {
+    id:'gpu', name:'Carte Graphique (GPU)', icon:'🎮', required:false,
+    categories:['Informatique'], subcategories:['Cartes Graphiques'],
+    searchHint:'RTX, RX, Arc…',
+    specsExtract: p => ({
+      vram: extractSpec(p,'vram'),
+      tdp: extractSpec(p,'tdp') || extractSpec(p,'gpuTdp'),
+      pcie: extractSpec(p,'pcie'),
+    })
+  },
+  {
+    id:'storage', name:'Stockage (SSD/HDD)', icon:'💽', required:true,
+    categories:['Informatique'], subcategories:['Stockage'],
+    searchHint:'NVMe, SATA, 1To…',
+    specsExtract: p => ({
+      capacity: extractSpec(p,'capacity'),
+      formFactor: extractSpec(p,'formFactor'),
+      interface: extractSpec(p,'interface'),
+    })
+  },
+  {
+    id:'psu', name:'Alimentation (PSU)', icon:'🔋', required:true,
+    categories:['Informatique'], subcategories:['Alimentation'],
+    searchHint:'650W, 80+ Gold…',
+    specsExtract: p => ({
+      power: extractSpec(p,'power'),
+      certification: extractSpec(p,'certification'),
+      modular: extractSpec(p,'modular'),
+    })
+  },
+  {
+    id:'case', name:'Boîtier PC', icon:'🖥️', required:false,
+    categories:['Informatique'], subcategories:['Boîtiers'],
+    searchHint:'ATX, Micro-ATX…',
+    specsExtract: p => ({
+      formFactor: extractSpec(p,'formFactor'),
+      supportedMb: extractSpec(p,'supportedMb'),
+      maxGpuLength: extractSpec(p,'maxGpuLength'),
+    })
+  },
+  {
+    id:'cooling', name:'Refroidissement CPU', icon:'❄️', required:false,
+    categories:['Informatique'], subcategories:['Refroidissement'],
+    searchHint:'Ventirad, AIO, watercooling…',
+    specsExtract: p => ({
+      type: extractSpec(p,'type'),
+      socket: extractSpec(p,'socket'),
+      tdp: extractSpec(p,'tdp'),
+    })
+  },
+];
+
+/* ── État ── */
+let activeSlotId = null;
+let selection = {}; // { slotId: { product, specs } }
+let searchTimer = null;
+let currentProducts = [];
+let searchQuery = '';
+
+/* ── Helpers d'extraction de specs ── */
+function extractSpec(product, key){
+  if(!product || !product.specs) return null;
+  const v = product.specs[key];
+  if(v == null || v === '') return null;
+  return String(v).trim();
+}
+function extractBrand(product){
+  return product.brand || '';
+}
+function fmtPrice(n){
+  if(n==null) return '—';
+  return Number(n).toLocaleString('fr-TN',{minimumFractionDigits:0,maximumFractionDigits:0})+' TND';
+}
+function escH(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+/* ── Ouvrir / Fermer ── */
+window.openPCBuilder = function(){
+  document.getElementById('pcbOverlay').classList.add('open');
+  document.body.style.overflow='hidden';
+  renderSlots();
+  renderPickerEmpty();
+  renderFooter();
+};
+window.closePCBuilder = function(){
+  document.getElementById('pcbOverlay').classList.remove('open');
+  document.body.style.overflow='';
+};
+window.pcbOverlayClick = function(e){
+  if(e.target === document.getElementById('pcbOverlay')) closePCBuilder();
+};
+
+/* ── Rendu des slots ── */
+function renderSlots(){
+  const container = document.getElementById('pcbSlotsList');
+  const sel = Object.keys(selection).filter(k => selection[k]).length;
+  const total = SLOTS.length;
+  document.getElementById('pcbSlotCounter').textContent = sel+'/'+total+' sélectionnés';
+  document.getElementById('pcbProgressBar').style.width = Math.round(sel/total*100)+'%';
+
+  container.innerHTML = SLOTS.map(slot => {
+    const chosen = selection[slot.id];
+    const isActive = activeSlotId === slot.id;
+    const classes = ['pcb-slot', isActive?'active':'', chosen?'selected':''].filter(Boolean).join(' ');
+
+    let statusHtml = '';
+    if(chosen){
+      const name = chosen.product.name;
+      const price = fmtPrice(chosen.product.bestPrice);
+      const img = chosen.product.images && chosen.product.images[0];
+      statusHtml = `
+        <div class="pcb-slot-selected-info">
+          <div class="pcb-slot-product-mini">
+            ${img ? `<img src="${escH(img)}" alt="" onerror="this.style.display='none'">` : `<div style="width:36px;height:36px;border-radius:6px;background:var(--glass-bg);flex-shrink:0;"></div>`}
+            <div class="pcb-slot-product-mini-name">${escH(name)}</div>
+            <div class="pcb-slot-product-mini-price">${price}</div>
+            <div class="pcb-slot-remove" onclick="event.stopPropagation();pcbRemove('${slot.id}')" title="Retirer">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </div>
+          </div>
+        </div>`;
+    }
+
+    return `
+      <div class="${classes}" onclick="pcbSelectSlot('${slot.id}')">
+        <div class="pcb-slot-header">
+          <div class="pcb-slot-icon">${slot.icon}</div>
+          <div class="pcb-slot-info">
+            <div class="pcb-slot-name">${slot.name}</div>
+            <div class="pcb-slot-status ${chosen?'chosen':''}">
+              ${chosen
+                ? `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Sélectionné`
+                : (isActive ? '▶ En cours de sélection…' : 'Cliquer pour choisir')}
+            </div>
+          </div>
+          ${slot.required ? `<span class="pcb-slot-required-badge">Requis</span>` : ''}
+        </div>
+        ${statusHtml}
+      </div>`;
+  }).join('');
+}
+
+/* ── Sélection d'un slot ── */
+window.pcbSelectSlot = function(slotId){
+  activeSlotId = slotId;
+  searchQuery = '';
+  const el = document.getElementById('pcbSearchInput');
+  if(el){ el.value=''; el.disabled=false; el.focus(); }
+  renderSlots();
+  const slot = SLOTS.find(s=>s.id===slotId);
+  if(slot){
+    document.getElementById('pcbPickerIcon').textContent = slot.icon;
+    document.getElementById('pcbPickerTitle').textContent = 'Choisir: '+slot.name;
+  }
+  loadPickerProducts('');
+};
+
+/* ── Chargement des produits dans le picker ── */
+async function loadPickerProducts(search){
+  if(!activeSlotId) return;
+  const slot = SLOTS.find(s=>s.id===activeSlotId);
+  if(!slot) return;
+
+  const list = document.getElementById('pcbProductsList');
+  list.innerHTML = `<div class="pcb-product-loading"><div class="pcb-spinner"></div>Chargement…</div>`;
+
+  try {
+    const params = new URLSearchParams({
+      limit: 30, page:1,
+      category: 'Informatique',
+      subcategory: slot.subcategories[0],
+    });
+    if(search) params.set('search', search);
+
+    const res = await fetch('/api/products?'+params.toString());
+    const data = await res.json();
+    currentProducts = data.products || [];
+    renderPickerProducts();
+  } catch(e){
+    list.innerHTML = `<div class="pcb-picker-empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/></svg><p>Erreur de chargement</p></div>`;
+  }
+}
+
+function renderPickerProducts(){
+  const list = document.getElementById('pcbProductsList');
+  const chosen = selection[activeSlotId];
+
+  if(!currentProducts.length){
+    list.innerHTML = `<div class="pcb-picker-empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg><p>Aucun produit trouvé</p></div>`;
+    return;
+  }
+
+  list.innerHTML = currentProducts.map((p,i) => {
+    const isSelected = chosen && chosen.product._id === p._id;
+    const img = p.images && p.images[0];
+    const storePills = (p.prices||[]).filter(pr=>pr.price).map(pr=>`
+      <span class="pcb-product-store-pill" style="background:${STORES[pr.store]?.color||'#888'}22;color:${STORES[pr.store]?.color||'#888'}">
+        ${fmtPrice(pr.price)}
+      </span>`).join('');
+
+    return `
+      <div class="pcb-product-item${isSelected?' selected':''}" style="animation-delay:${i*0.04}s" onclick="pcbPick('${escH(p._id||'')}')" data-id="${escH(p._id||'')}">
+        ${img
+          ? `<img class="pcb-product-img" src="${escH(img)}" alt="" loading="lazy" onerror="this.style.display='none'">`
+          : `<div class="pcb-product-img-ph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>`}
+        <div class="pcb-product-info">
+          <div class="pcb-product-name">${escH(p.name)}</div>
+          <div class="pcb-product-brand">${escH(p.brand||'')}</div>
+          <div class="pcb-product-store-pills">${storePills}</div>
+        </div>
+        <div class="pcb-product-right">
+          <div class="pcb-product-price">${fmtPrice(p.bestPrice)}</div>
+          <button class="pcb-product-select-btn" onclick="event.stopPropagation();pcbPick('${escH(p._id||'')}')">
+            ${isSelected ? 'Retirer' : 'Choisir'}
+          </button>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function renderPickerEmpty(){
+  const list = document.getElementById('pcbProductsList');
+  list.innerHTML = `<div class="pcb-picker-empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg><p>Cliquez sur un composant à gauche<br>pour commencer votre sélection</p></div>`;
+}
+
+/* ── Picker: choisir un produit ── */
+window.pcbPick = function(productId){
+  if(!activeSlotId) return;
+  const product = currentProducts.find(p=>p._id===productId);
+  if(!product) return;
+
+  if(selection[activeSlotId] && selection[activeSlotId].product._id === productId){
+    // Déselectionner
+    delete selection[activeSlotId];
+  } else {
+    const slot = SLOTS.find(s=>s.id===activeSlotId);
+    const specs = slot ? slot.specsExtract(product) : {};
+    selection[activeSlotId] = { product, specs };
+  }
+
+  renderSlots();
+  renderPickerProducts();
+  renderFooter();
+  updateFAB();
+};
+
+/* ── Retirer un composant ── */
+window.pcbRemove = function(slotId){
+  delete selection[slotId];
+  if(activeSlotId === slotId) renderPickerProducts();
+  renderSlots();
+  renderFooter();
+  updateFAB();
+};
+
+/* ── Recherche dans le picker ── */
+window.pcbSearch = function(){
+  clearTimeout(searchTimer);
+  searchQuery = document.getElementById('pcbSearchInput').value.trim();
+  searchTimer = setTimeout(()=>loadPickerProducts(searchQuery), 350);
+};
+
+/* ── FAB badge ── */
+function updateFAB(){
+  const count = Object.keys(selection).filter(k=>selection[k]).length;
+  const badge = document.getElementById('pcbFabBadge');
+  if(badge){ badge.style.display = count>0?'inline':'none'; badge.textContent=count; }
+}
+
+/* ══════════════════════════════════════════
+   COMPATIBILITÉ — Système de vérification
+══════════════════════════════════════════ */
+
+function checkCompatibility(){
+  const warnings = [];
+  const cpu = selection.cpu?.specs;
+  const mb  = selection.motherboard?.specs;
+  const ram = selection.ram?.specs;
+  const gpu = selection.gpu?.specs;
+  const psu = selection.psu?.specs;
+  const cooling = selection.cooling?.specs;
+  const caseComp = selection.case?.specs;
+
+  /* ── 1. CPU ↔ Carte Mère: socket ── */
+  if(cpu && mb){
+    const cpuSocket = cpu.socket;
+    const mbSocket  = mb.socket;
+    if(cpuSocket && mbSocket && !socketsCompatible(cpuSocket, mbSocket)){
+      warnings.push({
+        type:'error',
+        icon:'<circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>',
+        msg:`⚠️ Incompatibilité de socket : le processeur utilise le socket <strong>${cpuSocket}</strong> mais la carte mère supporte <strong>${mbSocket}</strong>.`
+      });
+    } else if(cpuSocket && mbSocket){
+      warnings.push({
+        type:'ok',
+        icon:'<polyline points="20 6 9 17 4 12"/>',
+        msg:`✓ Socket CPU compatible avec la carte mère (${cpuSocket}).`
+      });
+    }
+  }
+
+  /* ── 2. RAM ↔ Carte Mère: type DDR ── */
+  if(ram && mb){
+    const ramType = normalizeDDR(ram.type);
+    const mbRamType = normalizeDDR(mb.ramType);
+    if(ramType && mbRamType && ramType !== mbRamType){
+      warnings.push({
+        type:'error',
+        icon:'<circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>',
+        msg:`⚠️ Incompatibilité RAM : vous avez sélectionné de la RAM <strong>${ramType}</strong> mais la carte mère ne supporte que la <strong>${mbRamType}</strong>.`
+      });
+    }
+  }
+
+  /* ── 3. RAM ↔ CPU: type DDR (via spec CPU) ── */
+  if(ram && cpu && cpu.ramType){
+    const ramType = normalizeDDR(ram.type);
+    const cpuRamType = normalizeDDR(cpu.ramType);
+    if(ramType && cpuRamType && ramType !== cpuRamType){
+      warnings.push({
+        type:'error',
+        icon:'<circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>',
+        msg:`⚠️ Le processeur ne supporte que la <strong>${cpuRamType}</strong>, mais vous avez choisi de la <strong>${ramType}</strong>.`
+      });
+    }
+  }
+
+  /* ── 4. GPU TDP ↔ PSU power: goulot ── */
+  if(gpu && psu){
+    const gpuTdp = parseWatt(gpu.tdp);
+    const psuPower = parseWatt(psu.power);
+    if(gpuTdp && psuPower){
+      const cpuTdp = cpu ? (parseWatt(cpu.tdp) || 65) : 65;
+      const estimated = gpuTdp + cpuTdp + 100; // estimation système
+      if(psuPower < estimated){
+        warnings.push({
+          type:'error',
+          icon:'<circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>',
+          msg:`⚠️ Alimentation insuffisante : votre configuration nécessite environ <strong>${estimated}W</strong> mais votre PSU ne fournit que <strong>${psuPower}W</strong>.`
+        });
+      } else if(psuPower < estimated * 1.2){
+        warnings.push({
+          type:'warn',
+          icon:'<path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>',
+          msg:`⚠️ Alimentation juste suffisante (${psuPower}W pour ~${estimated}W estimés). Recommandation : prévoir au moins ${Math.ceil(estimated*1.2/50)*50}W.`
+        });
+      } else {
+        warnings.push({
+          type:'ok',
+          icon:'<polyline points="20 6 9 17 4 12"/>',
+          msg:`✓ Alimentation adaptée (${psuPower}W pour ~${estimated}W estimés).`
+        });
+      }
+    }
+  }
+
+  /* ── 5. CPU ↔ GPU: goulot de bouteille ── */
+  if(cpu && gpu){
+    const bottleneck = detectBottleneck(selection.cpu.product, selection.gpu.product);
+    if(bottleneck){
+      warnings.push({
+        type:'warn',
+        icon:'<path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>',
+        msg: bottleneck
+      });
+    }
+  }
+
+  /* ── 6. Boîtier ↔ Carte Mère: format ── */
+  if(caseComp && mb){
+    const caseSupport = (caseComp.supportedMb||'').toLowerCase();
+    const mbFormat = (mb.formFactor||'').toLowerCase();
+    if(caseSupport && mbFormat){
+      const ok = caseSupport.includes(mbFormat) || mbFormat.includes('micro') && caseSupport.includes('matx') || mbFormat === 'mini-itx' && (caseSupport.includes('mini') || caseSupport.includes('itx'));
+      if(!ok && !caseSupport.includes('atx')){
+        warnings.push({
+          type:'warn',
+          icon:'<path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>',
+          msg:`⚠️ Le boîtier pourrait ne pas être compatible avec le format <strong>${mb.formFactor||'inconnu'}</strong> de la carte mère.`
+        });
+      }
+    }
+  }
+
+  /* ── 7. Refroidissement ↔ CPU: socket ── */
+  if(cooling && cpu){
+    const coolSocket = cooling.socket;
+    const cpuSocket  = cpu.socket;
+    if(coolSocket && cpuSocket && !socketsCompatible(coolSocket, cpuSocket)){
+      warnings.push({
+        type:'error',
+        icon:'<circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/>',
+        msg:`⚠️ Le refroidissement ne supporte pas le socket <strong>${cpuSocket}</strong> (supporte: <strong>${coolSocket}</strong>).`
+      });
+    }
+    // TDP check
+    const coolTdp = parseWatt(cooling.tdp);
+    const cpuTdp  = parseWatt(cpu.tdp);
+    if(coolTdp && cpuTdp && coolTdp < cpuTdp){
+      warnings.push({
+        type:'warn',
+        icon:'<path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>',
+        msg:`⚠️ Le refroidissement est certifié pour ${coolTdp}W mais votre CPU consomme ${cpuTdp}W. Il pourrait être insuffisant.`
+      });
+    }
+  }
+
+  /* ── 8. GPU longueur ↔ Boîtier ── */
+  if(selection.gpu && caseComp){
+    const gpuLen = parseInt(extractSpec(selection.gpu.product,'length')||0);
+    const maxLen = parseInt(caseComp.maxGpuLength||0);
+    if(gpuLen && maxLen && gpuLen > maxLen){
+      warnings.push({
+        type:'error',
+        icon:'<circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/>',
+        msg:`⚠️ La carte graphique mesure <strong>${gpuLen}mm</strong> mais le boîtier supporte au maximum <strong>${maxLen}mm</strong>.`
+      });
+    }
+  }
+
+  /* ── 9. Intel ↔ AMD cross-platform ── */
+  if(cpu && mb){
+    const cpuName = (selection.cpu.product.name||'').toLowerCase();
+    const mbName  = (selection.motherboard.product.name||'').toLowerCase();
+    const cpuIsAmd = cpuName.includes('ryzen') || cpuName.includes('amd') || (cpu.brand||'').toLowerCase().includes('amd');
+    const cpuIsIntel = cpuName.includes('intel') || cpuName.includes('core i') || (cpu.brand||'').toLowerCase().includes('intel');
+    const mbIsAmd = mbName.includes('b450')||mbName.includes('b550')||mbName.includes('x570')||mbName.includes('b650')||mbName.includes('x670')||mbName.includes('am4')||mbName.includes('am5');
+    const mbIsIntel = mbName.includes('z790')||mbName.includes('z690')||mbName.includes('h770')||mbName.includes('b760')||mbName.includes('lga17')||mbName.includes('lga18');
+
+    if((cpuIsAmd && mbIsIntel) || (cpuIsIntel && mbIsAmd)){
+      warnings.push({
+        type:'error',
+        icon:'<circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/>',
+        msg:`⚠️ Incompatibilité de plateforme détectée : ${cpuIsAmd?'processeur AMD':'processeur Intel'} avec une carte mère ${mbIsIntel?'Intel':'AMD'}. Ces composants ne sont pas compatibles.`
+      });
+    }
+  }
+
+  return warnings;
+}
+
+/* ── Helpers compatibilité ── */
+function normalizeDDR(str){
+  if(!str) return null;
+  const s = str.toUpperCase();
+  if(s.includes('DDR5')) return 'DDR5';
+  if(s.includes('DDR4')) return 'DDR4';
+  if(s.includes('DDR3')) return 'DDR3';
+  if(s.includes('DDR2')) return 'DDR2';
+  return null;
+}
+
+function socketsCompatible(a, b){
+  if(!a || !b) return true;
+  const na = a.toUpperCase().replace(/\s/g,'');
+  const nb = b.toUpperCase().replace(/\s/g,'');
+  if(na === nb) return true;
+  // Handle multi-socket strings like "AM4/AM5"
+  const aParts = na.split(/[/,;]/);
+  const bParts = nb.split(/[/,;]/);
+  return aParts.some(x => bParts.some(y => x.trim() === y.trim()));
+}
+
+function parseWatt(str){
+  if(!str) return 0;
+  const m = String(str).match(/(\d+)/);
+  return m ? parseInt(m[1]) : 0;
+}
+
+function detectBottleneck(cpuProduct, gpuProduct){
+  if(!cpuProduct || !gpuProduct) return null;
+  const cpuName = (cpuProduct.name||'').toLowerCase();
+  const gpuName = (gpuProduct.name||'').toLowerCase();
+  const cpuBrand = (cpuProduct.brand||'').toLowerCase();
+
+  // GPU tier detection (crude but effective)
+  const gpuTier = getGpuTier(gpuName);
+  const cpuTier = getCpuTier(cpuName, cpuBrand);
+
+  if(gpuTier >= 4 && cpuTier <= 2){
+    return `⚠️ Goulot d'étranglement important : votre GPU est très puissant mais votre CPU risque de le brider significativement, limitant les performances en jeu.`;
+  }
+  if(gpuTier >= 3 && cpuTier <= 1){
+    return `⚠️ Goulot d'étranglement possible : votre CPU pourrait limiter les performances de votre carte graphique dans certains jeux.`;
+  }
+  if(cpuTier >= 4 && gpuTier <= 1){
+    return `ℹ️ Votre CPU est très puissant pour cette carte graphique. Pour profiter pleinement du processeur, envisagez une GPU plus performante.`;
+  }
+  return null;
+}
+
+function getGpuTier(name){
+  if(name.match(/rtx\s*49[0-9][0-9]|rtx\s*50[0-9][0-9]|rx\s*79[0-9][0-9]|rx\s*70[0-9][0-9]/)) return 5;
+  if(name.match(/rtx\s*48[0-9][0-9]|rtx\s*47[0-9][0-9]|rx\s*69[0-9][0-9]|rx\s*68[0-9][0-9]/)) return 4;
+  if(name.match(/rtx\s*46[0-9][0-9]|rtx\s*40[0-9][0-9]\s*ti|rx\s*67[0-9][0-9]|rtx\s*30[0-9][0-9]\s*ti/)) return 3;
+  if(name.match(/rtx\s*40[0-9][0-9]|rtx\s*30[0-9][0-9]|rx\s*66[0-9][0-9]|rtx\s*20[0-9][0-9]/)) return 2;
+  return 1;
+}
+
+function getCpuTier(name, brand){
+  // Intel Core Ultra / i9 / Ryzen 9 = tier 4-5
+  if(name.match(/core\s*ultra|i9-1[4-9]|i9-2|ryzen\s*9\s*7[0-9][0-9][0-9]x3d|ryzen\s*9\s*9/)) return 5;
+  if(name.match(/i9-1[0-3]|ryzen\s*9\s*5[0-9][0-9][0-9]|ryzen\s*9\s*7[0-9][0-9][0-9]/)) return 4;
+  if(name.match(/i7-1[2-4]|ryzen\s*7\s*7[0-9][0-9][0-9]|ryzen\s*7\s*5[0-9][0-9][0-9]/)) return 3;
+  if(name.match(/i5-1[2-4]|i7-1[0-1]|ryzen\s*5\s*7[0-9][0-9][0-9]|ryzen\s*5\s*5[0-9][0-9][0-9]/)) return 2;
+  return 1;
+}
+
+/* ── Footer: total + warnings ── */
+function renderFooter(){
+  // Total prix
+  let total = 0;
+  let count = 0;
+  Object.values(selection).forEach(sel => {
+    if(sel && sel.product && sel.product.bestPrice){
+      total += sel.product.bestPrice;
+      count++;
+    }
+  });
+
+  document.getElementById('pcbTotalPrice').textContent = total > 0 ? fmtPrice(total) : '0 TND';
+  document.getElementById('pcbTotalItems').textContent = count > 0 ? count+' composant'+(count>1?'s':'')+' sélectionné'+(count>1?'s':'') : 'Aucun composant sélectionné';
+
+  // Warnings
+  const warnings = checkCompatibility();
+  const wContainer = document.getElementById('pcbWarnings');
+  if(!warnings.length){
+    wContainer.innerHTML = '';
+    return;
+  }
+  wContainer.innerHTML = warnings.map(w=>`
+    <div class="pcb-warning ${w.type}">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">${w.icon}</svg>
+      <span>${w.msg}</span>
+    </div>`).join('');
+}
+
+/* ── Reset ── */
+window.pcbReset = function(){
+  if(!Object.keys(selection).length) return;
+  if(!confirm('Réinitialiser toute la configuration ?')) return;
+  selection = {};
+  activeSlotId = null;
+  document.getElementById('pcbSearchInput').value='';
+  document.getElementById('pcbSearchInput').disabled=true;
+  document.getElementById('pcbPickerTitle').textContent='Sélectionnez un composant à gauche';
+  document.getElementById('pcbPickerIcon').textContent='🖥️';
+  renderSlots();
+  renderPickerEmpty();
+  renderFooter();
+  updateFAB();
+};
+
+/* ── Partager ── */
+window.pcbShare = function(){
+  const lines = ['🖥️ Ma Configuration PC — ComparateurTN', ''];
+  let total = 0;
+  SLOTS.forEach(slot => {
+    const sel = selection[slot.id];
+    if(sel){
+      lines.push(`${slot.icon} ${slot.name}: ${sel.product.name}`);
+      lines.push(`   💰 ${fmtPrice(sel.product.bestPrice)} chez ${sel.product.bestPriceStore||'—'}`);
+      if(sel.product.bestPriceStore && sel.product.prices){
+        const entry = sel.product.prices.find(p=>p.store===sel.product.bestPriceStore);
+        if(entry && entry.url) lines.push(`   🔗 ${entry.url}`);
+      }
+      lines.push('');
+      if(sel.product.bestPrice) total += sel.product.bestPrice;
+    }
+  });
+  lines.push('──────────────────');
+  lines.push(`💵 Total estimé: ${fmtPrice(total)}`);
+  lines.push('');
+  lines.push('Configuré sur ComparateurTN — '+window.location.origin);
+
+  document.getElementById('pcbShareText').value = lines.join('\n');
+  document.getElementById('pcbShareModal').classList.add('open');
+};
+
+window.pcbCopyShare = function(){
+  const ta = document.getElementById('pcbShareText');
+  ta.select();
+  navigator.clipboard.writeText(ta.value).then(()=>{
+    showToast('Configuration copiée !','success');
+    document.getElementById('pcbShareModal').classList.remove('open');
+  }).catch(()=>{ document.execCommand('copy'); showToast('Copié !','success'); });
+};
+
+/* ── Export texte ── */
+window.pcbExport = function(){
+  pcbShare();
+};
+
+/* ── Initialisation ── */
+function init(){
+  renderSlots();
+  // Keyboard close
+  document.addEventListener('keydown', e=>{
+    if(e.key==='Escape'){
+      const shareModal = document.getElementById('pcbShareModal');
+      if(shareModal.classList.contains('open')){ shareModal.classList.remove('open'); return; }
+      closePCBuilder();
+    }
+  });
+}
+
+init();
+
+return { open: openPCBuilder, close: closePCBuilder };
 })();
+
+if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',()=>{}); // PCB init is self-contained
 </script>
 </body>
 </html>

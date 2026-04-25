@@ -5,8 +5,153 @@ const bcrypt = require('bcrypt');
 const Product = require('../models/Product');
 const ScraperLog = require('../models/ScraperLog');
 const Ad = require('../models/Ad');
+const multer = require('multer');
+const fs = require('fs');
+
+// ── Multer: image upload config ──
+const uploadsDir = path.join(__dirname, '..', 'public', 'uploads');
+if (!fs.existsSync(uploadsDir)) fs.mkdirSync(uploadsDir, { recursive: true });
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => cb(null, uploadsDir),
+  filename: (req, file, cb) => {
+    const ext = path.extname(file.originalname).toLowerCase();
+    const name = Date.now() + '-' + Math.round(Math.random() * 1e6) + ext;
+    cb(null, name);
+  }
+});
+const fileFilter = (req, file, cb) => {
+  const allowed = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.avif'];
+  const ext = path.extname(file.originalname).toLowerCase();
+  if (allowed.includes(ext)) cb(null, true);
+  else cb(new Error('Format non supporté. Utilisez JPG, PNG, WebP ou GIF.'), false);
+};
+const upload = multer({ storage, fileFilter, limits: { fileSize: 10 * 1024 * 1024 } });
 
 let scraperModule = null;
+/**
+ * ════════════════════════════════════════════════════════════
+ *  التعديلات المطلوبة على admin.js
+ *  أضف هذا الكود في المناطق المحددة أدناه
+ * ════════════════════════════════════════════════════════════
+ */
+
+// ══════════════════════════════════════════════════════════
+// [1] في أعلى admin.js، بعد السطر:
+//     let scraperModule = null;
+//     أضف هذا:
+// ══════════════════════════════════════════════════════════
+
+let tunisianetScraperModule = null;
+function getTunisianetScraper() {
+  if (!tunisianetScraperModule) {
+    try {
+      tunisianetScraperModule = require('../scrapers/tunisianet_scraper');
+    } catch (e) {
+      console.error('Cannot load tunisianet_scraper:', e.message);
+    }
+  }
+  return tunisianetScraperModule;
+}
+
+
+// ══════════════════════════════════════════════════════════
+// [2] استبدل route POST /api/scraper/run الموجودة حالياً
+//     بهذه النسخة الجديدة التي تتعامل مع Tunisianet بشكل منفصل:
+// ══════════════════════════════════════════════════════════
+
+router.post('/api/scraper/run', requireAuth, async (req, res) => {
+  if (scraperState.running) {
+    return res.status(409).json({ error: 'Un scraping est déjà en cours', state: scraperState });
+  }
+
+  const { stores = ['all'] } = req.body;
+
+  /* ─── Tunisianet: مسار مخصص لتحديث الأسعار ─── */
+  const isTunisianetOnly =
+    stores.length === 1 && stores[0].toLowerCase() === 'tunisianet';
+
+  if (isTunisianetOnly) {
+    const scraper = getTunisianetScraper();
+    if (!scraper || typeof scraper.updateTunisianetPrices !== 'function') {
+      return res.status(503).json({ error: 'Module Tunisianet non disponible — vérifiez scrapers/tunisianet_scraper.js' });
+    }
+
+    scraperState.running     = true;
+    scraperState.progress    = 0;
+    scraperState.message     = 'جارٍ تحديث أسعار Tunisianet…';
+    scraperState.currentStore = 'Tunisianet';
+    scraperState.status      = 'running';
+    scraperState.results     = null;
+
+    res.json({ success: true, message: 'Mise à jour Tunisianet lancée', state: scraperState });
+
+    setImmediate(async () => {
+      try {
+        const onProgress = (data) => {
+          if (data.progress   != null) scraperState.progress    = data.progress;
+          if (data.message)            scraperState.message     = data.message;
+          if (data.currentStore)       scraperState.currentStore = data.currentStore;
+          if (data.results)            scraperState.results     = data.results;
+          if (data.status === 'done') {
+            scraperState.status  = 'done';
+            scraperState.running = false;
+          }
+        };
+
+        await scraper.updateTunisianetPrices(onProgress);
+
+        /* تأكّد من الإنهاء حتى لو لم يُطلق onProgress بـ done */
+        scraperState.running = false;
+        if (scraperState.status === 'running') scraperState.status = 'done';
+
+      } catch (err) {
+        console.error('Tunisianet scraper error:', err);
+        scraperState.running = false;
+        scraperState.status  = 'error';
+        scraperState.message = err.message || 'Erreur inconnue';
+      }
+    });
+
+    return; // انتهى المسار الخاص بـ Tunisianet
+  }
+
+  /* ─── باقي المتاجر: المسار الأصلي ─── */
+  const scraper = getScraper();
+  if (!scraper || typeof scraper.runScraper !== 'function') {
+    return res.status(503).json({ error: 'Module scraper non disponible' });
+  }
+
+  scraperState.running      = true;
+  scraperState.progress     = 0;
+  scraperState.message      = 'Initialisation…';
+  scraperState.currentStore = stores[0] === 'all' ? 'Tous les stores' : stores[0];
+  scraperState.status       = 'running';
+  scraperState.results      = null;
+
+  res.json({ success: true, message: 'Scraping lancé', state: scraperState });
+
+  setImmediate(async () => {
+    try {
+      const onProgress = (data) => {
+        if (data.progress     != null) scraperState.progress    = data.progress;
+        if (data.message)              scraperState.message     = data.message;
+        if (data.currentStore)         scraperState.currentStore = data.currentStore;
+      };
+      const results = await scraper.runScraper(stores, onProgress);
+      scraperState.running  = false;
+      scraperState.progress = 100;
+      scraperState.message  = 'Scraping terminé avec succès';
+      scraperState.status   = 'done';
+      scraperState.results  = results;
+    } catch (err) {
+      console.error('Scraper run error:', err);
+      scraperState.running = false;
+      scraperState.status  = 'error';
+      scraperState.message = err.message || 'Erreur inconnue';
+    }
+  });
+});
 function getScraper() {
   if (!scraperModule) {
     try { scraperModule = require('../scrapers/scraper'); } catch (e) {}
@@ -226,6 +371,35 @@ router.delete('/api/product/:id', requireAuth, async (req, res) => {
     res.json({ success: true, message: 'Produit supprimé avec succès' });
   } catch (err) {
     res.status(500).json({ error: 'Erreur interne du serveur' });
+  }
+});
+
+/* ── IMAGE UPLOAD ── */
+
+// Upload single main image
+router.post('/api/upload/main-image', requireAuth, upload.single('image'), (req, res) => {
+  if (!req.file) return res.status(400).json({ error: 'Aucun fichier reçu' });
+  const url = '/uploads/' + req.file.filename;
+  res.json({ success: true, url });
+});
+
+// Upload multiple extra images (up to 10)
+router.post('/api/upload/extra-images', requireAuth, upload.array('images', 10), (req, res) => {
+  if (!req.files || !req.files.length) return res.status(400).json({ error: 'Aucun fichier reçu' });
+  const urls = req.files.map(f => '/uploads/' + f.filename);
+  res.json({ success: true, urls });
+});
+
+// Delete uploaded image
+router.delete('/api/upload/image', requireAuth, (req, res) => {
+  try {
+    const { filename } = req.body;
+    if (!filename) return res.status(400).json({ error: 'Nom de fichier requis' });
+    const filePath = path.join(uploadsDir, path.basename(filename));
+    if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ error: 'Erreur lors de la suppression' });
   }
 });
 

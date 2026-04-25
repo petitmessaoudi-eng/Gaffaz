@@ -349,6 +349,78 @@ select.form-input-modal option { background:rgba(13,26,20,.98); }
 @media(max-width:992px){ :root{--sidebar-width:0px;} .sidebar{transform:translateX(-100%);width:280px;} .sidebar.open{transform:translateX(0);} .main-content{margin-left:0;} .mobile-menu-toggle{display:flex;} .site-footer{margin-left:0;} }
 @media(max-width:768px){ .stats-grid{grid-template-columns:1fr 1fr;} .form-row{grid-template-columns:1fr;} .store-price-form{grid-template-columns:1fr 1fr;} }
 @media(max-width:480px){ .stats-grid{grid-template-columns:1fr;} .section-tabs{flex-wrap:wrap;} .main-content{padding:20px 15px;} }
+
+/* ── Image Upload Zone ── */
+.img-upload-section { margin-bottom:4px; }
+.img-upload-label { font-size:13px; font-weight:600; color:var(--text-secondary); margin-bottom:8px; display:block; }
+.img-upload-zone {
+  border:2px dashed var(--glass-border); border-radius:12px;
+  padding:18px 14px; text-align:center; cursor:pointer;
+  transition:all .2s ease; background:var(--glass-bg); position:relative;
+}
+.img-upload-zone:hover, .img-upload-zone.drag-over {
+  border-color:var(--emerald-light); background:rgba(52,211,153,.05);
+}
+.img-upload-zone input[type="file"] { display:none; }
+.img-upload-zone .zone-icon { font-size:28px; margin-bottom:6px; }
+.img-upload-zone .zone-text { font-size:12px; color:var(--text-muted); }
+.img-upload-zone .zone-btn {
+  display:inline-flex; align-items:center; gap:6px; margin-top:8px;
+  padding:7px 16px; border-radius:8px; font-size:12px; font-weight:700;
+  background:linear-gradient(135deg,var(--emerald),var(--emerald-light));
+  color:white; border:none; cursor:pointer; font-family:inherit;
+  transition:all .15s ease;
+}
+.img-upload-zone .zone-btn:hover { transform:translateY(-1px); }
+.img-upload-zone .zone-btn svg { width:13px; height:13px; }
+.img-upload-zone.uploading { pointer-events:none; opacity:.7; }
+.upload-spinner { display:inline-block; width:14px; height:14px; border:2px solid rgba(255,255,255,.3); border-top-color:white; border-radius:50%; animation:spin 1s linear infinite; }
+
+/* Main image preview */
+.main-img-preview {
+  width:100%; height:140px; border-radius:10px; overflow:hidden;
+  background:var(--glass-bg); border:1px solid var(--glass-border);
+  display:flex; align-items:center; justify-content:center;
+  margin-bottom:8px; position:relative;
+}
+.main-img-preview img { width:100%; height:100%; object-fit:contain; padding:8px; }
+.main-img-preview .no-img-placeholder { color:var(--text-muted); font-size:12px; display:flex; flex-direction:column; align-items:center; gap:6px; }
+.main-img-preview .no-img-placeholder svg { width:32px; height:32px; opacity:.3; }
+.main-img-remove {
+  position:absolute; top:6px; right:6px; width:24px; height:24px;
+  border-radius:6px; background:rgba(220,38,38,.85); border:none; cursor:pointer;
+  display:flex; align-items:center; justify-content:center; color:white;
+  transition:background .15s ease;
+}
+.main-img-remove:hover { background:rgba(220,38,38,1); }
+.main-img-remove svg { width:12px; height:12px; }
+
+/* Extra images grid */
+.extra-imgs-grid {
+  display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-top:8px;
+}
+.extra-img-item {
+  position:relative; height:70px; border-radius:8px; overflow:hidden;
+  background:var(--glass-bg); border:1px solid var(--glass-border);
+}
+.extra-img-item img { width:100%; height:100%; object-fit:contain; padding:4px; }
+.extra-img-remove {
+  position:absolute; top:3px; right:3px; width:18px; height:18px;
+  border-radius:4px; background:rgba(220,38,38,.85); border:none; cursor:pointer;
+  display:flex; align-items:center; justify-content:center; color:white;
+  transition:background .15s;
+}
+.extra-img-remove:hover { background:rgba(220,38,38,1); }
+.extra-img-remove svg { width:10px; height:10px; }
+.upload-progress {
+  width:100%; height:4px; background:rgba(255,255,255,.08);
+  border-radius:2px; overflow:hidden; margin-top:8px; display:none;
+}
+.upload-progress-bar {
+  height:100%; border-radius:2px;
+  background:linear-gradient(90deg,var(--emerald),var(--emerald-light));
+  transition:width .3s ease; width:0%;
+}
 </style>
 </head>
 <body>
@@ -404,10 +476,49 @@ select.form-input-modal option { background:rgba(13,26,20,.98); }
           <textarea class="form-input-modal" id="fDescription" rows="3" placeholder="Description du produit…" style="resize:vertical;"></textarea>
         </div>
       </div>
-      <div class="form-row full">
-        <div class="form-group-modal">
-          <label class="form-label-modal">Images (URLs, une par ligne)</label>
-          <textarea class="form-input-modal" id="fImages" rows="2" placeholder="https://…&#10;https://…" style="resize:vertical;"></textarea>
+      <!-- ── IMAGE UPLOAD SECTION ── -->
+      <div class="section-divider">Images du produit</div>
+
+      <!-- Bouton 1: Image principale -->
+      <div class="img-upload-section" style="margin-bottom:16px;">
+        <span class="img-upload-label">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;margin-right:5px;color:var(--emerald-light)"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          Image principale
+        </span>
+        <div class="main-img-preview" id="mainImgPreview">
+          <div class="no-img-placeholder">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+            <span>Aucune image principale</span>
+          </div>
+        </div>
+        <div class="img-upload-zone" id="mainImgZone" onclick="document.getElementById('mainImgInput').click()" ondragover="handleDragOver(event,'mainImgZone')" ondragleave="handleDragLeave(event,'mainImgZone')" ondrop="handleDrop(event,'main')">
+          <input type="file" id="mainImgInput" accept="image/*" onchange="uploadMainImage(this)">
+          <div class="zone-icon">🖼️</div>
+          <div class="zone-text">Glissez une image ici ou</div>
+          <button type="button" class="zone-btn" onclick="event.stopPropagation();document.getElementById('mainImgInput').click()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            Choisir l'image principale
+          </button>
+          <div class="upload-progress" id="mainImgProgress"><div class="upload-progress-bar" id="mainImgProgressBar"></div></div>
+        </div>
+      </div>
+
+      <!-- Bouton 2: Images supplémentaires -->
+      <div class="img-upload-section">
+        <span class="img-upload-label">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;margin-right:5px;color:var(--gold)"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+          Images supplémentaires <span style="color:var(--text-muted);font-weight:400;">(jusqu'à 9)</span>
+        </span>
+        <div class="extra-imgs-grid" id="extraImgsGrid"></div>
+        <div class="img-upload-zone" id="extraImgsZone" style="margin-top:8px;" onclick="document.getElementById('extraImgsInput').click()" ondragover="handleDragOver(event,'extraImgsZone')" ondragleave="handleDragLeave(event,'extraImgsZone')" ondrop="handleDrop(event,'extra')">
+          <input type="file" id="extraImgsInput" accept="image/*" multiple onchange="uploadExtraImages(this)">
+          <div class="zone-icon">📷</div>
+          <div class="zone-text">Glissez plusieurs images ou</div>
+          <button type="button" class="zone-btn" style="background:linear-gradient(135deg,var(--amber),var(--gold));" onclick="event.stopPropagation();document.getElementById('extraImgsInput').click()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            Choisir les images supplémentaires
+          </button>
+          <div class="upload-progress" id="extraImgsProgress"><div class="upload-progress-bar" id="extraImgsProgressBar"></div></div>
         </div>
       </div>
 
@@ -531,11 +642,31 @@ select.form-input-modal option { background:rgba(13,26,20,.98); }
       </div>
 
       <div class="section-divider">Visuel & Lien</div>
-      <div class="form-row full">
-        <div class="form-group-modal">
-          <label class="form-label-modal">URL de l'image</label>
-          <input class="form-input-modal" id="adImage" placeholder="https://…/image.jpg">
+
+      <!-- Ad image upload -->
+      <div class="img-upload-section" style="margin-bottom:16px;">
+        <span class="img-upload-label">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;margin-right:5px;color:var(--gold)"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          Image de l'annonce
+        </span>
+        <div class="main-img-preview" id="adImgPreview" style="height:110px;">
+          <div class="no-img-placeholder">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+            <span>Aucune image</span>
+          </div>
         </div>
+        <div class="img-upload-zone" id="adImgZone" onclick="document.getElementById('adImgInput').click()" ondragover="handleDragOver(event,'adImgZone')" ondragleave="handleDragLeave(event,'adImgZone')" ondrop="handleDrop(event,'ad')">
+          <input type="file" id="adImgInput" accept="image/*" onchange="uploadAdImage(this)">
+          <div class="zone-icon">🖼️</div>
+          <div class="zone-text">Glissez une image ici ou</div>
+          <button type="button" class="zone-btn" style="background:linear-gradient(135deg,var(--amber),var(--gold));" onclick="event.stopPropagation();document.getElementById('adImgInput').click()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            Choisir une image
+          </button>
+          <div class="upload-progress" id="adImgProgress"><div class="upload-progress-bar" id="adImgProgressBar"></div></div>
+        </div>
+        <!-- Hidden input to keep adImage value accessible -->
+        <input type="hidden" id="adImage">
       </div>
       <div class="form-row">
         <div class="form-group-modal">
@@ -1799,7 +1930,8 @@ window.openAddModal=function(){
   document.getElementById('editProductId').value='';
   document.getElementById('modalTitle').textContent='Ajouter un produit';
   document.getElementById('saveProductBtn').innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>Enregistrer';
-  ['fName','fBrand','fDescription','fImages'].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
+  ['fName','fBrand','fDescription'].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
+  resetImageUploads();
   document.getElementById('fCategory').value='';
   const _subReset=document.getElementById('fSubcategory'); if(_subReset){ _subReset.innerHTML='<option value="">— Choisir catégorie d\'abord —</option>'; }
   document.getElementById('specFieldsWrap').innerHTML='';
@@ -1831,7 +1963,7 @@ window.openEditModal=async function(id){
       subSel.value=p.subcategory||'';
     })();
     document.getElementById('fDescription').value=p.description||'';
-    document.getElementById('fImages').value=(p.images||[]).join('\n');
+    loadImagesIntoModal(p.images||[]);
     renderSpecFields(p.specs||{});
     Object.keys(STORES).forEach(s=>{
       const entry=(p.prices||[]).find(x=>x.store===s);
@@ -1865,7 +1997,7 @@ window.saveProduct=async function(){
     category, subcategory,
     ...(slug ? {slug} : {}),
     description:document.getElementById('fDescription').value.trim(),
-    images:document.getElementById('fImages').value.split('\n').map(s=>s.trim()).filter(Boolean),
+    images:getImagesFromModal(),
     specs:collectSpecs(), prices
   };
   const btn=document.getElementById('saveProductBtn');
@@ -1881,6 +2013,222 @@ window.saveProduct=async function(){
     loadProducts(); loadStats();
   }catch(e){ showToast(e.message||'Erreur lors de l\'enregistrement','error'); }
   finally{ btn.disabled=false; btn.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>Enregistrer'; }
+};
+
+
+/* ══════════════════════════════════════════
+   IMAGE UPLOAD SYSTEM
+══════════════════════════════════════════ */
+
+// State: tracks all uploaded image URLs
+let _mainImageUrl = '';       // URL of main image
+let _extraImageUrls = [];     // URLs of extra images
+
+/* ── Reset all image state (called when opening Add modal) ── */
+function resetImageUploads() {
+  _mainImageUrl = '';
+  _extraImageUrls = [];
+  renderMainImagePreview();
+  renderExtraImagesGrid();
+}
+
+/* ── Load existing images into modal (called when opening Edit modal) ── */
+function loadImagesIntoModal(images) {
+  if (!images || !images.length) {
+    resetImageUploads();
+    return;
+  }
+  _mainImageUrl = images[0] || '';
+  _extraImageUrls = images.slice(1);
+  renderMainImagePreview();
+  renderExtraImagesGrid();
+}
+
+/* ── Collect all images to save ── */
+function getImagesFromModal() {
+  const all = [];
+  if (_mainImageUrl) all.push(_mainImageUrl);
+  _extraImageUrls.forEach(u => { if(u) all.push(u); });
+  return all;
+}
+
+/* ── Render main image preview ── */
+function renderMainImagePreview() {
+  const preview = document.getElementById('mainImgPreview');
+  if (!preview) return;
+  if (_mainImageUrl) {
+    preview.innerHTML = `
+      <img src="${_mainImageUrl}" alt="Image principale" onerror="this.src='';this.parentElement.innerHTML='<div class=\"no-img-placeholder\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\"><rect x=\"3\" y=\"3\" width=\"18\" height=\"18\" rx=\"2\"/></svg><span>Erreur de chargement</span></div>'">
+      <button class="main-img-remove" onclick="removeMainImage()" title="Supprimer l'image principale">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>`;
+  } else {
+    preview.innerHTML = `
+      <div class="no-img-placeholder">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+        <span>Aucune image principale</span>
+      </div>`;
+  }
+}
+
+/* ── Render extra images grid ── */
+function renderExtraImagesGrid() {
+  const grid = document.getElementById('extraImgsGrid');
+  if (!grid) return;
+  if (!_extraImageUrls.length) {
+    grid.innerHTML = '';
+    return;
+  }
+  grid.innerHTML = _extraImageUrls.map((url, i) => `
+    <div class="extra-img-item">
+      <img src="${url}" alt="" onerror="this.style.opacity='0.3'">
+      <button class="extra-img-remove" onclick="removeExtraImage(${i})" title="Supprimer">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>`).join('');
+}
+
+/* ── Remove main image ── */
+window.removeMainImage = function() {
+  _mainImageUrl = '';
+  renderMainImagePreview();
+};
+
+/* ── Remove extra image by index ── */
+window.removeExtraImage = function(idx) {
+  _extraImageUrls.splice(idx, 1);
+  renderExtraImagesGrid();
+};
+
+/* ── Upload main image ── */
+window.uploadMainImage = async function(input) {
+  const file = input.files[0];
+  if (!file) return;
+  input.value = '';
+
+  const zone = document.getElementById('mainImgZone');
+  const progress = document.getElementById('mainImgProgress');
+  const bar = document.getElementById('mainImgProgressBar');
+
+  zone.classList.add('uploading');
+  zone.querySelector('.zone-text').textContent = 'Envoi en cours…';
+  if (progress) { progress.style.display = 'block'; bar.style.width = '30%'; }
+
+  try {
+    const formData = new FormData();
+    formData.append('image', file);
+
+    if (bar) bar.style.width = '60%';
+
+    const res = await fetch('/admin/api/upload/main-image', {
+      method: 'POST',
+      body: formData
+    });
+    const data = await res.json();
+
+    if (bar) bar.style.width = '100%';
+
+    if (!res.ok) throw new Error(data.error || 'Erreur upload');
+
+    _mainImageUrl = data.url;
+    renderMainImagePreview();
+    showToast('Image principale uploadée !', 'success');
+  } catch(e) {
+    showToast(e.message || 'Erreur lors de l\'upload', 'error');
+  } finally {
+    zone.classList.remove('uploading');
+    zone.querySelector('.zone-text').textContent = 'Glissez une image ici ou';
+    if (progress) { setTimeout(() => { progress.style.display = 'none'; bar.style.width = '0%'; }, 600); }
+  }
+};
+
+/* ── Upload extra images ── */
+window.uploadExtraImages = async function(input) {
+  const files = Array.from(input.files);
+  if (!files.length) return;
+  input.value = '';
+
+  const maxExtra = 9;
+  const remaining = maxExtra - _extraImageUrls.length;
+  if (remaining <= 0) {
+    showToast('Maximum 9 images supplémentaires atteint', 'warning');
+    return;
+  }
+  const toUpload = files.slice(0, remaining);
+  if (files.length > remaining) {
+    showToast(`Seulement ${remaining} image(s) ajoutée(s) sur ${files.length} (limite: 9)`, 'warning');
+  }
+
+  const zone = document.getElementById('extraImgsZone');
+  const progress = document.getElementById('extraImgsProgress');
+  const bar = document.getElementById('extraImgsProgressBar');
+
+  zone.classList.add('uploading');
+  zone.querySelector('.zone-text').textContent = `Envoi de ${toUpload.length} image(s)…`;
+  if (progress) { progress.style.display = 'block'; bar.style.width = '20%'; }
+
+  try {
+    const formData = new FormData();
+    toUpload.forEach(f => formData.append('images', f));
+
+    if (bar) bar.style.width = '60%';
+
+    const res = await fetch('/admin/api/upload/extra-images', {
+      method: 'POST',
+      body: formData
+    });
+    const data = await res.json();
+
+    if (bar) bar.style.width = '100%';
+
+    if (!res.ok) throw new Error(data.error || 'Erreur upload');
+
+    _extraImageUrls.push(...data.urls);
+    renderExtraImagesGrid();
+    showToast(`${data.urls.length} image(s) ajoutée(s) !`, 'success');
+  } catch(e) {
+    showToast(e.message || 'Erreur lors de l\'upload', 'error');
+  } finally {
+    zone.classList.remove('uploading');
+    zone.querySelector('.zone-text').textContent = 'Glissez plusieurs images ou';
+    if (progress) { setTimeout(() => { progress.style.display = 'none'; bar.style.width = '0%'; }, 600); }
+  }
+};
+
+/* ── Drag & Drop handlers ── */
+window.handleDragOver = function(e, zoneId) {
+  e.preventDefault();
+  document.getElementById(zoneId)?.classList.add('drag-over');
+};
+window.handleDragLeave = function(e, zoneId) {
+  document.getElementById(zoneId)?.classList.remove('drag-over');
+};
+window.handleDrop = function(e, type) {
+  e.preventDefault();
+  const zoneIdMap = { main: 'mainImgZone', extra: 'extraImgsZone', ad: 'adImgZone' };
+  const zoneId = zoneIdMap[type] || 'mainImgZone';
+  document.getElementById(zoneId)?.classList.remove('drag-over');
+  const files = e.dataTransfer.files;
+  if (!files.length) return;
+  if (type === 'main') {
+    const dt = new DataTransfer();
+    dt.items.add(files[0]);
+    const input = document.getElementById('mainImgInput');
+    input.files = dt.files;
+    uploadMainImage(input);
+  } else if (type === 'ad') {
+    const dt = new DataTransfer();
+    dt.items.add(files[0]);
+    const input = document.getElementById('adImgInput');
+    input.files = dt.files;
+    uploadAdImage(input);
+  } else {
+    const input = document.getElementById('extraImgsInput');
+    const dt = new DataTransfer();
+    Array.from(files).forEach(f => dt.items.add(f));
+    input.files = dt.files;
+    uploadExtraImages(input);
+  }
 };
 
 /* ── delete ── */
@@ -2175,7 +2523,7 @@ window.openAddAdModal = function() {
   document.getElementById('adTitle').value = '';
   document.getElementById('adSubtitle').value = '';
   document.getElementById('adBadge').value = '';
-  document.getElementById('adImage').value = '';
+  resetAdImage();
   document.getElementById('adAccentColor').value = '#34d399';
   document.getElementById('adColorPicker').value = '#34d399';
   document.getElementById('adCtaText').value = 'Voir l\'offre';
@@ -2203,7 +2551,7 @@ window.openEditAdModal = async function(id) {
     document.getElementById('adTitle').value = ad.title || '';
     document.getElementById('adSubtitle').value = ad.subtitle || '';
     document.getElementById('adBadge').value = ad.badge || '';
-    document.getElementById('adImage').value = ad.image || '';
+    loadAdImage(ad.image || '');
     document.getElementById('adAccentColor').value = ad.accentColor || '#34d399';
     document.getElementById('adColorPicker').value = ad.accentColor || '#34d399';
     document.getElementById('adCtaText').value = ad.ctaText || 'Voir l\'offre';
@@ -2311,9 +2659,87 @@ window.confirmDeleteAd = async function() {
   }
 };
 
+
+/* ══════════════════════════════════════════
+   AD IMAGE UPLOAD
+══════════════════════════════════════════ */
+
+/* ── Reset ad image state ── */
+function resetAdImage() {
+  document.getElementById('adImage').value = '';
+  renderAdImgPreview('');
+}
+
+/* ── Load existing ad image into preview ── */
+function loadAdImage(url) {
+  document.getElementById('adImage').value = url || '';
+  renderAdImgPreview(url || '');
+  updateAdPreview();
+}
+
+/* ── Render ad image preview box ── */
+function renderAdImgPreview(url) {
+  const preview = document.getElementById('adImgPreview');
+  if (!preview) return;
+  if (url) {
+    preview.innerHTML = `
+      <img src="${url}" alt="Image annonce" style="width:100%;height:100%;object-fit:contain;padding:8px;"
+        onerror="this.src='';this.parentElement.innerHTML='<div class=\"no-img-placeholder\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\"><rect x=\"3\" y=\"3\" width=\"18\" height=\"18\" rx=\"2\"/></svg><span>Erreur de chargement</span></div>'">
+      <button class="main-img-remove" onclick="resetAdImage()" title="Supprimer l'image">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>`;
+  } else {
+    preview.innerHTML = `
+      <div class="no-img-placeholder">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+        <span>Aucune image</span>
+      </div>`;
+  }
+}
+
+/* ── Upload ad image from computer ── */
+window.uploadAdImage = async function(input) {
+  const file = input.files[0];
+  if (!file) return;
+  input.value = '';
+
+  const zone = document.getElementById('adImgZone');
+  const progress = document.getElementById('adImgProgress');
+  const bar = document.getElementById('adImgProgressBar');
+
+  zone.classList.add('uploading');
+  zone.querySelector('.zone-text').textContent = 'Envoi en cours…';
+  if (progress) { progress.style.display = 'block'; bar.style.width = '30%'; }
+
+  try {
+    const formData = new FormData();
+    formData.append('image', file);
+    if (bar) bar.style.width = '60%';
+
+    const res = await fetch('/admin/api/upload/main-image', {
+      method: 'POST',
+      body: formData
+    });
+    const data = await res.json();
+    if (bar) bar.style.width = '100%';
+    if (!res.ok) throw new Error(data.error || 'Erreur upload');
+
+    document.getElementById('adImage').value = data.url;
+    renderAdImgPreview(data.url);
+    updateAdPreview();
+    showToast('Image uploadée !', 'success');
+  } catch(e) {
+    showToast(e.message || "Erreur lors de l'upload", 'error');
+  } finally {
+    zone.classList.remove('uploading');
+    zone.querySelector('.zone-text').textContent = 'Glissez une image ici ou';
+    if (progress) { setTimeout(() => { progress.style.display = 'none'; bar.style.width = '0%'; }, 600); }
+  }
+};
+
 /* ── Live preview: wire input events ── */
 (function wirePreview() {
-  const IDS = ['adTitle','adSubtitle','adBadge','adImage','adAccentColor','adCtaText','adPrice','adOldPrice'];
+  const IDS = ['adTitle','adSubtitle','adBadge','adAccentColor','adCtaText','adPrice','adOldPrice'];
   document.addEventListener('input', e => {
     if(IDS.includes(e.target.id)) {
       // sync color picker ↔ text

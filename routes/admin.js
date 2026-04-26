@@ -29,134 +29,27 @@ const fileFilter = (req, file, cb) => {
 const upload = multer({ storage, fileFilter, limits: { fileSize: 10 * 1024 * 1024 } });
 
 let scraperModule = null;
-/**
- * ════════════════════════════════════════════════════════════
- *  التعديلات المطلوبة على admin.js
- *  أضف هذا الكود في المناطق المحددة أدناه
- * ════════════════════════════════════════════════════════════
- */
-
-// ══════════════════════════════════════════════════════════
-// [1] في أعلى admin.js، بعد السطر:
-//     let scraperModule = null;
-//     أضف هذا:
-// ══════════════════════════════════════════════════════════
-
-let tunisianetScraperModule = null;
-function getTunisianetScraper() {
-  if (!tunisianetScraperModule) {
-    try {
-      tunisianetScraperModule = require('../scrapers/tunisianet_scraper');
-    } catch (e) {
-      console.error('Cannot load tunisianet_scraper:', e.message);
-    }
-  }
-  return tunisianetScraperModule;
-}
-
-
-// ══════════════════════════════════════════════════════════
-// [2] استبدل route POST /api/scraper/run الموجودة حالياً
-//     بهذه النسخة الجديدة التي تتعامل مع Tunisianet بشكل منفصل:
-// ══════════════════════════════════════════════════════════
-
-router.post('/api/scraper/run', requireAuth, async (req, res) => {
-  if (scraperState.running) {
-    return res.status(409).json({ error: 'Un scraping est déjà en cours', state: scraperState });
-  }
-
-  const { stores = ['all'] } = req.body;
-
-  /* ─── Tunisianet: مسار مخصص لتحديث الأسعار ─── */
-  const isTunisianetOnly =
-    stores.length === 1 && stores[0].toLowerCase() === 'tunisianet';
-
-  if (isTunisianetOnly) {
-    const scraper = getTunisianetScraper();
-    if (!scraper || typeof scraper.updateTunisianetPrices !== 'function') {
-      return res.status(503).json({ error: 'Module Tunisianet non disponible — vérifiez scrapers/tunisianet_scraper.js' });
-    }
-
-    scraperState.running     = true;
-    scraperState.progress    = 0;
-    scraperState.message     = 'جارٍ تحديث أسعار Tunisianet…';
-    scraperState.currentStore = 'Tunisianet';
-    scraperState.status      = 'running';
-    scraperState.results     = null;
-
-    res.json({ success: true, message: 'Mise à jour Tunisianet lancée', state: scraperState });
-
-    setImmediate(async () => {
-      try {
-        const onProgress = (data) => {
-          if (data.progress   != null) scraperState.progress    = data.progress;
-          if (data.message)            scraperState.message     = data.message;
-          if (data.currentStore)       scraperState.currentStore = data.currentStore;
-          if (data.results)            scraperState.results     = data.results;
-          if (data.status === 'done') {
-            scraperState.status  = 'done';
-            scraperState.running = false;
-          }
-        };
-
-        await scraper.updateTunisianetPrices(onProgress);
-
-        /* تأكّد من الإنهاء حتى لو لم يُطلق onProgress بـ done */
-        scraperState.running = false;
-        if (scraperState.status === 'running') scraperState.status = 'done';
-
-      } catch (err) {
-        console.error('Tunisianet scraper error:', err);
-        scraperState.running = false;
-        scraperState.status  = 'error';
-        scraperState.message = err.message || 'Erreur inconnue';
-      }
-    });
-
-    return; // انتهى المسار الخاص بـ Tunisianet
-  }
-
-  /* ─── باقي المتاجر: المسار الأصلي ─── */
-  const scraper = getScraper();
-  if (!scraper || typeof scraper.runScraper !== 'function') {
-    return res.status(503).json({ error: 'Module scraper non disponible' });
-  }
-
-  scraperState.running      = true;
-  scraperState.progress     = 0;
-  scraperState.message      = 'Initialisation…';
-  scraperState.currentStore = stores[0] === 'all' ? 'Tous les stores' : stores[0];
-  scraperState.status       = 'running';
-  scraperState.results      = null;
-
-  res.json({ success: true, message: 'Scraping lancé', state: scraperState });
-
-  setImmediate(async () => {
-    try {
-      const onProgress = (data) => {
-        if (data.progress     != null) scraperState.progress    = data.progress;
-        if (data.message)              scraperState.message     = data.message;
-        if (data.currentStore)         scraperState.currentStore = data.currentStore;
-      };
-      const results = await scraper.runScraper(stores, onProgress);
-      scraperState.running  = false;
-      scraperState.progress = 100;
-      scraperState.message  = 'Scraping terminé avec succès';
-      scraperState.status   = 'done';
-      scraperState.results  = results;
-    } catch (err) {
-      console.error('Scraper run error:', err);
-      scraperState.running = false;
-      scraperState.status  = 'error';
-      scraperState.message = err.message || 'Erreur inconnue';
-    }
-  });
-});
 function getScraper() {
   if (!scraperModule) {
     try { scraperModule = require('../scrapers/scraper'); } catch (e) {}
   }
   return scraperModule;
+}
+
+let tunisianetScraperModule = null;
+function getTunisianetScraper() {
+  if (!tunisianetScraperModule) {
+    try { tunisianetScraperModule = require('../scrapers/tunisianet_scraper'); } catch (e) {}
+  }
+  return tunisianetScraperModule;
+}
+
+let multiScraperModule = null;
+function getMultiScraper() {
+  if (!multiScraperModule) {
+    try { multiScraperModule = require('../scrapers/multi_scraper'); } catch (e) {}
+  }
+  return multiScraperModule;
 }
 
 const scraperState = {
@@ -409,33 +302,62 @@ router.post('/api/scraper/run', requireAuth, async (req, res) => {
   if (scraperState.running) {
     return res.status(409).json({ error: 'Un scraping est déjà en cours', state: scraperState });
   }
+
   const { stores = ['all'] } = req.body;
-  const scraper = getScraper();
-  if (!scraper || typeof scraper.runScraper !== 'function') {
-    return res.status(503).json({ error: 'Module scraper non disponible' });
-  }
+  const storeName = stores[0];
+  const PRICE_UPDATE_STORES = ['Tunisianet', 'SpaceNet', 'Skymil', 'Mytek'];
+  const isSinglePriceStore = stores.length === 1 && PRICE_UPDATE_STORES.includes(storeName);
+
   scraperState.running = true;
   scraperState.progress = 0;
   scraperState.message = 'Initialisation…';
-  scraperState.currentStore = stores[0] === 'all' ? 'Tous les stores' : stores[0];
+  scraperState.currentStore = isSinglePriceStore ? storeName : 'Tous les stores';
   scraperState.status = 'running';
   scraperState.results = null;
+
   res.json({ success: true, message: 'Scraping lancé', state: scraperState });
+
   setImmediate(async () => {
+    const onProgress = (data) => {
+      if (data.progress != null) scraperState.progress = data.progress;
+      if (data.message) scraperState.message = data.message;
+      if (data.currentStore) scraperState.currentStore = data.currentStore;
+      if (data.results) scraperState.results = data.results;
+      if (data.status === 'done') {
+        scraperState.status = 'done';
+        scraperState.running = false;
+      }
+    };
+
     try {
-      const onProgress = (data) => {
-        if (data.progress != null) scraperState.progress = data.progress;
-        if (data.message) scraperState.message = data.message;
-        if (data.currentStore) scraperState.currentStore = data.currentStore;
-      };
-      const results = await scraper.runScraper(stores, onProgress);
-      scraperState.running = false;
-      scraperState.progress = 100;
-      scraperState.message = 'Scraping terminé avec succès';
-      scraperState.status = 'done';
-      scraperState.results = results;
+      if (storeName === 'Tunisianet' && isSinglePriceStore) {
+        const scraper = getTunisianetScraper();
+        if (!scraper) throw new Error('tunisianet_scraper.js introuvable dans scrapers/');
+        await scraper.updateTunisianetPrices(onProgress);
+
+      } else if (isSinglePriceStore) {
+        const scraper = getMultiScraper();
+        if (!scraper) throw new Error('multi_scraper.js introuvable dans scrapers/');
+        await scraper.updateStorePrices(storeName, onProgress);
+
+      } else {
+        const scraper = getScraper();
+        if (!scraper || typeof scraper.runScraper !== 'function') throw new Error('Module scraper non disponible');
+        const results = await scraper.runScraper(stores, onProgress);
+        scraperState.results = results;
+        scraperState.status = 'done';
+        scraperState.running = false;
+        scraperState.progress = 100;
+        scraperState.message = 'Scraping terminé avec succès';
+      }
+
+      if (scraperState.running) {
+        scraperState.running = false;
+        scraperState.status = 'done';
+      }
+
     } catch (err) {
-      console.error('Scraper run error:', err);
+      console.error('Scraper error:', err);
       scraperState.running = false;
       scraperState.status = 'error';
       scraperState.message = err.message || 'Erreur inconnue';

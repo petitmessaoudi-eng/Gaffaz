@@ -417,7 +417,6 @@ async function processScrapedProducts(storeName, scrapedProducts, log) {
           updated++;
         } else {
           log.addNewProduct(item.name);
-          // Create new product with initial price history entry
           try {
             const initPrices = [{
               store: storeName,

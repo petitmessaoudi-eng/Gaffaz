@@ -8,7 +8,6 @@ const Ad = require('../models/Ad');
 const multer = require('multer');
 const fs = require('fs');
 
-// ── Multer: image upload config ──
 const uploadsDir = path.join(__dirname, '..', 'public', 'uploads');
 if (!fs.existsSync(uploadsDir)) fs.mkdirSync(uploadsDir, { recursive: true });
 
@@ -119,7 +118,6 @@ router.get('/', requireAuth, (req, res) => {
   res.sendFile(path.join(__dirname, '../public/admin.html'));
 });
 
-/* ── PRODUCTS ── */
 
 router.get('/api/products', requireAuth, async (req, res) => {
   try {
@@ -189,7 +187,6 @@ router.post('/api/product', requireAuth, async (req, res) => {
       inStock: p.inStock !== false,
       lastUpdated: new Date()
     })).filter(p => p.price != null && !isNaN(p.price));
-    // Build initial priceHistory from the prices provided
     const initHistory = cleanPrices.map(p => ({
       store: p.store,
       price: p.price,
@@ -236,7 +233,6 @@ router.put('/api/product/:id', requireAuth, async (req, res) => {
     product.images = (images || []).filter(Boolean);
     product.specs = specs || {};
 
-    // Use updateStorePrice() so price changes are recorded in priceHistory
     const incomingStores = cleanPrices.map(p => p.store);
     cleanPrices.forEach(p => {
       product.updateStorePrice(p.store, {
@@ -245,7 +241,6 @@ router.put('/api/product/:id', requireAuth, async (req, res) => {
         inStock: p.inStock
       });
     });
-    // Remove store entries that were deleted in the admin form
     product.prices = product.prices.filter(p => incomingStores.includes(p.store));
     product.markModified('prices');
 
@@ -267,23 +262,19 @@ router.delete('/api/product/:id', requireAuth, async (req, res) => {
   }
 });
 
-/* ── IMAGE UPLOAD ── */
 
-// Upload single main image
 router.post('/api/upload/main-image', requireAuth, upload.single('image'), (req, res) => {
   if (!req.file) return res.status(400).json({ error: 'Aucun fichier reçu' });
   const url = '/uploads/' + req.file.filename;
   res.json({ success: true, url });
 });
 
-// Upload multiple extra images (up to 10)
 router.post('/api/upload/extra-images', requireAuth, upload.array('images', 10), (req, res) => {
   if (!req.files || !req.files.length) return res.status(400).json({ error: 'Aucun fichier reçu' });
   const urls = req.files.map(f => '/uploads/' + f.filename);
   res.json({ success: true, urls });
 });
 
-// Delete uploaded image
 router.delete('/api/upload/image', requireAuth, (req, res) => {
   try {
     const { filename } = req.body;
@@ -296,7 +287,6 @@ router.delete('/api/upload/image', requireAuth, (req, res) => {
   }
 });
 
-/* ── SCRAPER ── */
 
 router.post('/api/scraper/run', requireAuth, async (req, res) => {
   if (scraperState.running) {
@@ -435,9 +425,7 @@ router.get('/api/stats', requireAuth, async (req, res) => {
   }
 });
 
-/* ══════════════════════════════════════════════════
-   ADS — Admin CRUD
-══════════════════════════════════════════════════ */
+
 
 router.get('/api/ads', requireAuth, async (req, res) => {
   try {
@@ -541,7 +529,6 @@ router.patch('/api/ad/:id/toggle', requireAuth, async (req, res) => {
   }
 });
 
-/* ── ADS — Public endpoints (called from product.html) ── */
 
 router.get('/public/ads', async (req, res) => {
   try {

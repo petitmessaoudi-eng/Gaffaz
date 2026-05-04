@@ -1,0 +1,2310 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TunGEAR — Comparateur de Prix Gaming en Tunisie</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@300;400;500;600;700&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+--red: #C0001A;
+--red-dark: #8B0000;
+--red-glow: rgba(192,0,26,0.4);
+--white: #FFFFFF;
+--gray-900: #0a0a0a;
+--gray-dark: #1a1a1a;
+--gray-mid: #2a2a2a;
+--gray-light: #3d3d3d;
+--gray-pale: #f0f0f0;
+--gold: #c9a84c;
+--font-display: 'Bebas Neue', sans-serif;
+--font-ui: 'Rajdhani', sans-serif;
+--font-body: 'Crimson Pro', serif;
+--nav-height: 72px;
+--transition: 0.25s cubic-bezier(0.4,0,0.2,1);
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+html{scroll-behavior:smooth;font-size:16px}
+
+body{
+background:var(--gray-dark);
+color:var(--white);
+font-family:var(--font-body);
+overflow-x:hidden;
+}
+
+body::before{
+content:'';
+position:fixed;
+inset:0;
+z-index:9998;
+pointer-events:none;
+opacity:0.035;
+background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+background-repeat:repeat;
+background-size:200px 200px;
+}
+
+#cursor-glow{
+position:fixed;
+width:300px;
+height:300px;
+border-radius:50%;
+background:radial-gradient(circle,rgba(192,0,26,0.12) 0%,transparent 70%);
+pointer-events:none;
+z-index:9997;
+transform:translate(-50%,-50%);
+transition:opacity 0.3s;
+}
+
+::selection{background:var(--red);color:var(--white)}
+
+a{color:inherit;text-decoration:none}
+
+img{display:block;max-width:100%}
+
+.container{width:100%;max-width:1280px;margin:0 auto;padding:0 24px}
+
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+
+/* ===== NAVBAR ===== */
+#navbar{
+position:fixed;
+top:0;left:0;right:0;
+z-index:1000;
+height:var(--nav-height);
+display:flex;
+align-items:center;
+transition:all var(--transition);
+}
+
+#navbar.scrolled{
+background:rgba(10,0,0,0.92);
+backdrop-filter:blur(12px);
+-webkit-backdrop-filter:blur(12px);
+border-bottom:1.5px solid var(--red);
+height:56px;
+box-shadow:0 4px 32px rgba(0,0,0,0.5);
+}
+
+.nav-inner{
+display:flex;
+align-items:center;
+justify-content:space-between;
+width:100%;
+max-width:1280px;
+margin:0 auto;
+padding:0 24px;
+}
+
+.nav-logo{
+font-family:var(--font-display);
+font-size:2rem;
+letter-spacing:2px;
+color:var(--white);
+position:relative;
+}
+
+.nav-logo span{
+color:var(--red);
+}
+
+.nav-logo::after{
+content:'';
+position:absolute;
+bottom:-2px;left:0;
+width:100%;height:2px;
+background:linear-gradient(90deg,var(--red),transparent);
+box-shadow:0 0 8px var(--red-glow);
+}
+
+.nav-links{
+display:flex;
+align-items:center;
+gap:2px;
+list-style:none;
+}
+
+.nav-links a{
+font-family:var(--font-ui);
+font-size:0.9rem;
+font-weight:600;
+letter-spacing:1.5px;
+text-transform:uppercase;
+padding:8px 14px;
+border-radius:2px;
+color:rgba(255,255,255,0.8);
+transition:color var(--transition),background var(--transition);
+}
+
+.nav-links a:hover{
+color:var(--white);
+background:rgba(192,0,26,0.15);
+}
+
+.nav-right{
+display:flex;
+align-items:center;
+gap:12px;
+}
+
+.nav-search-btn{
+background:none;
+border:none;
+color:rgba(255,255,255,0.7);
+cursor:pointer;
+padding:8px;
+border-radius:50%;
+transition:color var(--transition),background var(--transition);
+display:flex;align-items:center;justify-content:center;
+}
+
+.nav-search-btn:hover{color:var(--white);background:rgba(255,255,255,0.08)}
+
+.btn-compare{
+font-family:var(--font-ui);
+font-size:0.85rem;
+font-weight:700;
+letter-spacing:2px;
+text-transform:uppercase;
+padding:10px 22px;
+background:var(--red);
+color:var(--white);
+border:none;
+cursor:pointer;
+clip-path:polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%);
+transition:background var(--transition),box-shadow var(--transition);
+}
+
+.btn-compare:hover{
+background:var(--red-dark);
+box-shadow:0 0 24px var(--red-glow);
+}
+
+.theme-toggle{
+background:none;
+border:1.5px solid rgba(255,255,255,0.2);
+color:rgba(255,255,255,0.7);
+cursor:pointer;
+padding:7px 10px;
+border-radius:20px;
+font-size:0.75rem;
+font-family:var(--font-ui);
+letter-spacing:1px;
+transition:all var(--transition);
+}
+
+.theme-toggle:hover{border-color:var(--red);color:var(--red)}
+
+.hamburger{
+display:none;
+flex-direction:column;
+gap:5px;
+background:none;
+border:none;
+cursor:pointer;
+padding:8px;
+}
+
+.hamburger span{
+display:block;
+width:24px;height:2px;
+background:var(--white);
+transition:all var(--transition);
+}
+
+.mobile-menu{
+display:none;
+position:fixed;
+top:0;left:0;right:0;bottom:0;
+background:rgba(10,0,0,0.97);
+z-index:999;
+padding:100px 32px 40px;
+flex-direction:column;
+gap:8px;
+}
+
+.mobile-menu.open{display:flex}
+
+.mobile-menu a{
+font-family:var(--font-display);
+font-size:2.5rem;
+letter-spacing:3px;
+color:var(--white);
+padding:12px 0;
+border-bottom:1px solid rgba(255,255,255,0.08);
+transition:color var(--transition),padding-left var(--transition);
+}
+
+.mobile-menu a:hover{color:var(--red);padding-left:12px}
+
+.mobile-close{
+position:absolute;
+top:24px;right:24px;
+background:none;border:none;
+color:var(--white);
+font-size:1.5rem;
+cursor:pointer;
+padding:8px;
+}
+
+/* ===== HERO ===== */
+#hero{
+position:relative;
+min-height:100vh;
+display:flex;
+align-items:center;
+overflow:hidden;
+}
+
+.hero-bg{
+position:absolute;
+inset:0;
+}
+
+.hero-bg img{
+width:100%;height:100%;
+object-fit:cover;
+object-position:center;
+}
+
+.hero-bg::after{
+content:'';
+position:absolute;
+inset:0;
+background:linear-gradient(135deg,rgba(10,0,0,0.82) 0%,rgba(10,0,0,0.55) 60%,rgba(10,0,0,0.3) 100%);
+pointer-events:none;
+}
+
+.hero-content{
+position:relative;
+z-index:2;
+padding-top:var(--nav-height);
+}
+
+.hero-tag{
+display:inline-flex;
+align-items:center;
+gap:8px;
+font-family:var(--font-ui);
+font-size:0.75rem;
+font-weight:700;
+letter-spacing:3px;
+text-transform:uppercase;
+color:var(--red);
+border:1px solid var(--red);
+padding:6px 16px;
+margin-bottom:24px;
+opacity:0;
+animation:fadeInUp 0.6s 0.2s forwards;
+}
+
+.hero-tag::before{
+content:'';
+display:inline-block;
+width:6px;height:6px;
+background:var(--red);
+border-radius:50%;
+animation:pulse 1.5s infinite;
+}
+
+@keyframes pulse{
+0%,100%{opacity:1;transform:scale(1)}
+50%{opacity:0.5;transform:scale(0.8)}
+}
+
+.hero-headline{
+font-family:var(--font-display);
+font-size:clamp(4rem,10vw,9rem);
+line-height:0.9;
+letter-spacing:2px;
+color:var(--white);
+opacity:0;
+animation:fadeInUp 0.7s 0.35s forwards;
+}
+
+.hero-headline .accent{color:var(--red);text-shadow:0 0 40px var(--red-glow)}
+
+.hero-sub{
+font-family:var(--font-body);
+font-size:clamp(1rem,2vw,1.25rem);
+color:rgba(255,255,255,0.75);
+max-width:520px;
+line-height:1.6;
+margin-top:20px;
+opacity:0;
+animation:fadeInUp 0.7s 0.5s forwards;
+}
+
+.hero-ctas{
+display:flex;
+gap:16px;
+margin-top:36px;
+flex-wrap:wrap;
+opacity:0;
+animation:fadeInUp 0.7s 0.65s forwards;
+}
+
+.btn-primary{
+font-family:var(--font-ui);
+font-size:0.9rem;
+font-weight:700;
+letter-spacing:2px;
+text-transform:uppercase;
+padding:16px 36px;
+background:var(--red);
+color:var(--white);
+border:none;
+cursor:pointer;
+clip-path:polygon(10px 0%,100% 0%,calc(100% - 10px) 100%,0% 100%);
+transition:all var(--transition);
+position:relative;
+overflow:hidden;
+}
+
+.btn-primary::before{
+content:'';
+position:absolute;
+inset:0;
+background:rgba(255,255,255,0);
+transition:background var(--transition);
+pointer-events:none;
+}
+
+.btn-primary:hover::before{background:rgba(255,255,255,0.1)}
+
+.btn-primary:hover{box-shadow:0 0 32px var(--red-glow),0 8px 24px rgba(0,0,0,0.4)}
+
+.btn-outline{
+font-family:var(--font-ui);
+font-size:0.9rem;
+font-weight:700;
+letter-spacing:2px;
+text-transform:uppercase;
+padding:15px 36px;
+background:transparent;
+color:var(--white);
+border:1.5px solid rgba(255,255,255,0.5);
+cursor:pointer;
+clip-path:polygon(10px 0%,100% 0%,calc(100% - 10px) 100%,0% 100%);
+transition:all var(--transition);
+}
+
+.btn-outline:hover{
+border-color:var(--white);
+background:rgba(255,255,255,0.08);
+box-shadow:0 0 20px rgba(255,255,255,0.1);
+}
+
+.hero-stats{
+display:flex;
+gap:24px;
+margin-top:56px;
+flex-wrap:wrap;
+opacity:0;
+animation:fadeInUp 0.7s 0.8s forwards;
+}
+
+.stat-badge{
+background:rgba(10,0,0,0.7);
+border:1px solid rgba(192,0,26,0.4);
+backdrop-filter:blur(8px);
+padding:12px 20px;
+animation:float 4s ease-in-out infinite;
+}
+
+.stat-badge:nth-child(2){animation-delay:0.8s}
+.stat-badge:nth-child(3){animation-delay:1.6s}
+
+@keyframes float{
+0%,100%{transform:translateY(0)}
+50%{transform:translateY(-8px)}
+}
+
+.stat-badge strong{
+display:block;
+font-family:var(--font-display);
+font-size:1.6rem;
+color:var(--red);
+}
+
+.stat-badge span{
+font-family:var(--font-ui);
+font-size:0.7rem;
+font-weight:600;
+letter-spacing:2px;
+text-transform:uppercase;
+color:rgba(255,255,255,0.6);
+}
+
+@keyframes fadeInUp{
+from{opacity:0;transform:translateY(30px)}
+to{opacity:1;transform:translateY(0)}
+}
+
+/* ===== TICKER ===== */
+#ticker{
+background:linear-gradient(90deg,var(--red-dark),var(--red),var(--red-dark));
+padding:12px 0;
+overflow:hidden;
+position:relative;
+z-index:10;
+border-top:1px solid rgba(255,255,255,0.1);
+border-bottom:1px solid rgba(0,0,0,0.3);
+}
+
+.ticker-wrap{
+display:flex;
+width:max-content;
+animation:ticker 35s linear infinite;
+}
+
+@keyframes ticker{
+0%{transform:translateX(0)}
+100%{transform:translateX(-50%)}
+}
+
+.ticker-item{
+font-family:var(--font-ui);
+font-size:0.85rem;
+font-weight:600;
+letter-spacing:1.5px;
+white-space:nowrap;
+padding:0 32px;
+color:var(--white);
+display:flex;
+align-items:center;
+gap:8px;
+}
+
+.ticker-item .name{font-weight:700;text-transform:uppercase}
+.ticker-item .price{color:rgba(255,255,255,0.9)}
+.ticker-up{color:#4ade80;font-size:0.75rem}
+.ticker-down{color:#fbbf24;font-size:0.75rem}
+.ticker-sep{color:rgba(255,255,255,0.3);font-size:0.5rem}
+
+/* ===== SECTION COMMON ===== */
+section{padding:100px 0}
+
+.section-label{
+font-family:var(--font-ui);
+font-size:0.7rem;
+font-weight:700;
+letter-spacing:4px;
+text-transform:uppercase;
+color:var(--red);
+margin-bottom:12px;
+display:flex;
+align-items:center;
+gap:12px;
+}
+
+.section-label::before{
+content:'';
+display:block;
+width:32px;height:2px;
+background:var(--red);
+}
+
+.section-title{
+font-family:var(--font-display);
+font-size:clamp(2.5rem,5vw,4rem);
+letter-spacing:2px;
+line-height:1;
+color:var(--white);
+margin-bottom:48px;
+}
+
+#categories{
+background:var(--gray-900);
+}
+
+.categories-grid{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+grid-template-rows:auto auto;
+gap:16px;
+}
+
+.categories-grid .cat-card:first-child{
+grid-column:1/2;
+grid-row:1/2;
+}
+
+.categories-grid .cat-card:nth-child(2){
+grid-column:2/4;
+grid-row:1/2;
+}
+
+.cat-card{
+background:var(--gray-mid);
+border:1px solid rgba(255,255,255,0.05);
+padding:40px 32px;
+position:relative;
+overflow:hidden;
+cursor:pointer;
+transition:all var(--transition);
+}
+
+.cat-card::before{
+content:'';
+position:absolute;
+inset:0;
+background:linear-gradient(135deg,transparent,rgba(192,0,26,0.06));
+opacity:0;
+transition:opacity var(--transition);
+pointer-events:none;
+}
+
+.cat-card::after{
+content:'';
+position:absolute;
+inset:-1px;
+border:1.5px solid var(--red);
+opacity:0;
+transition:opacity var(--transition);
+pointer-events:none;
+}
+
+.cat-card:hover{
+transform:translateY(-4px);
+box-shadow:0 16px 48px rgba(0,0,0,0.4),0 0 32px rgba(192,0,26,0.15);
+}
+
+.cat-card:hover::before{opacity:1}
+.cat-card:hover::after{opacity:1}
+
+.cat-icon{
+font-size:2.8rem;
+margin-bottom:20px;
+display:block;
+filter:drop-shadow(0 0 8px var(--red-glow));
+}
+
+.cat-name{
+font-family:var(--font-display);
+font-size:1.6rem;
+letter-spacing:2px;
+color:var(--white);
+margin-bottom:8px;
+}
+
+.cat-count{
+font-family:var(--font-ui);
+font-size:0.75rem;
+font-weight:600;
+letter-spacing:2px;
+color:rgba(255,255,255,0.4);
+text-transform:uppercase;
+}
+
+.cat-arrow{
+position:absolute;
+bottom:24px;right:24px;
+color:var(--red);
+opacity:0;
+transition:all var(--transition);
+font-size:1.4rem;
+}
+
+.cat-card:hover .cat-arrow{opacity:1;transform:translateX(4px)}
+
+/* ===== PC BUILD TEASER ===== */
+#build-teaser{
+background:var(--gray-dark);
+position:relative;
+overflow:hidden;
+}
+
+#build-teaser::before{
+content:'';
+position:absolute;
+top:0;left:0;bottom:0;
+width:3px;
+background:linear-gradient(to bottom,transparent,var(--red),transparent);
+pointer-events:none;
+}
+
+.build-grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:64px;
+align-items:center;
+}
+
+.build-left .section-title{margin-bottom:20px}
+
+.build-desc{
+font-family:var(--font-body);
+font-size:1.1rem;
+color:rgba(255,255,255,0.6);
+line-height:1.7;
+margin-bottom:32px;
+}
+
+.checklist{
+list-style:none;
+margin-bottom:40px;
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:10px;
+}
+
+.checklist li{
+font-family:var(--font-ui);
+font-size:0.85rem;
+font-weight:600;
+letter-spacing:1px;
+color:rgba(255,255,255,0.7);
+display:flex;
+align-items:center;
+gap:10px;
+}
+
+.checklist li::before{
+content:'✓';
+color:var(--red);
+font-size:0.9rem;
+font-weight:900;
+}
+
+.build-card{
+background:var(--gray-mid);
+border:1px solid rgba(255,255,255,0.08);
+padding:32px;
+position:relative;
+}
+
+.build-card::before{
+content:'';
+position:absolute;
+top:0;left:0;right:0;
+height:3px;
+background:linear-gradient(90deg,var(--red),var(--red-dark));
+}
+
+.build-card-title{
+font-family:var(--font-display);
+font-size:1.1rem;
+letter-spacing:2px;
+color:rgba(255,255,255,0.5);
+margin-bottom:24px;
+text-transform:uppercase;
+}
+
+.build-item{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:12px 0;
+border-bottom:1px solid rgba(255,255,255,0.06);
+}
+
+.build-item:last-of-type{border-bottom:none}
+
+.build-item-name{
+font-family:var(--font-ui);
+font-size:0.85rem;
+font-weight:600;
+color:rgba(255,255,255,0.6);
+}
+
+.build-item-sub{
+font-family:var(--font-ui);
+font-size:0.75rem;
+color:rgba(255,255,255,0.35);
+margin-top:2px;
+}
+
+.build-item-price{
+font-family:var(--font-ui);
+font-size:0.9rem;
+font-weight:700;
+color:rgba(255,255,255,0.8);
+}
+
+.build-total{
+margin-top:24px;
+padding-top:24px;
+border-top:2px solid rgba(192,0,26,0.3);
+display:flex;
+justify-content:space-between;
+align-items:baseline;
+}
+
+.build-total-label{
+font-family:var(--font-display);
+font-size:1.2rem;
+letter-spacing:2px;
+color:var(--white);
+}
+
+.build-total-price{
+font-family:var(--font-display);
+font-size:2.5rem;
+color:var(--red);
+text-shadow:0 0 20px var(--red-glow);
+letter-spacing:2px;
+}
+
+.compat-badge{
+display:inline-flex;
+align-items:center;
+gap:8px;
+font-family:var(--font-ui);
+font-size:0.75rem;
+font-weight:700;
+letter-spacing:2px;
+text-transform:uppercase;
+background:rgba(74,222,128,0.1);
+color:#4ade80;
+border:1px solid rgba(74,222,128,0.3);
+padding:8px 16px;
+margin-top:16px;
+}
+
+/* ===== BEST DEALS ===== */
+#best-deals{
+position:relative;
+padding:120px 0;
+overflow:hidden;
+clip-path:polygon(0 5%,100% 0,100% 95%,0 100%);
+}
+
+.deals-bg{
+position:absolute;
+inset:0;
+}
+
+.deals-bg img{
+width:100%;height:100%;
+object-fit:cover;
+mix-blend-mode:multiply;
+}
+
+.deals-bg::after{
+content:'';
+position:absolute;
+inset:0;
+background:linear-gradient(135deg,rgba(10,0,0,0.88) 0%,rgba(139,0,0,0.75) 50%,rgba(10,0,0,0.88) 100%);
+pointer-events:none;
+}
+
+.deals-content{
+position:relative;
+z-index:2;
+}
+
+.deals-title{
+font-family:var(--font-display);
+font-size:clamp(3rem,8vw,7rem);
+letter-spacing:4px;
+color:var(--white);
+text-align:center;
+margin-bottom:12px;
+text-shadow:0 4px 32px rgba(0,0,0,0.5);
+}
+
+.deals-subtitle{
+text-align:center;
+font-family:var(--font-ui);
+font-size:0.85rem;
+font-weight:600;
+letter-spacing:3px;
+text-transform:uppercase;
+color:rgba(255,255,255,0.5);
+margin-bottom:60px;
+}
+
+.deals-grid{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:20px;
+}
+
+.deal-card{
+background:rgba(10,0,0,0.85);
+border:1px solid rgba(192,0,26,0.3);
+padding:28px;
+backdrop-filter:blur(8px);
+position:relative;
+overflow:hidden;
+transition:all var(--transition);
+}
+
+.deal-card::before{
+content:'';
+position:absolute;
+top:0;left:0;right:0;
+height:2px;
+background:var(--red);
+}
+
+.deal-card:hover{
+border-color:var(--red);
+box-shadow:0 8px 32px rgba(192,0,26,0.25);
+transform:translateY(-4px);
+}
+
+.deal-badge{
+position:absolute;
+top:16px;right:16px;
+background:var(--red);
+font-family:var(--font-display);
+font-size:1rem;
+letter-spacing:1px;
+color:var(--white);
+padding:4px 12px;
+clip-path:polygon(6px 0%,100% 0%,calc(100% - 6px) 100%,0% 100%);
+}
+
+.deal-store{
+font-family:var(--font-ui);
+font-size:0.7rem;
+font-weight:700;
+letter-spacing:2px;
+text-transform:uppercase;
+color:rgba(255,255,255,0.4);
+margin-bottom:12px;
+}
+
+.deal-name{
+font-family:var(--font-display);
+font-size:1.3rem;
+letter-spacing:1px;
+color:var(--white);
+margin-bottom:6px;
+line-height:1.2;
+}
+
+.deal-spec{
+font-family:var(--font-ui);
+font-size:0.75rem;
+color:rgba(255,255,255,0.4);
+margin-bottom:20px;
+}
+
+.deal-prices{
+display:flex;
+align-items:baseline;
+gap:12px;
+margin-bottom:20px;
+}
+
+.deal-old{
+font-family:var(--font-ui);
+font-size:1rem;
+font-weight:600;
+color:rgba(255,255,255,0.3);
+text-decoration:line-through;
+}
+
+.deal-new{
+font-family:var(--font-display);
+font-size:2rem;
+color:var(--red);
+letter-spacing:1px;
+}
+
+.deal-new small{
+font-size:1rem;
+}
+
+.btn-deal{
+display:block;
+font-family:var(--font-ui);
+font-size:0.8rem;
+font-weight:700;
+letter-spacing:2px;
+text-transform:uppercase;
+padding:12px 24px;
+background:transparent;
+color:var(--red);
+border:1px solid var(--red);
+cursor:pointer;
+text-align:center;
+transition:all var(--transition);
+}
+
+.btn-deal:hover{
+background:var(--red);
+color:var(--white);
+box-shadow:0 0 20px var(--red-glow);
+}
+
+/* ===== COMPARISON TABLE ===== */
+#comparison{
+background:var(--gray-900);
+}
+
+.table-wrap{
+overflow-x:auto;
+border:1px solid rgba(255,255,255,0.07);
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+font-family:var(--font-ui);
+}
+
+thead tr{
+background:rgba(192,0,26,0.15);
+border-bottom:2px solid var(--red);
+}
+
+th{
+padding:16px 20px;
+text-align:left;
+font-size:0.75rem;
+font-weight:700;
+letter-spacing:2px;
+text-transform:uppercase;
+color:rgba(255,255,255,0.6);
+cursor:pointer;
+user-select:none;
+white-space:nowrap;
+transition:color var(--transition);
+}
+
+th:hover{color:var(--white)}
+
+th.sortable::after{
+content:' ↕';
+color:rgba(255,255,255,0.3);
+font-size:0.7rem;
+}
+
+th.sort-asc::after{content:' ↑';color:var(--red)}
+th.sort-desc::after{content:' ↓';color:var(--red)}
+
+tbody tr{
+border-bottom:1px solid rgba(255,255,255,0.04);
+transition:background var(--transition);
+}
+
+tbody tr:hover{background:rgba(255,255,255,0.04)}
+
+td{
+padding:16px 20px;
+font-size:0.88rem;
+color:rgba(255,255,255,0.75);
+white-space:nowrap;
+}
+
+td.product-name{
+font-weight:700;
+color:var(--white);
+}
+
+td.product-name small{
+display:block;
+font-weight:400;
+color:rgba(255,255,255,0.35);
+font-size:0.75rem;
+margin-top:2px;
+}
+
+td.best-price{
+color:var(--red) !important;
+font-weight:700;
+font-size:0.95rem;
+position:relative;
+}
+
+td.best-price::before{
+content:'';
+position:absolute;
+left:0;top:0;bottom:0;
+width:3px;
+background:var(--red);
+}
+
+td.price-cell{
+color:rgba(255,255,255,0.6);
+}
+
+td.lowest{
+background:rgba(192,0,26,0.12);
+color:var(--red) !important;
+font-weight:700;
+}
+
+.na-price{color:rgba(255,255,255,0.2) !important}
+
+/* ===== BRANDS ===== */
+/* --- Conteneur avec scrollbar --- */
+/* --- الحاوية التي تمتد على كامل عرض الشاشة --- */
+.brands-track-wrapper {
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);
+  padding: 0 24px 20px 0; /* مساحة جانبية لتناسب الحاوية */
+  overflow-x: auto;
+  overflow-y: hidden;
+  position: relative;
+  /* شريط التمرير في فايرفوكس */
+  scrollbar-width: thin;
+  scrollbar-color: var(--red) transparent;
+}
+
+/* --- تنسيق الشعارات --- */
+.brands-track {
+  display: flex;
+  gap: 48px;
+  align-items: center;
+  width: max-content;
+  padding: 8px 24px 20px 24px; /* مساحة أسفل للشريط */
+  margin: 0 auto;
+}
+
+.brand-logo {
+  flex-shrink: 0;
+  height: 56px;
+  width: auto;
+  max-width: 160px;
+  object-fit: contain;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  cursor: pointer;
+}
+
+.brand-logo:hover {
+  transform: scale(1.1) translateY(-2px);
+}
+
+/* --- تصميم شريط التمرير (Chrome, Safari, Edge) --- */
+.brands-track-wrapper::-webkit-scrollbar {
+  height: 5px; /* ارتفاع الشريط رفيع وأنيق */
+}
+
+.brands-track-wrapper::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.04); /* مسار شبه شفاف */
+  border-radius: 10px;
+  margin: 0 24px; /* مسافة من الحواف */
+}
+
+.brands-track-wrapper::-webkit-scrollbar-thumb {
+  background: var(--red);
+  border-radius: 10px;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 8px rgba(192, 0, 26, 0.2);
+}
+
+.brands-track-wrapper::-webkit-scrollbar-thumb:hover {
+  background: var(--red-dark);
+  box-shadow: 0 0 20px var(--red-glow), 0 0 40px rgba(192, 0, 26, 0.3);
+}
+
+/* لمسة إضافية: توهج خفيف عند التمرير */
+.brands-track-wrapper::-webkit-scrollbar-thumb:active {
+  background: #a00000;
+  box-shadow: 0 0 25px var(--red-glow);
+}
+
+/* --- الوضع الفاتح --- */
+body.light-mode .brands-track-wrapper::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+body.light-mode .brands-track-wrapper::-webkit-scrollbar-thumb {
+  background: var(--red);
+  box-shadow: 0 0 8px rgba(192, 0, 26, 0.3);
+}
+
+/* ===== WHY TUNGEAR ===== */
+#why{
+background:var(--gray-mid);
+position:relative;
+overflow:hidden;
+}
+
+#why::before{
+content:'';
+position:absolute;
+top:-100px;right:-100px;
+width:400px;height:400px;
+background:radial-gradient(circle,rgba(192,0,26,0.08),transparent);
+pointer-events:none;
+}
+
+.features-grid{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:24px;
+}
+
+.feature-card{
+background:var(--gray-dark);
+border:1px solid rgba(255,255,255,0.06);
+padding:40px;
+position:relative;
+overflow:hidden;
+opacity:0;
+transform:translateY(40px);
+transition:opacity 0.6s,transform 0.6s,border-color var(--transition),box-shadow var(--transition);
+}
+
+.feature-card.visible{
+opacity:1;
+transform:translateY(0);
+}
+
+.feature-card:nth-child(2){transition-delay:0.1s}
+.feature-card:nth-child(3){transition-delay:0.2s}
+.feature-card:nth-child(4){transition-delay:0.3s}
+
+.feature-card::after{
+content:'';
+position:absolute;
+bottom:0;left:0;
+width:100%;height:2px;
+background:linear-gradient(90deg,var(--red),transparent);
+opacity:0;
+transition:opacity var(--transition);
+}
+
+.feature-card:hover{
+border-color:rgba(192,0,26,0.3);
+box-shadow:0 8px 32px rgba(0,0,0,0.3);
+}
+
+.feature-card:hover::after{opacity:1}
+
+.feature-num{
+font-family:var(--font-display);
+font-size:4rem;
+color:rgba(192,0,26,0.2);
+line-height:1;
+margin-bottom:12px;
+}
+
+.feature-icon{
+font-size:2rem;
+margin-bottom:16px;
+}
+
+.feature-title{
+font-family:var(--font-display);
+font-size:1.6rem;
+letter-spacing:2px;
+color:var(--white);
+margin-bottom:12px;
+}
+
+.feature-desc{
+font-family:var(--font-body);
+font-size:1rem;
+color:rgba(255,255,255,0.5);
+line-height:1.7;
+}
+
+#blog{
+background:var(--gray-900);
+}
+
+.blog-grid{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:24px;
+}
+
+.article-card{
+background:var(--gray-mid);
+border:1px solid rgba(255,255,255,0.05);
+overflow:hidden;
+cursor:pointer;
+transition:all var(--transition);
+}
+
+.article-card:hover{
+border-color:rgba(192,0,26,0.3);
+box-shadow:0 8px 32px rgba(0,0,0,0.4);
+transform:translateY(-4px);
+}
+
+.article-img{
+height:180px;
+background:var(--gray-light);
+position:relative;
+overflow:hidden;
+display:flex;
+align-items:center;
+justify-content:center;
+}
+
+.article-img::before{
+content:'';
+position:absolute;
+inset:0;
+background:linear-gradient(135deg,transparent 0%,transparent 49%,rgba(192,0,26,0.3) 50%,var(--red-dark) 100%);
+}
+
+.article-img-label{
+font-family:var(--font-display);
+font-size:3rem;
+color:rgba(255,255,255,0.08);
+letter-spacing:4px;
+}
+
+.article-body{padding:24px}
+
+.article-tag{
+display:inline-block;
+font-family:var(--font-ui);
+font-size:0.65rem;
+font-weight:700;
+letter-spacing:2px;
+text-transform:uppercase;
+color:var(--white);
+background:var(--red);
+padding:4px 10px;
+margin-bottom:14px;
+}
+
+.article-title{
+font-family:var(--font-display);
+font-size:1.3rem;
+letter-spacing:1px;
+color:var(--white);
+line-height:1.3;
+margin-bottom:12px;
+position:relative;
+display:inline-block;
+}
+
+.article-title::after{
+content:'';
+position:absolute;
+bottom:-2px;left:0;
+width:0;height:2px;
+background:var(--red);
+transition:width 0.3s;
+}
+
+.article-card:hover .article-title::after{width:100%}
+
+.article-meta{
+font-family:var(--font-ui);
+font-size:0.75rem;
+font-weight:600;
+letter-spacing:1px;
+color:rgba(255,255,255,0.3);
+}
+
+/* ===== NEWSLETTER ===== */
+#newsletter{
+background:linear-gradient(135deg,var(--red-dark) 0%,#5a0010 50%,var(--red-dark) 100%);
+padding:80px 0;
+position:relative;
+overflow:hidden;
+}
+
+#newsletter::before{
+content:'';
+position:absolute;
+inset:0;
+background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+opacity:0.05;
+pointer-events:none;
+}
+
+.newsletter-inner{
+text-align:center;
+position:relative;
+z-index:1;
+}
+
+.newsletter-title{
+font-family:var(--font-display);
+font-size:clamp(2rem,5vw,3.5rem);
+letter-spacing:3px;
+color:var(--white);
+margin-bottom:12px;
+}
+
+.newsletter-sub{
+font-family:var(--font-body);
+font-size:1.1rem;
+color:rgba(255,255,255,0.7);
+margin-bottom:40px;
+}
+
+.newsletter-form{
+display:flex;
+gap:0;
+max-width:500px;
+margin:0 auto;
+position:relative;
+}
+
+.newsletter-input{
+flex:1;
+padding:18px 24px;
+background:rgba(0,0,0,0.3);
+border:1.5px solid rgba(255,255,255,0.2);
+border-right:none;
+color:var(--white);
+font-family:var(--font-ui);
+font-size:0.9rem;
+outline:none;
+transition:border-color var(--transition);
+}
+
+.newsletter-input::placeholder{color:rgba(255,255,255,0.4)}
+
+.newsletter-input:focus{border-color:rgba(255,255,255,0.6)}
+
+.newsletter-input.error{
+border-color:#ff4444;
+animation:shake 0.4s;
+}
+
+.newsletter-input.success{
+border-color:#4ade80;
+}
+
+@keyframes shake{
+0%,100%{transform:translateX(0)}
+25%{transform:translateX(-8px)}
+75%{transform:translateX(8px)}
+}
+
+.btn-newsletter{
+padding:18px 32px;
+background:rgba(0,0,0,0.5);
+border:1.5px solid rgba(255,255,255,0.2);
+color:var(--white);
+font-family:var(--font-ui);
+font-size:0.85rem;
+font-weight:700;
+letter-spacing:2px;
+text-transform:uppercase;
+cursor:pointer;
+transition:all var(--transition);
+}
+
+.btn-newsletter:hover{background:rgba(0,0,0,0.7);border-color:rgba(255,255,255,0.5)}
+
+.newsletter-feedback{
+margin-top:12px;
+font-family:var(--font-ui);
+font-size:0.8rem;
+font-weight:600;
+letter-spacing:1px;
+height:20px;
+}
+
+/* ===== FOOTER ===== */
+footer{
+background:var(--gray-900);
+border-top:2px solid rgba(192,0,26,0.4);
+padding:80px 0 0;
+}
+
+.footer-grid{
+display:grid;
+grid-template-columns:2fr 1fr 1fr 1.5fr;
+gap:48px;
+margin-bottom:60px;
+}
+
+.footer-logo{
+font-family:var(--font-display);
+font-size:2rem;
+letter-spacing:2px;
+margin-bottom:16px;
+}
+
+.footer-logo span{color:var(--red)}
+
+.footer-tagline{
+font-family:var(--font-body);
+font-size:0.95rem;
+color:rgba(255,255,255,0.4);
+line-height:1.6;
+margin-bottom:24px;
+}
+
+.footer-socials{
+display:flex;
+gap:12px;
+}
+
+.social-btn{
+width:40px;height:40px;
+background:var(--gray-mid);
+border:1px solid rgba(255,255,255,0.08);
+display:flex;align-items:center;justify-content:center;
+color:rgba(255,255,255,0.5);
+cursor:pointer;
+transition:all var(--transition);
+}
+
+.social-btn:hover{
+background:rgba(192,0,26,0.2);
+border-color:var(--red);
+color:var(--red);
+}
+
+.social-btn svg{width:16px;height:16px;fill:currentColor}
+
+.footer-col h4{
+font-family:var(--font-display);
+font-size:1rem;
+letter-spacing:3px;
+text-transform:uppercase;
+color:var(--white);
+margin-bottom:20px;
+position:relative;
+padding-bottom:12px;
+}
+
+.footer-col h4::after{
+content:'';
+position:absolute;
+bottom:0;left:0;
+width:24px;height:2px;
+background:var(--red);
+}
+
+.footer-links{
+list-style:none;
+display:flex;
+flex-direction:column;
+gap:10px;
+}
+
+.footer-links a{
+font-family:var(--font-ui);
+font-size:0.85rem;
+font-weight:500;
+color:rgba(255,255,255,0.4);
+letter-spacing:0.5px;
+transition:color var(--transition),padding-left var(--transition);
+}
+
+.footer-links a:hover{color:var(--red);padding-left:6px}
+
+.footer-contact p{
+font-family:var(--font-ui);
+font-size:0.85rem;
+color:rgba(255,255,255,0.4);
+margin-bottom:10px;
+display:flex;
+align-items:flex-start;
+gap:10px;
+line-height:1.5;
+}
+
+.footer-contact p span:first-child{
+color:var(--red);
+flex-shrink:0;
+}
+
+.footer-bottom{
+border-top:1px solid rgba(255,255,255,0.06);
+padding:24px 0;
+display:flex;
+justify-content:space-between;
+align-items:center;
+flex-wrap:wrap;
+gap:12px;
+}
+
+.footer-bottom p{
+font-family:var(--font-ui);
+font-size:0.75rem;
+font-weight:500;
+letter-spacing:1px;
+color:rgba(255,255,255,0.3);
+}
+
+.footer-bottom-links{
+display:flex;
+gap:24px;
+}
+
+.footer-bottom-links a{
+font-family:var(--font-ui);
+font-size:0.75rem;
+font-weight:500;
+letter-spacing:1px;
+color:rgba(255,255,255,0.3);
+transition:color var(--transition);
+}
+
+.footer-bottom-links a:hover{color:var(--red)}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width:1200px){
+.build-grid{grid-template-columns:1fr;gap:40px}
+.footer-grid{grid-template-columns:1fr 1fr;gap:32px}
+}
+
+@media (max-width:768px){
+section{padding:72px 0}
+.nav-links,.nav-right .btn-compare,.nav-right .theme-toggle{display:none}
+.hamburger{display:flex}
+.categories-grid{grid-template-columns:1fr 1fr}
+.categories-grid .cat-card:first-child,.categories-grid .cat-card:nth-child(2){grid-column:auto;grid-row:auto}
+.deals-grid{grid-template-columns:1fr}
+.features-grid{grid-template-columns:1fr}
+.blog-grid{grid-template-columns:1fr}
+.footer-grid{grid-template-columns:1fr}
+.hero-stats{gap:12px}
+.checklist{grid-template-columns:1fr}
+.newsletter-form{flex-direction:column}
+.newsletter-input{border-right:1.5px solid rgba(255,255,255,0.2)}
+table{font-size:0.8rem}
+td,th{padding:12px}
+#best-deals{clip-path:none}
+}
+
+@media (max-width:480px){
+.categories-grid{grid-template-columns:1fr}
+.hero-ctas{flex-direction:column}
+.btn-primary,.btn-outline{width:100%;text-align:center}
+}
+
+body.light-mode{
+--gray-dark:#f4f4f4;
+--gray-mid:#e8e8e8;
+--gray-900:#ececec;
+--gray-light:#d0d0d0;
+--white:#111111;
+background:#f4f4f4;
+color:#111111;
+}
+body.light-mode #navbar{background:rgba(244,244,244,0.95)}
+body.light-mode #navbar.scrolled{background:rgba(240,240,240,0.97);border-bottom:1.5px solid var(--red)}
+body.light-mode .nav-logo{color:#111}
+body.light-mode .nav-links a{color:#333}
+body.light-mode .nav-links a:hover{color:#111;background:rgba(192,0,26,0.1)}
+body.light-mode .nav-search-btn{color:#555}
+body.light-mode .theme-toggle{border-color:#bbb;color:#555}
+body.light-mode .theme-toggle:hover{border-color:var(--red);color:var(--red)}
+body.light-mode .section-title{color:#111}
+body.light-mode .section-label{color:var(--red)}
+body.light-mode #categories{background:#e8e8e8}
+body.light-mode .cat-card{background:#fff;border-color:#ddd}
+body.light-mode .cat-name{color:#111}
+body.light-mode .cat-count{color:#666}
+body.light-mode #build-teaser{background:#f0f0f0}
+body.light-mode .build-desc{color:#444}
+body.light-mode .checklist li{color:#444}
+body.light-mode .build-card{background:#fff;border-color:#ddd}
+body.light-mode .build-card-title{color:#888}
+body.light-mode .build-item{border-bottom-color:#eee}
+body.light-mode .build-item-name{color:#333}
+body.light-mode .build-item-sub{color:#888}
+body.light-mode .build-item-price{color:#222}
+body.light-mode .build-total-label{color:#111}
+body.light-mode .deal-card{background:rgba(10,0,0,0.82);border-color:rgba(192,0,26,0.4)}
+body.light-mode .deal-store,.deal-spec{color:rgba(255,255,255,0.5)}
+body.light-mode .deal-name{color:#fff}
+body.light-mode .deal-old{color:rgba(255,255,255,0.35)}
+body.light-mode #comparison{background:#ececec}
+body.light-mode .table-wrap{border-color:#ddd;background:#fff}
+body.light-mode thead tr{background:rgba(192,0,26,0.1)}
+body.light-mode th{color:#444}
+body.light-mode th:hover{color:#111}
+body.light-mode tbody tr{border-bottom-color:#eee}
+body.light-mode tbody tr:hover{background:rgba(0,0,0,0.04)}
+body.light-mode td{color:#333}
+body.light-mode td.product-name{color:#111}
+body.light-mode td.product-name small{color:#888}
+body.light-mode td.price-cell{color:#444}
+body.light-mode td.lowest{background:rgba(192,0,26,0.08)}
+body.light-mode #brands{background:#f0f0f0}
+body.light-mode .brand-pill{background:#fff;border-color:#ddd;color:#444}
+body.light-mode .brand-pill:hover{color:#111;border-color:var(--red)}
+body.light-mode #why{background:#e8e8e8}
+body.light-mode .feature-card{background:#fff;border-color:#ddd}
+body.light-mode .feature-num{color:rgba(192,0,26,0.15)}
+body.light-mode .feature-title{color:#111}
+body.light-mode .feature-desc{color:#555}
+body.light-mode #blog{background:#ececec}
+body.light-mode .article-card{background:#fff;border-color:#ddd}
+body.light-mode .article-title{color:#111}
+body.light-mode .article-meta{color:#888}
+body.light-mode .article-img{background:#ddd}
+body.light-mode .article-img-label{color:rgba(0,0,0,0.1)}
+body.light-mode .newsletter-input{color:#fff;background:rgba(0,0,0,0.25);border-color:rgba(255,255,255,0.25)}
+body.light-mode .newsletter-input::placeholder{color:rgba(255,255,255,0.45)}
+body.light-mode .btn-newsletter{color:#fff;border-color:rgba(255,255,255,0.25)}
+body.light-mode footer{background:#ddd}
+body.light-mode .footer-logo{color:#111}
+body.light-mode .footer-tagline{color:#555}
+body.light-mode .footer-col h4{color:#111}
+body.light-mode .footer-links a{color:#555}
+body.light-mode .footer-links a:hover{color:var(--red)}
+body.light-mode .footer-contact p{color:#555}
+body.light-mode .footer-bottom{border-top-color:#ccc}
+body.light-mode .footer-bottom p{color:#666}
+body.light-mode .footer-bottom-links a{color:#666}
+body.light-mode .social-btn{background:#e0e0e0;border-color:#ccc;color:#555}
+body.light-mode .social-btn:hover{color:var(--red);border-color:var(--red)}
+body.light-mode .hero-sub{color:rgba(255,255,255,0.85)}
+body.light-mode .stat-badge{background:rgba(10,0,0,0.65)}
+body.light-mode .stat-badge span{color:rgba(255,255,255,0.65)}
+body.light-mode .mobile-menu{background:rgba(240,240,240,0.98)}
+body.light-mode .mobile-menu a{color:#111}
+body.light-mode .mobile-close{color:#111}
+
+</style>
+</head>
+<body>
+
+<div id="cursor-glow" aria-hidden="true"></div>
+
+<a href="#main-content" class="sr-only">Aller au contenu principal</a>
+
+<nav id="navbar" role="navigation" aria-label="Navigation principale">
+<div class="nav-inner">
+  <a href="/" class="nav-logo" aria-label="TunGear - Accueil">TUN<span>GEAR</span></a>
+  <ul class="nav-links">
+    <li><a href="/">Accueil</a></li>
+    <li><a href="/products">Comparateur</a></li>
+    <li><a href="/products?category=Informatique">Builds</a></li>
+    <li><a href="/products">Deals</a></li>
+    <li><a href="#brands">Marques</a></li>
+    <li><a href="#why">À propos</a></li>
+  </ul>
+  <div class="nav-right">
+    <button class="nav-search-btn" aria-label="Rechercher">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    </button>
+    <button class="btn-compare" onclick="navigateTo('/products')">Comparer</button>
+    <button class="theme-toggle" id="themeToggle" aria-label="Basculer le thème">◐ MODE</button>
+  </div>
+  <button class="hamburger" id="hamburger" aria-label="Menu mobile" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+</div>
+</nav>
+
+<nav class="mobile-menu" id="mobileMenu" aria-label="Menu mobile">
+  <button class="mobile-close" id="mobileClose" aria-label="Fermer le menu">✕</button>
+  <a href="/">Accueil</a>
+  <a href="/products">Comparateur</a>
+  <a href="/products?category=Informatique">Builds</a>
+  <a href="/products">Deals</a>
+  <a href="#brands">Marques</a>
+  <a href="#why">À propos</a>
+</nav>
+
+<main id="main-content">
+
+<section id="hero" aria-label="Hero principal">
+  <div class="hero-bg" aria-hidden="true">
+    <img src="FTHCRQ3-red-wallpapers.jpg" alt="Fond floral grungy rouge et gris" loading="eager">
+  </div>
+  <div class="container">
+    <div class="hero-content">
+      <div class="hero-tag">Tunisie Gaming Hub</div>
+      <h1 class="hero-headline">COMPARE.<br>CHOOSE.<br><span class="accent">DOMINATE.</span></h1>
+      <p class="hero-sub">Les meilleurs prix gaming en Tunisie — CPUs, GPUs, écrans, périphériques et builds complets, en temps réel.</p>
+      <div class="hero-ctas">
+        <button class="btn-primary" onclick="navigateTo('/products')">Comparer maintenant</button>
+        <button class="btn-outline" onclick="navigateTo('/products?category=Informatique')">Construire mon PC</button>
+      </div>
+      <div class="hero-stats">
+        <div class="stat-badge">
+          <strong>+2400</strong>
+          <span>Produits</span>
+        </div>
+        <div class="stat-badge">
+          <strong>32</strong>
+          <span>Boutiques</span>
+        </div>
+        <div class="stat-badge">
+          <strong>Live</strong>
+          <span>Mis à jour</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div id="ticker" aria-label="Ticker de prix en direct" role="marquee">
+  <div class="ticker-wrap" aria-live="off">
+    <div class="ticker-item"><span class="name">RTX 5080</span><span class="ticker-sep">●</span><span class="price">4,299 DT</span><span class="ticker-down">↓3.0%</span></div>
+    <div class="ticker-item"><span class="name">RX 9070 XT</span><span class="ticker-sep">●</span><span class="price">2,890 DT</span><span class="ticker-up">↑1.2%</span></div>
+    <div class="ticker-item"><span class="name">i9-14900K</span><span class="ticker-sep">●</span><span class="price">2,150 DT</span><span class="ticker-down">↓0.5%</span></div>
+    <div class="ticker-item"><span class="name">RTX 4070 Super</span><span class="ticker-sep">●</span><span class="price">3,100 DT</span><span class="ticker-up">↑0.8%</span></div>
+    <div class="ticker-item"><span class="name">Ryzen 9 7950X</span><span class="ticker-sep">●</span><span class="price">1,950 DT</span><span class="ticker-down">↓1.4%</span></div>
+    <div class="ticker-item"><span class="name">Samsung 980 Pro 2TB</span><span class="ticker-sep">●</span><span class="price">480 DT</span><span class="ticker-down">↓2.1%</span></div>
+    <div class="ticker-item"><span class="name">ROG Swift PG27AQN</span><span class="ticker-sep">●</span><span class="price">1,790 DT</span><span class="ticker-up">↑0.3%</span></div>
+    <div class="ticker-item"><span class="name">Corsair Vengeance 32GB</span><span class="ticker-sep">●</span><span class="price">320 DT</span><span class="ticker-down">↓1.8%</span></div>
+    <div class="ticker-item"><span class="name">RTX 5080</span><span class="ticker-sep">●</span><span class="price">4,299 DT</span><span class="ticker-down">↓3.0%</span></div>
+    <div class="ticker-item"><span class="name">RX 9070 XT</span><span class="ticker-sep">●</span><span class="price">2,890 DT</span><span class="ticker-up">↑1.2%</span></div>
+    <div class="ticker-item"><span class="name">i9-14900K</span><span class="ticker-sep">●</span><span class="price">2,150 DT</span><span class="ticker-down">↓0.5%</span></div>
+    <div class="ticker-item"><span class="name">RTX 4070 Super</span><span class="ticker-sep">●</span><span class="price">3,100 DT</span><span class="ticker-up">↑0.8%</span></div>
+    <div class="ticker-item"><span class="name">Ryzen 9 7950X</span><span class="ticker-sep">●</span><span class="price">1,950 DT</span><span class="ticker-down">↓1.4%</span></div>
+    <div class="ticker-item"><span class="name">Samsung 980 Pro 2TB</span><span class="ticker-sep">●</span><span class="price">480 DT</span><span class="ticker-down">↓2.1%</span></div>
+    <div class="ticker-item"><span class="name">ROG Swift PG27AQN</span><span class="ticker-sep">●</span><span class="price">1,790 DT</span><span class="ticker-up">↑0.3%</span></div>
+    <div class="ticker-item"><span class="name">Corsair Vengeance 32GB</span><span class="ticker-sep">●</span><span class="price">320 DT</span><span class="ticker-down">↓1.8%</span></div>
+  </div>
+</div>
+
+<section id="categories" aria-labelledby="cat-title">
+  <div class="container">
+    <div class="section-label">Explorer</div>
+    <h2 class="section-title" id="cat-title">EXPLORER PAR CATÉGORIE</h2>
+    <div class="categories-grid">
+      <div class="cat-card" role="button" tabindex="0" aria-label="Processeurs - 348 produits" onclick="navigateTo('/products?category=Informatique&subcategory=Processeurs')">
+        <span class="cat-icon">⚡</span>
+        <div class="cat-name">Processeurs</div>
+        <div class="cat-count">348 produits</div>
+        <span class="cat-arrow">→</span>
+      </div>
+      <div class="cat-card" role="button" tabindex="0" aria-label="Cartes Graphiques - 512 produits" onclick="navigateTo('/products?category=Informatique&subcategory=Cartes Graphiques')">
+        <span class="cat-icon">🎮</span>
+        <div class="cat-name">Cartes Graphiques</div>
+        <div class="cat-count">512 produits</div>
+        <span class="cat-arrow">→</span>
+      </div>
+      <div class="cat-card" role="button" tabindex="0" aria-label="Écrans - 278 produits" onclick="navigateTo('/products?category=Informatique&subcategory=Moniteurs')">
+        <span class="cat-icon">🖥</span>
+        <div class="cat-name">Écrans</div>
+        <div class="cat-count">278 produits</div>
+        <span class="cat-arrow">→</span>
+      </div>
+      <div class="cat-card" role="button" tabindex="0" aria-label="Claviers et Souris - 640 produits" onclick="navigateTo('/products?category=Informatique&subcategory=Claviers')">
+        <span class="cat-icon">⌨</span>
+        <div class="cat-name">Claviers & Souris</div>
+        <div class="cat-count">640 produits</div>
+        <span class="cat-arrow">→</span>
+      </div>
+      <div class="cat-card" role="button" tabindex="0" aria-label="Casques - 192 produits" onclick="navigateTo('/products?category=T%C3%A9l%C3%A9phonie+%26+Tablettes&subcategory=%C3%89couteurs')">
+        <span class="cat-icon">🎧</span>
+        <div class="cat-name">Casques</div>
+        <div class="cat-count">192 produits</div>
+        <span class="cat-arrow">→</span>
+      </div>
+      <div class="cat-card" role="button" tabindex="0" aria-label="Alimentations - 224 produits" onclick="navigateTo('/products?category=Informatique&subcategory=Alimentation')">
+        <span class="cat-icon">🔋</span>
+        <div class="cat-name">Alimentations</div>
+        <div class="cat-count">224 produits</div>
+        <span class="cat-arrow">→</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="build-teaser" aria-labelledby="build-title">
+  <div class="container">
+    <div class="build-grid">
+      <div class="build-left">
+        <div class="section-label">Configurateur</div>
+        <h2 class="section-title" id="build-title">CONSTRUIS TON SETUP IDÉAL</h2>
+        <p class="build-desc">Notre configurateur intelligent t'aide à assembler le PC gaming parfait selon ton budget, en comparant les prix de 32 boutiques tunisiennes en temps réel.</p>
+        <ul class="checklist">
+          <li>CPU</li>
+          <li>GPU</li>
+          <li>RAM</li>
+          <li>SSD</li>
+          <li>Carte mère</li>
+          <li>Boîtier</li>
+          <li>Alimentation</li>
+          <li>Refroidissement</li>
+        </ul>
+        <button class="btn-primary" onclick="navigateTo('/products?category=Informatique')">Lancer le configurateur</button>
+      </div>
+      <div class="build-card" aria-label="Exemple de configuration PC gaming">
+        <div class="build-card-title">Setup Gaming — Configuration Exemple</div>
+        <div class="build-item">
+          <div>
+            <div class="build-item-name">Processeur</div>
+            <div class="build-item-sub">AMD Ryzen 7 7800X3D</div>
+          </div>
+          <div class="build-item-price">1,290 DT</div>
+        </div>
+        <div class="build-item">
+          <div>
+            <div class="build-item-name">Carte Graphique</div>
+            <div class="build-item-sub">RTX 4070 Ti Super 16GB</div>
+          </div>
+          <div class="build-item-price">3,200 DT</div>
+        </div>
+        <div class="build-item">
+          <div>
+            <div class="build-item-name">RAM</div>
+            <div class="build-item-sub">Corsair Vengeance 32GB DDR5</div>
+          </div>
+          <div class="build-item-price">320 DT</div>
+        </div>
+        <div class="build-item">
+          <div>
+            <div class="build-item-name">Stockage</div>
+            <div class="build-item-sub">Samsung 980 Pro 2TB NVMe</div>
+          </div>
+          <div class="build-item-price">480 DT</div>
+        </div>
+        <div class="build-item">
+          <div>
+            <div class="build-item-name">Carte Mère</div>
+            <div class="build-item-sub">ASUS ROG X670E Hero</div>
+          </div>
+          <div class="build-item-price">1,150 DT</div>
+        </div>
+        <div class="build-item">
+          <div>
+            <div class="build-item-name">Alimentation</div>
+            <div class="build-item-sub">Corsair RM1000x 1000W</div>
+          </div>
+          <div class="build-item-price">680 DT</div>
+        </div>
+        <div class="build-item">
+          <div>
+            <div class="build-item-name">Boîtier</div>
+            <div class="build-item-sub">Lian Li PC-O11 Dynamic</div>
+          </div>
+          <div class="build-item-price">720 DT</div>
+        </div>
+        <div class="build-total">
+          <span class="build-total-label">Total</span>
+          <span class="build-total-price">7,840 DT</span>
+        </div>
+        <div class="compat-badge">✅ Build Compatible</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="best-deals" aria-labelledby="deals-title">
+  <div class="deals-bg" aria-hidden="true">
+    <img src="njO2gMs-red-wallpapers.jpg" alt="Fond rouge et blanc grungy avec motifs floraux">
+  </div>
+  <div class="container deals-content">
+    <h2 class="deals-title" id="deals-title">MEILLEURES<br>OFFRES DU MOMENT</h2>
+    <p class="deals-subtitle">Prix vérifiés en temps réel · Stocks limités</p>
+    <div class="deals-grid">
+      <article class="deal-card">
+        <span class="deal-badge">-22%</span>
+        <div class="deal-store">TechStore TN</div>
+        <h3 class="deal-name">RTX 4080 Super 16GB</h3>
+        <div class="deal-spec">GDDR6X · PCIe 4.0 · 256-bit</div>
+        <div class="deal-prices">
+          <span class="deal-old">4,299 DT</span>
+          <span class="deal-new">3,349 <small>DT</small></span>
+        </div>
+        <a href="/products" class="btn-deal">Voir l'offre →</a>
+      </article>
+      <article class="deal-card">
+        <span class="deal-badge">-18%</span>
+        <div class="deal-store">MegaPC Tunis</div>
+        <h3 class="deal-name">Ryzen 9 7950X3D</h3>
+        <div class="deal-spec">16 cœurs · 144MB cache · AM5</div>
+        <div class="deal-prices">
+          <span class="deal-old">2,850 DT</span>
+          <span class="deal-new">2,337 <small>DT</small></span>
+        </div>
+        <a href="/products" class="btn-deal">Voir l'offre →</a>
+      </article>
+      <article class="deal-card">
+        <span class="deal-badge">-31%</span>
+        <div class="deal-store">InfoSystems</div>
+        <h3 class="deal-name">ASUS ROG Swift OLED PG32UQX</h3>
+        <div class="deal-spec">32" · 4K · 144Hz · OLED</div>
+        <div class="deal-prices">
+          <span class="deal-old">4,100 DT</span>
+          <span class="deal-new">2,829 <small>DT</small></span>
+        </div>
+        <a href="/products" class="btn-deal">Voir l'offre →</a>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section id="comparison" aria-labelledby="comp-title">
+  <div class="container">
+    <div class="section-label">Comparateur</div>
+    <h2 class="section-title" id="comp-title">COMPARER EN TEMPS RÉEL</h2>
+    <div class="table-wrap" role="region" aria-label="Tableau de comparaison de prix GPU" tabindex="0">
+      <table id="priceTable">
+        <thead>
+          <tr>
+            <th class="sortable" data-col="0" scope="col">Produit</th>
+            <th class="sortable" data-col="1" scope="col">TechStore TN</th>
+            <th class="sortable" data-col="2" scope="col">MegaPC</th>
+            <th class="sortable" data-col="3" scope="col">InfoSystems</th>
+            <th class="sortable" data-col="4" scope="col">Tunisie Achat</th>
+            <th scope="col">Meilleur Prix</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody">
+          <tr>
+            <td class="product-name">RTX 4070 Super<small>12GB GDDR6X · PCIe 4.0</small></td>
+            <td class="price-cell">3,100 DT</td>
+            <td class="price-cell lowest">2,950 DT</td>
+            <td class="price-cell">3,050 DT</td>
+            <td class="price-cell">3,180 DT</td>
+            <td class="best-price">2,950 DT — MegaPC</td>
+          </tr>
+          <tr>
+            <td class="product-name">RTX 4080 Super<small>16GB GDDR6X · PCIe 4.0</small></td>
+            <td class="price-cell lowest">3,349 DT</td>
+            <td class="price-cell">3,500 DT</td>
+            <td class="price-cell">3,420 DT</td>
+            <td class="price-cell">3,680 DT</td>
+            <td class="best-price">3,349 DT — TechStore</td>
+          </tr>
+          <tr>
+            <td class="product-name">RX 9070 XT<small>16GB GDDR6 · PCIe 5.0</small></td>
+            <td class="price-cell">2,890 DT</td>
+            <td class="price-cell">2,950 DT</td>
+            <td class="price-cell lowest">2,750 DT</td>
+            <td class="price-cell">2,980 DT</td>
+            <td class="best-price">2,750 DT — InfoSystems</td>
+          </tr>
+          <tr>
+            <td class="product-name">RTX 5080<small>16GB GDDR7 · PCIe 5.0</small></td>
+            <td class="price-cell">4,299 DT</td>
+            <td class="price-cell">4,350 DT</td>
+            <td class="price-cell">4,400 DT</td>
+            <td class="price-cell lowest">4,199 DT</td>
+            <td class="best-price">4,199 DT — Tunisie Achat</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section id="brands" aria-labelledby="brands-title">
+  <div class="container">
+    <div class="section-label">Partenaires</div>
+    <h2 class="section-title" id="brands-title" style="margin-bottom:32px">NOS MARQUES</h2>
+  </div>
+  <!-- الحاوية التي تمتد على كامل العرض -->
+  <div class="brands-track-wrapper">
+    <div class="brands-track" role="list" aria-label="Marques disponibles">
+      <img class="brand-logo" src="uploads\NVIDIA.png" alt="NVIDIA" role="listitem">
+      <img class="brand-logo" src="uploads\AMD.png" alt="AMD" role="listitem">
+      <img class="brand-logo" src="uploads\INTEL.png" alt="INTEL" role="listitem">
+      <img class="brand-logo" src="uploads\ASUS.png" alt="ASUS" role="listitem">
+      <img class="brand-logo" src="uploads\MSI.png" alt="MSI" role="listitem">
+      <img class="brand-logo" src="uploads\CORSAIR.png" alt="CORSAIR" role="listitem">
+      <img class="brand-logo" src="uploads\LOGITECH.png" alt="LOGITECH" role="listitem">
+      <img class="brand-logo" src="uploads\STEELSERIES.png" alt="STEELSERIES" role="listitem">
+      <img class="brand-logo" src="uploads\HYPERX.png" alt="HYPERX" role="listitem">
+      <img class="brand-logo" src="uploads\SAMSUNG.png" alt="SAMSUNG" role="listitem">
+      <img class="brand-logo" src="uploads\WESTERN DIGITAL.png" alt="WESTERN DIGITAL" role="listitem">
+      <img class="brand-logo" src="uploads\GIGABYTE.png" alt="GIGABYTE" role="listitem">
+      <img class="brand-logo" src="uploads\RAZER.png" alt="RAZER" role="listitem">
+      <img class="brand-logo" src="uploads\NZXT.png" alt="NZXT" role="listitem">
+    </div>
+  </div>
+</section>
+
+<section id="why" aria-labelledby="why-title">
+  <div class="container">
+    <div class="section-label">Nos avantages</div>
+    <h2 class="section-title" id="why-title">POURQUOI TUNGEAR ?</h2>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-num">01</div>
+        <div class="feature-title">Comparaison en temps réel</div>
+        <p class="feature-desc">Les prix sont mis à jour toutes les heures depuis 32 boutiques tunisiennes. Plus besoin de visiter chaque site séparément.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-num">02</div>
+        <div class="feature-title">32 Boutiques Tunisiennes</div>
+        <p class="feature-desc">TechStore TN, MegaPC, InfoSystems, Tunisie Achat et bien d'autres — toutes les enseignes gaming du pays en un seul endroit.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-num">03</div>
+        <div class="feature-title">Alertes de Prix Personnalisées</div>
+        <p class="feature-desc">Définissez votre prix cible pour n'importe quel produit. Recevez une notification instantanée dès que le prix baisse à votre seuil.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-num">04</div>
+        <div class="feature-title">Configurateur de Builds Intelligent</div>
+        <p class="feature-desc">Notre algorithme vérifie la compatibilité de chaque composant et optimise votre configuration pour le meilleur rapport qualité/prix.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="blog" aria-labelledby="blog-title">
+  <div class="container">
+    <div class="section-label">Actualités</div>
+    <h2 class="section-title" id="blog-title">DERNIÈRES NOUVELLES</h2>
+    <div class="blog-grid">
+      <article class="article-card">
+        <div class="article-img" aria-hidden="true"><div class="article-img-label">GPU</div></div>
+        <div class="article-body">
+          <span class="article-tag">Chute de Prix</span>
+          <h3 class="article-title">RTX 5080 : Baisse Surprise de 8% chez Tunisie Achat</h3>
+          <p class="article-meta">28 Avril 2025 · 4 min de lecture</p>
+        </div>
+      </article>
+      <article class="article-card">
+        <div class="article-img" aria-hidden="true"><div class="article-img-label">BUILD</div></div>
+        <div class="article-body">
+          <span class="article-tag">Guide</span>
+          <h3 class="article-title">Le Meilleur Setup Gaming à 5000 DT en 2025</h3>
+          <p class="article-meta">25 Avril 2025 · 8 min de lecture</p>
+        </div>
+      </article>
+      <article class="article-card">
+        <div class="article-img" aria-hidden="true"><div class="article-img-label">AMD</div></div>
+        <div class="article-body">
+          <span class="article-tag">Nouveau</span>
+          <h3 class="article-title">RX 9070 XT : Disponible en Tunisie — Comparatif Complet</h3>
+          <p class="article-meta">22 Avril 2025 · 6 min de lecture</p>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section id="newsletter" aria-labelledby="newsletter-title">
+  <div class="container">
+    <div class="newsletter-inner">
+      <h2 class="newsletter-title" id="newsletter-title">SOYEZ LE PREMIER INFORMÉ<br>DES BAISSES DE PRIX</h2>
+      <p class="newsletter-sub">Alertes instantanées · Aucun spam · Résiliation en 1 clic</p>
+      <div class="newsletter-form" role="form" aria-label="Formulaire d'alerte prix">
+        <input type="email" id="emailInput" class="newsletter-input" placeholder="votre@email.com" aria-label="Adresse email">
+        <button class="btn-newsletter" id="newsletterBtn" onclick="handleNewsletter()">M'alerter</button>
+      </div>
+      <div class="newsletter-feedback" id="newsletterFeedback" role="alert" aria-live="polite"></div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer role="contentinfo">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-logo">TUN<span>GEAR</span></div>
+        <p class="footer-tagline">Le comparateur de prix gaming #1 en Tunisie. Comparez, économisez, dominez.</p>
+        <div class="footer-socials" aria-label="Réseaux sociaux">
+          <a href="#" class="social-btn" aria-label="Facebook">
+            <svg viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+          </a>
+          <a href="#" class="social-btn" aria-label="Instagram">
+            <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+          </a>
+          <a href="#" class="social-btn" aria-label="Discord">
+            <svg viewBox="0 0 24 24"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994.021-.041.001-.09-.041-.106a13.1 13.1 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/></svg>
+          </a>
+          <a href="#" class="social-btn" aria-label="YouTube">
+            <svg viewBox="0 0 24 24"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 0 0-1.95 1.96A29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58A2.78 2.78 0 0 0 3.41 19.6C5.12 20 12 20 12 20s6.88 0 8.59-.4a2.78 2.78 0 0 0 1.95-1.95A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02"/></svg>
+          </a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Navigation</h4>
+        <ul class="footer-links">
+          <li><a href="/">Accueil</a></li>
+          <li><a href="/products">Comparateur</a></li>
+          <li><a href="/products?category=Informatique">Builds PC</a></li>
+          <li><a href="/products">Deals</a></li>
+          <li><a href="#blog">Blog</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Catégories</h4>
+        <ul class="footer-links">
+          <li><a href="/products?category=Informatique&subcategory=Processeurs">Processeurs</a></li>
+          <li><a href="/products?category=Informatique&subcategory=Cartes Graphiques">Cartes Graphiques</a></li>
+          <li><a href="/products?category=Informatique&subcategory=Moniteurs">Écrans</a></li>
+          <li><a href="/products?category=Informatique&subcategory=Claviers">Claviers & Souris</a></li>
+          <li><a href="/products?category=Informatique&subcategory=Alimentation">Alimentations</a></li>
+        </ul>
+      </div>
+      <div class="footer-col footer-contact">
+        <h4>Contact</h4>
+        <p><span>✉</span><span>contact@tungear.tn</span></p>
+        <p><span>📍</span><span>Tunis, Tunisie</span></p>
+        <p><span>📞</span><span>+216 70 000 000</span></p>
+        <p><span>⏰</span><span>Lun–Ven · 9h–18h</span></p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 TunGEAR · Tous droits réservés</p>
+      <div class="footer-bottom-links">
+        <a href="#">Politique de confidentialité</a>
+        <a href="#">CGU</a>
+        <a href="#">Cookies</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+
+const cursorGlow = document.getElementById('cursor-glow');
+document.addEventListener('mousemove', function(e){
+  cursorGlow.style.left = e.clientX + 'px';
+  cursorGlow.style.top = e.clientY + 'px';
+});
+
+document.addEventListener('mouseenter', function(){cursorGlow.style.opacity='1'});
+document.addEventListener('mouseleave', function(){cursorGlow.style.opacity='0'});
+
+const navbar = document.getElementById('navbar');
+let lastScroll = 0;
+window.addEventListener('scroll', function(){
+  const scrollY = window.scrollY;
+  if(scrollY > 60){
+    navbar.classList.add('scrolled');
+  } else {
+    navbar.classList.remove('scrolled');
+  }
+  lastScroll = scrollY;
+}, {passive:true});
+
+const hamburger = document.getElementById('hamburger');
+const mobileMenu = document.getElementById('mobileMenu');
+const mobileClose = document.getElementById('mobileClose');
+
+hamburger.addEventListener('click', function(){
+  mobileMenu.classList.add('open');
+  hamburger.setAttribute('aria-expanded','true');
+  document.body.style.overflow='hidden';
+});
+
+function closeMenu(){
+  mobileMenu.classList.remove('open');
+  hamburger.setAttribute('aria-expanded','false');
+  document.body.style.overflow='';
+}
+
+mobileClose.addEventListener('click', closeMenu);
+
+mobileMenu.querySelectorAll('a').forEach(function(link){
+  link.addEventListener('click', closeMenu);
+});
+
+const themeToggle = document.getElementById('themeToggle');
+themeToggle.addEventListener('click', function(){
+  document.body.classList.toggle('light-mode');
+  themeToggle.textContent = document.body.classList.contains('light-mode') ? '☀ MODE' : '◐ MODE';
+});
+
+const featureCards = document.querySelectorAll('.feature-card');
+const catCards = document.querySelectorAll('.cat-card');
+
+const observerOptions = {threshold:0.15,rootMargin:'0px 0px -40px 0px'};
+
+const observer = new IntersectionObserver(function(entries){
+  entries.forEach(function(entry){
+    if(entry.isIntersecting){
+      entry.target.classList.add('visible');
+      observer.unobserve(entry.target);
+    }
+  });
+}, observerOptions);
+
+featureCards.forEach(function(card){observer.observe(card)});
+
+function handleNewsletter(){
+  const input = document.getElementById('emailInput');
+  const feedback = document.getElementById('newsletterFeedback');
+  const email = input.value.trim();
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  input.classList.remove('error','success');
+  feedback.textContent = '';
+  feedback.style.color = '';
+
+  if(!email || !emailRegex.test(email)){
+    input.classList.add('error');
+    feedback.textContent = '✕ Adresse email invalide. Veuillez réessayer.';
+    feedback.style.color = '#ff6b6b';
+    return;
+  }
+
+  input.classList.add('success');
+  feedback.textContent = '✓ Parfait ! Vous recevrez vos alertes prix très bientôt.';
+  feedback.style.color = '#4ade80';
+  input.value = '';
+
+  setTimeout(function(){
+    input.classList.remove('success');
+    feedback.textContent = '';
+  }, 5000);
+}
+
+window.handleNewsletter = handleNewsletter;
+
+document.getElementById('emailInput').addEventListener('keydown', function(e){
+  if(e.key === 'Enter') handleNewsletter();
+});
+
+const table = document.getElementById('priceTable');
+const headers = table.querySelectorAll('th.sortable');
+let sortState = {col:-1, dir:1};
+
+headers.forEach(function(th){
+  th.addEventListener('click', function(){
+    const col = parseInt(th.getAttribute('data-col'));
+    if(sortState.col === col){
+      sortState.dir *= -1;
+    } else {
+      sortState.col = col;
+      sortState.dir = 1;
+    }
+
+    headers.forEach(function(h){
+      h.classList.remove('sort-asc','sort-desc');
+    });
+    th.classList.add(sortState.dir === 1 ? 'sort-asc' : 'sort-desc');
+
+    const tbody = document.getElementById('tableBody');
+    const rows = Array.from(tbody.querySelectorAll('tr'));
+
+    rows.sort(function(a,b){
+      const aCell = a.querySelectorAll('td')[col];
+      const bCell = b.querySelectorAll('td')[col];
+      const aText = aCell ? aCell.textContent.replace(/[^\d,.]/g,'').replace(',','') : '';
+      const bText = bCell ? bCell.textContent.replace(/[^\d,.]/g,'').replace(',','') : '';
+      const aNum = parseFloat(aText) || 0;
+      const bNum = parseFloat(bText) || 0;
+
+      if(aNum && bNum) return (aNum - bNum) * sortState.dir;
+      return aText.localeCompare(bText) * sortState.dir;
+    });
+
+    rows.forEach(function(row){tbody.appendChild(row)});
+  });
+});
+
+document.querySelectorAll('a[href^="#"]').forEach(function(anchor){
+  anchor.addEventListener('click', function(e){
+    const target = document.querySelector(this.getAttribute('href'));
+    if(target){
+      e.preventDefault();
+      target.scrollIntoView({behavior:'smooth',block:'start'});
+    }
+  });
+});
+
+function navigateTo(url){
+  document.body.style.opacity='0';
+  document.body.style.transition='opacity 0.3s ease';
+  setTimeout(function(){ window.location.href=url; },300);
+}
+
+document.querySelectorAll('.cat-card').forEach(function(card){
+  card.addEventListener('keydown', function(e){
+    if(e.key === 'Enter' || e.key === ' '){
+      e.preventDefault();
+      card.click();
+    }
+  });
+});
+
+})();
+</script>
+</body>
+</html>

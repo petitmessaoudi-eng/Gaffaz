@@ -4,7 +4,6 @@ const mongoose = require('mongoose');
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
 const path = require('path');
-const helmet = require('helmet');
 const { loadUser } = require('./middleware/userAuth');
 
 
@@ -76,16 +75,21 @@ process.on('unhandledRejection', (reason) => {
   console.error('Unhandled Rejection:', reason);
 });
 
-app.use(helmet({
-  contentSecurityPolicy: false,
-  crossOriginEmbedderPolicy: false
-}));
+app.use(express.json({ limit: '100kb' }));
+app.use(express.urlencoded({ extended: true, limit: '100kb' }));
 
-app.use(express.json({ limit: '10mb' }));
-app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+const SESSION_SECRET = process.env.SESSION_SECRET;
+if (!SESSION_SECRET) {
+  if (process.env.NODE_ENV === 'production') {
+    console.error('FATAL: SESSION_SECRET manquant en production. Arrêt du serveur.');
+    process.exit(1);
+  } else {
+    console.warn('ATTENTION: SESSION_SECRET non défini. Utilisez une valeur sécurisée en production.');
+  }
+}
 
 app.use(session({
-  secret: process.env.SESSION_SECRET || 'comparateur-tn-secret-key-change-in-production',
+  secret: SESSION_SECRET || 'dev-only-secret-change-in-production',
   resave: false,
   saveUninitialized: false,
   rolling: true,

@@ -6,10 +6,14 @@ const MAX_LOGIN_ATTEMPTS = 5;
 const LOCK_TIME_MS = 15 * 60 * 1000;
 
 const COMMON_PASSWORDS = [
-  'password','password1','123456','12345678','qwerty','abc123',
-  'monkey','1234567','letmein','trustno1','dragon','baseball',
-  'iloveyou','master','sunshine','ashley','bailey','passw0rd',
-  'shadow','123123'
+  'password','password1','password123','123456','12345678','123456789','1234567890',
+  'qwerty','qwerty123','azerty','azerty123','abc123','abc1234','111111','000000',
+  'monkey','1234567','letmein','trustno1','dragon','baseball','iloveyou','master',
+  'sunshine','ashley','bailey','passw0rd','shadow','123123','superman','batman',
+  'football','soccer','hockey','killer','george','andrew','charlie','donald',
+  'welcome','login','admin','admin123','root','root123','toor','pass','test',
+  'guest','qwertyuiop','1q2w3e4r','zxcvbnm','password!','P@ssword','P@ssw0rd',
+  'Passw0rd','Admin123','Welcome1','123qwe','321321','666666','888888','999999'
 ];
 
 const RESERVED_USERNAMES = [

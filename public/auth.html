@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; script-src-attr 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self';">
 <title>Connexion — ComparateurTN</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -179,6 +180,8 @@ a{text-decoration:none;color:inherit;}
   font-family:'Rajdhani',sans-serif;font-size:12px;font-weight:600;color:var(--text-secondary);user-select:none;
 }
 .terms-row input{display:none;}
+.terms-row input:checked + .custom-check{background:var(--red);border-color:var(--red);box-shadow:0 0 10px rgba(192,0,26,0.35);}
+.terms-row input:checked + .custom-check::after{content:'';width:4px;height:8px;border:2px solid white;border-top:none;border-left:none;transform:rotate(45deg) translateY(-1px);}
 .terms-row a{color:var(--red);}
 .terms-row a:hover{text-decoration:underline;}
 .forgot-link{font-family:'Rajdhani',sans-serif;font-size:12px;font-weight:700;color:var(--red);letter-spacing:0.3px;}
@@ -516,59 +519,7 @@ function getStrength(pw){
   return{w:100,label:'Très fort',color:'#16a34a'};
 }
 
-document.getElementById('regPass').addEventListener('input',function(e){
-  var pw=e.target.value;
-  var wrap=document.getElementById('strengthWrap');
-  var fill=document.getElementById('strengthFill');
-  var lbl=document.getElementById('strengthLabel');
-  if(pw){wrap.style.display='block';var s=getStrength(pw);fill.style.width=s.w+'%';fill.style.background=s.color;lbl.textContent=s.label;lbl.style.color=s.color;}
-  else{wrap.style.display='none';}
-  clearErr('regPassErr');setInputState('regPass',null);
-  checkMatch();
-});
-document.getElementById('regConfirm').addEventListener('input',function(){clearErr('regConfirmErr');setInputState('regConfirm',null);checkMatch();});
 
-function checkMatch(){
-  var pw=document.getElementById('regPass').value;
-  var cpw=document.getElementById('regConfirm').value;
-  var hint=document.getElementById('matchHint');
-  if(!cpw){hint.className='match-hint';return;}
-  if(pw===cpw){hint.className='match-hint ok show';hint.textContent='✓ Les mots de passe correspondent';setInputState('regConfirm','ok');}
-  else{hint.className='match-hint fail show';hint.textContent='✗ Ne correspondent pas';setInputState('regConfirm','err');}
-}
-
-var unameTimer=null;
-document.getElementById('regUsername').addEventListener('input',function(e){
-  var val=e.target.value.trim();
-  var status=document.getElementById('unameStatus');
-  clearErr('regUsernameErr');setInputState('regUsername',null);
-  status.textContent='';
-  clearTimeout(unameTimer);
-  if(!val||val.length<3)return;
-  if(!/^[a-zA-Z0-9_]+$/.test(val))return;
-  status.className='uname-status checking';status.textContent='…';
-  unameTimer=setTimeout(async function(){
-    try{
-      var res=await fetch('/auth/check-username/'+encodeURIComponent(val));
-      var data=await res.json();
-      if(data.available){status.className='uname-status avail';status.textContent='✓';setInputState('regUsername','ok');}
-      else{status.className='uname-status taken';status.textContent='✗';fieldErr('regUsernameErr','Nom d\'utilisateur déjà pris');setInputState('regUsername','err');}
-    }catch(e){status.textContent='';}
-  },400);
-});
-
-['regEmail','regDisplay'].forEach(function(id){
-  var el=document.getElementById(id);
-  if(el)el.addEventListener('input',function(){clearErr(id+'Err');setInputState(id,null);hideAlert();});
-});
-['loginEmail','loginPass'].forEach(function(id){
-  var el=document.getElementById(id);
-  if(el)el.addEventListener('input',function(){clearErr(id==='loginEmail'?'loginEmailErr':'loginPassErr');setInputState(id,null);hideAlert();});
-});
-
-document.getElementById('loginPwToggle').addEventListener('click',function(){togglePw('loginPass','loginEye');});
-document.getElementById('regPwToggle1').addEventListener('click',function(){togglePw('regPass','regEye1');});
-document.getElementById('regPwToggle2').addEventListener('click',function(){togglePw('regConfirm','regEye2');});
 
 window.handleRegister=async function(){
   hideAlert();
@@ -627,11 +578,75 @@ async function checkAuth(){
   }catch(e){}
 }
 
+function checkMatch(){
+  var pw=document.getElementById('regPass').value;
+  var cpw=document.getElementById('regConfirm').value;
+  var hint=document.getElementById('matchHint');
+  if(!cpw){hint.className='match-hint';return;}
+  if(pw===cpw){hint.className='match-hint ok show';hint.textContent='✓ Les mots de passe correspondent';setInputState('regConfirm','ok');}
+  else{hint.className='match-hint fail show';hint.textContent='✗ Ne correspondent pas';setInputState('regConfirm','err');}
+}
+
+function initListeners(){
+  var unameTimer=null;
+  var regPassEl=document.getElementById('regPass');
+  if(regPassEl){
+    regPassEl.addEventListener('input',function(e){
+      var pw=e.target.value;
+      var wrap=document.getElementById('strengthWrap');
+      var fill=document.getElementById('strengthFill');
+      var lbl=document.getElementById('strengthLabel');
+      if(pw){wrap.style.display='block';var s=getStrength(pw);fill.style.width=s.w+'%';fill.style.background=s.color;lbl.textContent=s.label;lbl.style.color=s.color;}
+      else{wrap.style.display='none';}
+      clearErr('regPassErr');setInputState('regPass',null);
+      checkMatch();
+    });
+  }
+  var regConfirmEl=document.getElementById('regConfirm');
+  if(regConfirmEl)regConfirmEl.addEventListener('input',function(){clearErr('regConfirmErr');setInputState('regConfirm',null);checkMatch();});
+  var regUsernameEl=document.getElementById('regUsername');
+  if(regUsernameEl){
+    regUsernameEl.addEventListener('input',function(e){
+      var val=e.target.value.trim();
+      var status=document.getElementById('unameStatus');
+      clearErr('regUsernameErr');setInputState('regUsername',null);
+      status.textContent='';
+      clearTimeout(unameTimer);
+      if(!val||val.length<3)return;
+      if(!/^[a-zA-Z0-9_]+$/.test(val))return;
+      status.className='uname-status checking';status.textContent='…';
+      unameTimer=setTimeout(async function(){
+        try{
+          var res=await fetch('/auth/check-username/'+encodeURIComponent(val));
+          var data=await res.json();
+          if(data.available){status.className='uname-status avail';status.textContent='✓';setInputState('regUsername','ok');}
+          else{status.className='uname-status taken';status.textContent='✗';fieldErr('regUsernameErr',"Nom d'utilisateur déjà pris");setInputState('regUsername','err');}
+        }catch(e){status.textContent='';}
+      },400);
+    });
+  }
+  ['regEmail','regDisplay'].forEach(function(id){
+    var el=document.getElementById(id);
+    if(el)el.addEventListener('input',function(){clearErr(id+'Err');setInputState(id,null);hideAlert();});
+  });
+  ['loginEmail','loginPass'].forEach(function(id){
+    var el=document.getElementById(id);
+    if(el)el.addEventListener('input',function(){clearErr(id==='loginEmail'?'loginEmailErr':'loginPassErr');setInputState(id,null);hideAlert();});
+  });
+  var loginPwToggle=document.getElementById('loginPwToggle');
+  if(loginPwToggle)loginPwToggle.addEventListener('click',function(){togglePw('loginPass','loginEye');});
+  var regPwToggle1=document.getElementById('regPwToggle1');
+  if(regPwToggle1)regPwToggle1.addEventListener('click',function(){togglePw('regPass','regEye1');});
+  var regPwToggle2=document.getElementById('regPwToggle2');
+  if(regPwToggle2)regPwToggle2.addEventListener('click',function(){togglePw('regConfirm','regEye2');});
+}
+
 function init(){
   initTheme();
   initCursor();
+  initListeners();
   var tab=new URLSearchParams(window.location.search).get('tab');
-  if(tab==='register')switchTab('register');
+  if(tab==='register'||window.location.pathname.includes('register'))switchTab('register');
   checkAuth();
   window.addEventListener('load',function(){document.body.style.opacity='1';});
 }

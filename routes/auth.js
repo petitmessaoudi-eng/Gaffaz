@@ -3,6 +3,7 @@ const router = express.Router();
 const path = require('path');
 const crypto = require('crypto');
 const { body, param, validationResult } = require('express-validator');
+const rateLimit = require('express-rate-limit');
 const User = require('../models/User');
 const SecurityLog = require('../models/SecurityLog');
 const { requireUser } = require('../middleware/userAuth');
@@ -36,15 +37,55 @@ function validationErrors(req, res) {
   return false;
 }
 
-function isApiRequest(req) {
-  return req.xhr
-    || (req.headers['accept'] && req.headers['accept'].includes('application/json'))
-    || (req.headers['content-type'] && req.headers['content-type'].includes('application/json'))
-    || req.path.startsWith('/auth/');
-}
+const limitRegister = rateLimit({
+  windowMs: 60 * 60 * 1000,
+  max: 5,
+  message: { error: 'Trop de tentatives d\'inscription. Réessayez dans 1 heure.', code: 'RATE_LIMIT' },
+  standardHeaders: true,
+  legacyHeaders: false,
+  skipFailedRequests: false
+});
+
+const limitLogin = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 10,
+  message: { error: 'Trop de tentatives de connexion. Réessayez dans 15 minutes.', code: 'RATE_LIMIT' },
+  standardHeaders: true,
+  legacyHeaders: false,
+  skipFailedRequests: false
+});
+
+const limitReset = rateLimit({
+  windowMs: 60 * 60 * 1000,
+  max: 3,
+  message: { error: 'Trop de demandes de réinitialisation. Réessayez dans 1 heure.', code: 'RATE_LIMIT' },
+  standardHeaders: true,
+  legacyHeaders: false,
+  skipFailedRequests: false
+});
+
+const limitResend = rateLimit({
+  windowMs: 60 * 60 * 1000,
+  max: 3,
+  message: { error: 'Trop de demandes d\'envoi. Réessayez dans 1 heure.', code: 'RATE_LIMIT' },
+  standardHeaders: true,
+  legacyHeaders: false,
+  skipFailedRequests: false
+});
+
+const limitGlobal = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 200,
+  message: { error: 'Trop de requêtes. Réessayez dans 15 minutes.', code: 'RATE_LIMIT' },
+  standardHeaders: true,
+  legacyHeaders: false,
+  skip: (req) => req.method === 'GET' && !req.path.startsWith('/auth/')
+});
+
+router.use(limitGlobal);
 
 router.get('/register', (req, res) => {
-  res.redirect('/login?tab=register');
+  res.sendFile(path.join(__dirname, '../public/auth.html'));
 });
 
 router.get('/login', (req, res) => {
@@ -52,22 +93,22 @@ router.get('/login', (req, res) => {
 });
 
 router.get('/account', requireUser, (req, res) => {
-  res.sendFile(path.join(__dirname, '../public/account.html'));
+  res.sendFile(path.join(__dirname, '../public/auth.html'));
 });
 
 router.get('/verify-email', (req, res) => {
-  res.sendFile(path.join(__dirname, '../public/verify-email.html'));
+  res.sendFile(path.join(__dirname, '../public/auth-extras.html'));
 });
 
 router.get('/forgot-password', (req, res) => {
-  res.sendFile(path.join(__dirname, '../public/forgot-password.html'));
+  res.sendFile(path.join(__dirname, '../public/auth-extras.html'));
 });
 
 router.get('/reset-password', (req, res) => {
-  res.sendFile(path.join(__dirname, '../public/reset-password.html'));
+  res.sendFile(path.join(__dirname, '../public/auth-extras.html'));
 });
 
-router.post('/auth/register', [
+router.post('/auth/register', limitRegister, [
   body('email').trim().isEmail().normalizeEmail().withMessage('Adresse e-mail invalide'),
   body('username')
     .trim()
@@ -139,7 +180,7 @@ router.get('/auth/verify-email/:token', [
   }
 });
 
-router.post('/auth/resend-verification', [
+router.post('/auth/resend-verification', limitResend, [
   body('email').trim().isEmail().normalizeEmail().withMessage('E-mail invalide')
 ], async (req, res) => {
   if (validationErrors(req, res)) return;
@@ -171,13 +212,39 @@ router.post('/auth/resend-verification', [
   }
 });
 
-router.post('/auth/login', [
+const emailRateLimitStore = new Map();
+setInterval(() => {
+  const cutoff = Date.now() - 15 * 60 * 1000;
+  for (const [k, v] of emailRateLimitStore) {
+    if (v.windowStart < cutoff) emailRateLimitStore.delete(k);
+  }
+}, 5 * 60 * 1000);
+
+function checkEmailRateLimit(email) {
+  const key = email.toLowerCase().trim();
+  const now = Date.now();
+  const windowStart = now - 15 * 60 * 1000;
+  let record = emailRateLimitStore.get(key);
+  if (!record || record.windowStart < windowStart) {
+    record = { count: 1, windowStart: now };
+  } else {
+    record.count++;
+  }
+  emailRateLimitStore.set(key, record);
+  return record.count > 10;
+}
+
+router.post('/auth/login', limitLogin, [
   body('email').trim().notEmpty().withMessage('E-mail ou nom d\'utilisateur requis'),
   body('password').notEmpty().withMessage('Mot de passe requis')
 ], async (req, res) => {
   if (validationErrors(req, res)) return;
   try {
     const { email, password } = req.body;
+    if (checkEmailRateLimit(email)) {
+      await new Promise(r => setTimeout(r, 400));
+      return res.status(429).json({ error: 'Trop de tentatives. Réessayez dans 15 minutes.', code: 'RATE_LIMIT' });
+    }
     const user = await User.findByEmailOrUsername(email);
     if (!user || !user.isActive) {
       await new Promise(r => setTimeout(r, 400));
@@ -211,6 +278,13 @@ router.post('/auth/login', [
         code: 'INVALID_CREDENTIALS'
       });
     }
+    if (!user.isEmailVerified) {
+      logSecurity('login_unverified', user._id, req);
+      return res.status(403).json({
+        error: 'Veuillez vérifier votre adresse e-mail avant de vous connecter.',
+        code: 'EMAIL_NOT_VERIFIED'
+      });
+    }
     await user.resetLoginAttempts();
     user.lastLoginAt = new Date();
     user.lastLoginIP = req.ip;
@@ -229,9 +303,9 @@ router.post('/auth/login', [
   }
 });
 
-router.post('/auth/logout', (req, res) => {
-  const userId = req.session && req.session.userId;
-  if (userId) logSecurity('logout', userId, req);
+router.post('/auth/logout', requireUser, (req, res) => {
+  const userId = req.session.userId;
+  logSecurity('logout', userId, req);
   req.session.destroy(err => {
     res.clearCookie('connect.sid');
     if (err) return res.status(500).json({ error: 'Erreur lors de la déconnexion', code: 'SESSION_ERROR' });
@@ -239,10 +313,7 @@ router.post('/auth/logout', (req, res) => {
   });
 });
 
-router.get('/auth/me', async (req, res) => {
-  if (!req.session || !req.session.userId) {
-    return res.status(401).json({ error: 'Non autorisé', code: 'UNAUTHORIZED' });
-  }
+router.get('/auth/me', requireUser, async (req, res) => {
   try {
     const user = await User.findById(req.session.userId).lean();
     if (!user) return res.status(401).json({ error: 'Non autorisé', code: 'UNAUTHORIZED' });
@@ -252,7 +323,7 @@ router.get('/auth/me', async (req, res) => {
   }
 });
 
-router.post('/auth/forgot-password', [
+router.post('/auth/forgot-password', limitReset, [
   body('email').trim().isEmail().normalizeEmail().withMessage('E-mail invalide')
 ], async (req, res) => {
   if (validationErrors(req, res)) return;

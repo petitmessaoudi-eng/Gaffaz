@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; script-src-attr 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self';">
 <title>ComparateurTN — Store Gaming</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1927,7 +1928,7 @@ input[type="range"]::-webkit-slider-thumb:hover { box-shadow:0 0 0 5px rgba(192,
       </div>
       <button class="theme-toggle" id="themeBtn" onclick="toggleTheme()" aria-label="Basculer le thème">◐ MODE</button>
       <div class="user-auth-wrap" id="userAuthWrap">
-        <button class="user-login-btn" id="userLoginBtn" onclick="navigateTo('/auth.html')">
+        <button class="user-login-btn" id="userLoginBtn" onclick="navigateTo('/login')">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
           Connexion
         </button>
